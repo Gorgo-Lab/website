@@ -227,6 +227,9 @@ npm run placeholder -- <cartella>     # copertina segnaposto in tavolozza
 
 Se `validate` passa in locale, passa anche in CI.
 
+L'elenco completo dei comandi, con le opzioni degli script e la gestione dei
+server in secondo piano, sta nella sezione "Comandi" di [`README.md`](README.md).
+
 ---
 
 ## Struttura

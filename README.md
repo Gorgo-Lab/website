@@ -12,16 +12,112 @@ titoli, bordi netti e ombre offset. Le regole vive stanno in
 
 ## Comandi
 
-| Comando | Cosa fa |
-| --- | --- |
-| `npm install` | installa le dipendenze |
-| `npm run dev` | server di sviluppo su `localhost:4321` |
-| `npm run build` | build di produzione in `dist/` |
-| `npm run preview` | serve la build locale |
-| `npm run validate` | tutti i controlli della CI in una volta |
-| `npm run check:links` | verifica i collegamenti interni sulla build |
-| `npm run ingest -- <zip\|cartella>` | importa il materiale di un maker |
-| `npm run placeholder -- <cartella>` | genera una copertina segnaposto in tema |
+Tutto quello che si può lanciare da riga di comando, con cosa fa.
+
+### Ogni giorno
+
+```bash
+npm install                  # installa le dipendenze (serve Node 22.12 o superiore)
+npm run dev                  # server di sviluppo su localhost:4321, si ricarica da solo
+npm run dev -- --host        # come sopra, ma raggiungibile dagli altri dispositivi in rete
+npm run build                # genera il sito in dist/, pronto da pubblicare
+npm run preview              # serve dist/ in locale: è il sito vero, senza ricarica automatica
+```
+
+Per mostrare il sito a qualcuno usa `build` + `preview`, non `dev`: le immagini
+sono ottimizzate e non c'è l'impalcatura dello sviluppo.
+
+### Controlli prima di aprire una pull request
+
+```bash
+npm run validate             # lancia tutti e quattro i controlli qui sotto, in ordine
+npm run check:assets         # file oltre 2 MB, immagini oltre 3000px, video committati
+npm run check                # tipi TypeScript e template (astro check)
+npm run check:links          # collegamenti interni rotti (richiede una build recente)
+```
+
+Se `validate` passa in locale, passa anche in integrazione continua. `check:links`
+legge la cartella `dist/`, quindi va lanciato dopo `build` se il sito è cambiato.
+
+### Pubblicare contenuti
+
+```bash
+# importa il materiale di un maker (zip o cartella): comprime le immagini,
+# toglie i dati EXIF, rinomina i file e prepara index.md con i campi da compilare
+npm run ingest -- ~/Downloads/progetto.zip
+npm run ingest -- ./cartella --collection blog     # per un articolo invece di un progetto
+npm run ingest -- ./cartella --slug nome-scelto    # decide il nome della cartella, e quindi l'indirizzo
+npm run ingest -- ./cartella --force               # sovrascrive una destinazione già esistente
+
+# copertina segnaposto geometrica, per un progetto senza foto decenti
+npm run placeholder -- src/content/progetti/mio-progetto
+npm run placeholder -- src/content/progetti/mio-progetto --force   # rigenera sovrascrivendo
+npm run placeholder -- copertina.jpg --seed "tornio"               # cambia il disegno
+npm run placeholder -- copertina.jpg --ratio 16:9 --width 2400     # proporzioni e dimensione
+```
+
+Entrambi i comandi stampano cosa hanno fatto e cosa resta da completare a mano.
+Lanciati senza argomenti mostrano le opzioni.
+
+### Gestione dei server
+
+Entrambi i server possono girare in secondo piano, con gli stessi sottocomandi:
+
+```bash
+npx astro dev --background       # avvia lo sviluppo senza occupare il terminale
+npx astro dev status             # dice se sta girando, e con quale PID
+npx astro dev logs               # mostra il registro del server
+npx astro dev logs --follow      # lo segue in tempo reale
+npx astro dev stop               # lo ferma
+
+npx astro preview --background   # stessa cosa per il server di anteprima
+npx astro preview status
+npx astro preview logs
+npx astro preview stop
+```
+
+Se una porta risulta occupata da un server dimenticato:
+
+```bash
+ss -tlnp | grep -E '4321|4322'   # chi sta ascoltando su quelle porte
+```
+
+### Manutenzione
+
+```bash
+npx astro info               # versioni di Astro, Node, integrazioni: da allegare quando si chiede aiuto
+npx astro sync               # rigenera i tipi delle collezioni dopo aver toccato content.config.ts
+npx astro add <nome>         # aggiunge un'integrazione ufficiale e la configura da sola
+npm outdated                 # elenca le dipendenze con una versione più recente
+npm update                   # le aggiorna entro i limiti di versione dichiarati
+
+# aggiungere un'icona all'interfaccia: si copia l'SVG e la si usa con <Icon name="…" />
+cp node_modules/lucide-static/icons/<nome>.svg src/icons/
+```
+
+### Trasferire il progetto su un'altra macchina
+
+```bash
+git bundle create gorgolab.bundle --all     # un solo file con tutta la storia (~500 kB)
+git clone gorgolab.bundle gorgolab          # sulla macchina di destinazione
+```
+
+Ricorda che `node_modules/` e la cartella `tmp/` non viaggiano: la prima si
+ricrea con `npm install`, la seconda è esclusa dal repository di proposito.
+Dettagli in [`HANDOFF.md`](HANDOFF.md).
+
+### Diagnostica visiva senza aprire il browser
+
+```bash
+# istantanea di una pagina; --virtual-time-budget aspetta il caricamento delle immagini
+google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+  --virtual-time-budget=6000 --window-size=1280,2000 \
+  --screenshot=/tmp/pagina.png http://localhost:4322/progetti/
+```
+
+Attenzione: `--window-size` non produce un viewport CSS esatto (chiedendo 390 px
+se ne ottengono 485). Per misure attendibili su mobile vedi la nota in
+[`HANDOFF.md`](HANDOFF.md).
 
 ## Come è organizzato
 
