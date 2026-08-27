@@ -1,0 +1,370 @@
+/* =========================================================
+   Gorgo Lab — fondamenta visive
+   Token dal design system ufficiale (colors_and_type.css).
+   Regole di marca da non violare:
+     · due colori piatti, blu e arancio. Nessun gradiente.
+     · sfondo carta; il nero non esiste, l'inchiostro è #0e1620.
+     · angoli piccoli, bordi netti da 2px, ombra offset dura.
+     · hover = cambio di colore o opacità. Mai scale().
+     · press = traslazione di 2px, l'ombra "collassa".
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ---------- Marca ---------- */
+  --gl-blue: #0071bc;
+  --gl-orange: #f15a24;
+
+  --gl-blue-950: #001a30;
+  --gl-blue-900: #002947;
+  --gl-blue-800: #003a66;
+  --gl-blue-700: #004f87;
+  --gl-blue-600: #0071bc;
+  --gl-blue-500: #2287cb;
+  --gl-blue-400: #5ba6db;
+  --gl-blue-300: #95c5e9;
+  --gl-blue-200: #c6e0f3;
+  --gl-blue-100: #e6f1fa;
+  --gl-blue-050: #f3f8fc;
+
+  --gl-orange-900: #6a1d04;
+  --gl-orange-800: #9b3210;
+  --gl-orange-700: #c8421a;
+  --gl-orange-600: #f15a24;
+  --gl-orange-500: #f57344;
+  --gl-orange-400: #f99068;
+  --gl-orange-300: #fcb393;
+  --gl-orange-200: #fdd1bd;
+  --gl-orange-100: #ffe7da;
+
+  --gl-ink: #0e1620;
+  --gl-ink-2: #2a3340;
+  --gl-ink-3: #4a5564;
+  --gl-mute: #7c8694;
+  --gl-line: #d5dae0;
+  --gl-line-soft: #e7eaee;
+  --gl-paper: #f7f4ee;
+  --gl-paper-2: #efece4;
+  --gl-white: #ffffff;
+
+  --gl-success: #2f8f4e;
+  --gl-warning: #e0a000;
+  --gl-danger: #d4341f;
+
+  /* ---------- Semantici ---------- */
+  --fg-1: var(--gl-ink);
+  --fg-2: var(--gl-ink-2);
+  --fg-3: var(--gl-ink-3);
+  --fg-mute: var(--gl-mute);
+  --fg-on-blue: var(--gl-paper);
+  --fg-on-orange: var(--gl-ink);
+  /* orange-700 invece di 600: sul fondo carta il 600 non arriva a 4.5:1 */
+  --fg-link: var(--gl-orange-700);
+
+  --bg-1: var(--gl-paper);
+  --bg-2: var(--gl-paper-2);
+  --bg-elev: var(--gl-white);
+  --bg-blue: var(--gl-blue-600);
+  --bg-orange: var(--gl-orange-600);
+
+  --border: var(--gl-line);
+  --border-strong: var(--gl-ink);
+
+  /* ---------- Tipografia ---------- */
+  --font-display: 'Archivo Black', Impact, Haettenschweiler, system-ui, sans-serif;
+  --font-sans: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, Menlo, monospace;
+
+  --fz-xs: 12px;
+  --fz-sm: 14px;
+  --fz-base: 16px;
+  --fz-md: 18px;
+  --fz-lg: 22px;
+  --fz-xl: 28px;
+  --fz-2xl: 36px;
+  --fz-3xl: 48px;
+  --fz-4xl: 64px;
+  --fz-5xl: 88px;
+  --fz-6xl: 120px;
+
+  /* Scala fluida ricavata dai gradini fissi: il display a 120px fisso
+     spacca il layout sul telefono, e questo sito si legge dal banco. */
+  --fz-fluid-2xl: clamp(28px, 2.4vw + 1rem, 36px);
+  --fz-fluid-3xl: clamp(32px, 3.6vw + 1rem, 48px);
+  --fz-fluid-4xl: clamp(38px, 5.4vw + 1rem, 64px);
+  --fz-fluid-5xl: clamp(44px, 7.6vw + 1rem, 88px);
+  --fz-fluid-6xl: clamp(52px, 10vw + 1rem, 120px);
+
+  --lh-tight: 0.95;
+  --lh-snug: 1.15;
+  --lh-base: 1.5;
+  --lh-loose: 1.7;
+
+  --tr-tight: -0.02em;
+  --tr-wide: 0.04em;
+  --tr-shout: 0.06em;
+
+  /* ---------- Spazio ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  /* ---------- Raggi ---------- */
+  --r-none: 0;
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 8px;
+  --r-pill: 999px;
+
+  /* ---------- Ombre ---------- */
+  --sh-flat: 0 0 0 1px var(--border);
+  --sh-card: 2px 2px 0 0 var(--gl-ink);
+  --sh-card-lg: 4px 4px 0 0 var(--gl-ink);
+  --sh-lift: 0 8px 24px -6px rgba(14, 22, 32, 0.18);
+
+  /* ---------- Bordi ---------- */
+  --bw-1: 1px;
+  --bw-2: 2px;
+  --bw-3: 3px;
+  --bw-4: 4px;
+
+  /* ---------- Movimento ---------- */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
+
+  /* ---------- Misure ---------- */
+  --wrap: 1200px;
+  --wrap-text: 42rem;
+  --pad: var(--s-5);
+}
+
+@media (max-width: 640px) {
+  :root { --pad: var(--s-4); }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--bg-1);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  font-size: var(--fz-base);
+  line-height: var(--lh-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+
+h1, h2, h3, h4 { line-height: var(--lh-snug); text-wrap: balance; }
+p, li { text-wrap: pretty; }
+
+a { color: var(--fg-link); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+a:hover { color: var(--gl-orange-800); }
+
+:focus-visible { outline: var(--bw-3) solid var(--gl-orange-600); outline-offset: 2px; }
+
+.wrap { width: min(100% - (var(--pad) * 2), var(--wrap)); margin-inline: auto; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   Tipografia di marca
+   --------------------------------------------------------- */
+.shout {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tr-tight);
+  line-height: var(--lh-tight);
+  /* Archivo Black è già nero: il bold sintetico lo impasta */
+  font-weight: 400;
+}
+
+.eyebrow {
+  font-size: var(--fz-sm); font-weight: 700;
+  text-transform: uppercase; letter-spacing: var(--tr-shout);
+  color: var(--gl-orange-700);
+}
+
+.lead { font-size: var(--fz-md); color: var(--fg-2); }
+.mono { font-family: var(--font-mono); font-size: var(--fz-sm); }
+
+/* ---------------------------------------------------------
+   Bottoni — bordo netto, ombra che collassa alla pressione
+   --------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-weight: 700; font-size: 15px; line-height: 1;
+  padding: var(--s-3) var(--s-4);
+  border: var(--bw-2) solid var(--gl-ink);
+  border-radius: var(--r-md);
+  text-decoration: none; cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+}
+.btn-primary { background: var(--gl-orange-600); color: var(--fg-on-orange); box-shadow: var(--sh-card); }
+.btn-primary:hover { background: var(--gl-orange-500); color: var(--fg-on-orange); }
+.btn-ghost { background: transparent; color: var(--gl-ink); }
+.btn-ghost:hover { background: var(--gl-paper-2); color: var(--gl-ink); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--gl-ink); }
+
+/* Sul fondo blu il bordo inchiostro sparisce: si inverte su carta */
+.on-blue .btn-ghost { color: var(--gl-paper); border-color: var(--gl-paper); }
+.on-blue .btn-ghost:hover { background: rgba(247, 244, 238, 0.15); color: var(--gl-paper); }
+
+/* ---------------------------------------------------------
+   Tag e stati
+   --------------------------------------------------------- */
+.tag {
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  font-family: var(--font-mono); font-size: var(--fz-xs); font-weight: 700;
+  line-height: 1; padding: 5px 10px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  border: 1.5px solid var(--gl-ink); border-radius: var(--r-pill);
+  background: var(--gl-paper); color: var(--gl-ink); text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+a.tag:hover { background: var(--gl-orange-200); color: var(--gl-ink); }
+.tag[data-on='true'] { background: var(--gl-orange-600); color: var(--fg-on-orange); }
+.tag .count { opacity: 0.55; }
+
+.on-blue .tag { background: transparent; color: var(--gl-paper); border-color: var(--gl-paper); }
+.on-blue a.tag:hover { background: rgba(247, 244, 238, 0.15); color: var(--gl-paper); }
+.on-blue .tag[data-on='true'] { background: var(--gl-orange-600); color: var(--fg-on-orange); border-color: var(--gl-ink); }
+
+.badge-status {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-family: var(--font-mono); font-size: var(--fz-xs); font-weight: 700;
+  line-height: 1; padding: 5px 10px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  border: 1.5px solid var(--gl-ink); border-radius: var(--r-sm);
+  background: var(--gl-paper); color: var(--gl-ink);
+}
+.badge-status::before { content: ''; width: 7px; height: 7px; background: currentColor; }
+/* La scala va dal leggero al pieno: idea appena accennata, in corso acceso,
+   completato chiuso e stampato. I due pieni devono staccare anche quando
+   finiscono sopra una copertina dello stesso colore, quindi niente fondo blu. */
+.badge-status[data-status='idea'] { color: var(--gl-blue-700); }
+.badge-status[data-status='in-corso'] { background: var(--gl-orange-600); color: var(--fg-on-orange); }
+.badge-status[data-status='completato'] { background: var(--gl-ink); color: var(--gl-paper); }
+.badge-status[data-status='sospeso'] { color: var(--gl-ink-3); }
+
+/* ---------------------------------------------------------
+   Bande a tutta larghezza: la sezione come manifesto affisso
+   --------------------------------------------------------- */
+.band { padding-block: var(--s-9); border-block: var(--bw-2) solid var(--gl-ink); }
+.band-blue { background: var(--bg-blue); color: var(--fg-on-blue); }
+.band-orange { background: var(--bg-orange); color: var(--fg-on-orange); }
+.band-paper { background: var(--bg-2); }
+/* Sul blu pieno nessun arancio della palette arriva a 4.5:1 (il migliore,
+   orange-200, si ferma a 3.7). I link su banda blu vanno quindi in chiaro:
+   l'arancio su blu resta solo nel marquee, che riproduce il banner ufficiale
+   ed è decorativo (aria-hidden). */
+.band-blue a { color: var(--gl-blue-050); }
+.band-blue a:hover { color: var(--gl-white); }
+
+/* ---------------------------------------------------------
+   .prose — il testo scritto dai maker
+   --------------------------------------------------------- */
+/* min-width: 0 perché la prose è spesso figlia di una griglia: senza,
+   il suo contenuto minimo diventa il minimo del contenitore. */
+.prose { max-width: var(--wrap-text); min-width: 0; font-size: var(--fz-md); color: var(--fg-2); }
+.prose > * + * { margin-top: 1.1em; }
+/* Un indirizzo incollato per intero non ha punti dove andare a capo:
+   senza questo sfonda la colonna su schermo stretto. */
+.prose :is(p, li, td, th, dd) { overflow-wrap: break-word; }
+
+.prose h2 {
+  font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
+  font-size: var(--fz-fluid-2xl); line-height: var(--lh-tight); letter-spacing: var(--tr-tight);
+  color: var(--fg-1); margin-top: 2em; margin-bottom: 0.4em;
+  padding-top: var(--s-5); border-top: var(--bw-4) solid var(--gl-ink);
+}
+.prose h3 {
+  font-weight: 700; font-size: var(--fz-lg);
+  color: var(--fg-1); margin-top: 1.8em; margin-bottom: 0.2em;
+}
+.prose h4 {
+  font-weight: 700; font-size: var(--fz-sm);
+  text-transform: uppercase; letter-spacing: var(--tr-shout);
+  color: var(--gl-orange-700); margin-top: 1.6em;
+}
+.prose :is(h2, h3) > a { color: inherit; text-decoration: none; }
+
+/* Solo le immagini scritte nel testo dal maker, cioè quelle che il markdown
+   mette in un <p> o in una <figure> figli diretti. Un `.prose img` generico
+   colpirebbe anche le immagini dentro i componenti — galleria, poster dei
+   video — riempiendole di margini e di un secondo bordo dentro al loro. */
+.prose :is(p, figure) > img {
+  width: 100%; height: auto;
+  border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+  box-shadow: var(--sh-card); margin-block: 1.8em;
+}
+.prose figure { margin-block: 1.8em; }
+.prose figure > img { margin-block: 0; }
+.prose figcaption {
+  font-family: var(--font-mono); font-size: var(--fz-xs);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--fg-3); margin-top: var(--s-3);
+}
+
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li + li { margin-top: 0.3em; }
+.prose li::marker { color: var(--gl-orange-600); font-weight: 700; }
+
+.prose blockquote {
+  border-left: var(--bw-4) solid var(--gl-orange-600);
+  padding: var(--s-2) 0 var(--s-2) var(--s-5);
+  color: var(--fg-1); font-weight: 500;
+}
+
+.prose code {
+  font-family: var(--font-mono); font-size: 0.86em;
+  background: var(--gl-paper-2); padding: 2px 6px;
+  border: var(--bw-1) solid var(--border); border-radius: var(--r-sm);
+}
+.prose pre {
+  /* Il colore serve ai blocchi scritti a mano: quelli generati da Shiki
+     portano i propri colori inline e vincono su questo. */
+  background: var(--gl-ink) !important;
+  color: var(--gl-paper);
+  border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+  box-shadow: var(--sh-card); padding: var(--s-5);
+  overflow-x: auto; font-size: var(--fz-sm);
+}
+.prose pre code { background: none; border: 0; padding: 0; }
+
+/* Lo scorrimento sta sul contenitore, così la tabella resta una tabella
+   e riempie la riga invece di stringersi sul contenuto. */
+.prose .table-wrap { overflow-x: auto; margin-block: 1.4em; }
+.prose table { width: 100%; border-collapse: collapse; font-size: var(--fz-sm); }
+.prose :is(th, td) { padding: var(--s-3) var(--s-4); border-bottom: var(--bw-1) solid var(--border); text-align: left; }
+.prose th {
+  font-family: var(--font-mono); font-size: var(--fz-xs); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-3);
+  border-bottom: var(--bw-2) solid var(--gl-ink); white-space: nowrap;
+}
+
+.prose hr { border: 0; border-top: var(--bw-2) solid var(--gl-ink); margin-block: 2.5em; }
