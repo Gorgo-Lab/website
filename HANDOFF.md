@@ -30,9 +30,17 @@ git bundle create gorgolab.bundle --all
 # sulla macchina di destinazione
 git clone gorgolab.bundle gorgolab && cd gorgolab
 git remote remove origin        # il bundle non serve più
+git branch --show-current       # dev'essere "main", non "master"
 npm install
 npm run validate                # deve passare tutto
 ```
+
+Il bundle pesa circa 500 kB. Procedura già provata: clonando da zero,
+`validate` passa tutti e quattro i controlli.
+
+Il ramo principale si chiama **`main`**: il workflow in
+`.github/workflows/ci.yml` è configurato su quel nome, e su un ramo chiamato
+diversamente i controlli non partirebbero affatto — senza dare errore.
 
 Il bundle è un singolo file che contiene l'intera storia: si passa con una
 chiavetta o via rete senza bisogno di un server git.
