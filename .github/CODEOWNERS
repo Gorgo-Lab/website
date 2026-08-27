@@ -1,0 +1,11 @@
+# Chi cura il sito rivede sempre struttura, layout e configurazione.
+# I contenuti dei progetti possono essere approvati più liberamente.
+
+/src/layouts/     @DA-COMPILARE
+/src/components/  @DA-COMPILARE
+/src/pages/       @DA-COMPILARE
+/src/styles/      @DA-COMPILARE
+/src/site.config.ts @DA-COMPILARE
+/src/content.config.ts @DA-COMPILARE
+/.github/         @DA-COMPILARE
+/scripts/         @DA-COMPILARE

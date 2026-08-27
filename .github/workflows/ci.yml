@@ -1,0 +1,42 @@
+name: Verifica contenuti
+
+# Gira su ogni PR: è il controllo che permette di accettare i contributi
+# dei maker senza rileggerli riga per riga.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # 1. File troppo grossi, video committati, immagini a piena risoluzione.
+      - name: Controllo dei file di contenuto
+        run: npm run check:assets
+
+      # 2. Tipi e template.
+      - name: Controllo dei tipi
+        run: npm run check
+
+      # 3. Lo schema Zod del frontmatter: qui cade tutto ciò che è malformato.
+      #    SHOW_DRAFTS: nelle PR le bozze si vedono, così si revisionano prima
+      #    di pubblicarle. Sul sito vero restano invisibili.
+      - name: Build del sito
+        run: npm run build
+        env:
+          SHOW_DRAFTS: ${{ github.event_name == 'pull_request' }}
+
+      # 4. Collegamenti interni: un refuso in un link scritto a mano non fa
+      #    fallire la build, ma produce un 404 che nessuno noterebbe.
+      - name: Controllo dei collegamenti interni
+        run: npm run check:links

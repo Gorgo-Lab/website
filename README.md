@@ -1,43 +1,102 @@
-# Astro Starter Kit: Minimal
+# Sito del Gorgo Lab
 
-```sh
-npm create astro@latest -- --template minimal
+Sito statico dell'hackerspace comunale di Gorgonzola, costruito con
+[Astro](https://astro.build). I progetti e gli articoli sono file markdown che i
+maker aggiungono via pull request; il sito li impagina, ottimizza le immagini e
+genera anteprime, indici e feed da solo.
+
+L'identità visiva segue il design system ufficiale di Gorgo Lab: due colori
+piatti (blu `#0071BC`, arancio `#F15A24`), sfondo carta, Archivo Black per i
+titoli, bordi netti e ombre offset. Le regole vive stanno in
+[`src/styles/global.css`](src/styles/global.css).
+
+## Comandi
+
+| Comando | Cosa fa |
+| --- | --- |
+| `npm install` | installa le dipendenze |
+| `npm run dev` | server di sviluppo su `localhost:4321` |
+| `npm run build` | build di produzione in `dist/` |
+| `npm run preview` | serve la build locale |
+| `npm run validate` | tutti i controlli della CI in una volta |
+| `npm run check:links` | verifica i collegamenti interni sulla build |
+| `npm run ingest -- <zip\|cartella>` | importa il materiale di un maker |
+| `npm run placeholder -- <cartella>` | genera una copertina segnaposto in tema |
+
+## Come è organizzato
+
+```
+src/
+├── content/
+│   ├── progetti/<slug>/index.md   ← un progetto = una cartella
+│   └── blog/<slug>/index.md
+├── content.config.ts    ← LO SCHEMA: cosa è obbligatorio nel frontmatter
+├── site.config.ts       ← nome, contatti, tag ammessi, stati progetto
+├── layouts/             ← struttura delle pagine
+├── components/          ← card, gallerie, allegati, blocchi per MDX
+├── pages/               ← rotte del sito
+└── styles/global.css    ← design tokens e tipografia dei contenuti
+scripts/
+├── ingest.mjs           ← import di uno zip: comprime, rinomina, prepara il frontmatter
+├── placeholder.mjs      ← copertine segnaposto geometriche, in palette
+├── check-assets.mjs     ← guardia su peso e formato dei file
+└── check-links.mjs      ← guardia sui collegamenti interni rotti
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Il patto con i maker
 
-## 🚀 Project Structure
+Un maker apre una PR con la sua cartella. La CI verifica **prima del merge**:
 
-Inside of your Astro project, you'll see the following folders and files:
+1. `check:assets` — nessun file oltre 2 MB, nessun video committato, nessuna
+   immagine a piena risoluzione;
+2. `astro check` — tipi e template;
+3. `astro build` — lo schema Zod di `content.config.ts` valida ogni campo del
+   frontmatter: campi mancanti, tag inventati, date malformate, immagini
+   inesistenti e allegati dichiarati ma assenti fanno **fallire la build**;
+4. `check:links` — nessun collegamento interno punta a una pagina che non esiste.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Cloudflare Pages pubblica un'anteprima della PR, così il progetto si vede
+renderizzato prima di accettarlo. Nelle preview le bozze (`draft: true`) sono
+visibili; sul sito pubblico no.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Il risultato: si accetta un contributo guardando la sostanza, non la
+formattazione.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Da fare prima di andare online
 
-Any static assets, like images, can be placed in the `public/` directory.
+- [ ] `src/site.config.ts` — confermare indirizzo ed email, aggiungere i social
+- [ ] `astro.config.mjs` — campo `site` con il dominio vero
+- [ ] `.github/CODEOWNERS` — sostituire `@DA-COMPILARE`
+- [ ] contenuti di esempio in `src/content/` — sostituirli con quelli veri
+- [ ] `src/pages/spazio.astro` — orari e regole da confermare sul regolamento
+- [ ] `src/pages/index.astro` — elenco attrezzature da allineare a quelle vere
 
-## 🧞 Commands
+## Decisioni prese, e perché
 
-All commands are run from the root of the project, from a terminal:
+**Solo italiano.** Niente i18n: le pagine dichiarano `lang="it"` e i contenuti
+stanno in una gerarchia piatta. Aggiungere una seconda lingua più avanti
+significherebbe rifare i path di tutti i contenuti — è una scelta reversibile
+solo a caro prezzo, presa consapevolmente.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+**Nessun CMS.** Un editor web git-based (Sveltia, Pages CMS) non introdurrebbe
+problemi di sicurezza — non c'è database utenti né server da proteggere, l'auth
+è delegata a GitHub — ma introdurrebbe uno **schema duplicato** accanto a
+`content.config.ts`, cioè una seconda fonte di verità che va tenuta allineata a
+mano. Per il volume atteso (una decina di contributi l'anno) non vale il costo.
 
-## 👀 Want to learn more?
+I maker che non usano git hanno già due strade senza infrastruttura aggiuntiva:
+l'interfaccia web di GitHub (upload della cartella + "Propose changes", che apre
+la PR da sola) oppure lo zip via email importato con `npm run ingest`.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Da rivalutare se i contributi superano i ~20 all'anno e la revisione diventa il
+collo di bottiglia. A quel punto Sveltia CMS dovrebbe essere in GA.
+
+## Deploy
+
+Cloudflare Pages, connesso al repository:
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Variabile d'ambiente (solo preview): `SHOW_DRAFTS=true`
+
+Vedi [`CONTRIBUTING.md`](CONTRIBUTING.md) per la guida destinata ai maker.
