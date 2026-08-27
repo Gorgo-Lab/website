@@ -233,7 +233,10 @@ pubblichi le bozze di tutti.**
 per verifiche visive e misurazioni:
 
 ```bash
-google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"   # macOS
+CHROME=google-chrome                                                    # Linux
+
+"$CHROME" --headless --disable-gpu --no-sandbox --hide-scrollbars \
   --virtual-time-budget=6000 --window-size=1280,2000 \
   --screenshot=/tmp/pagina.png http://localhost:4322/progetti/
 ```

@@ -17,6 +17,7 @@ Tutto quello che si può lanciare da riga di comando, con cosa fa.
 ### Ogni giorno
 
 ```bash
+nvm use                      # seleziona la versione di Node dichiarata in .nvmrc
 npm install                  # installa le dipendenze (serve Node 22.12 o superiore)
 npm run dev                  # server di sviluppo su localhost:4321, si ricarica da solo
 npm run dev -- --host        # come sopra, ma raggiungibile dagli altri dispositivi in rete
@@ -79,7 +80,8 @@ npx astro preview stop
 Se una porta risulta occupata da un server dimenticato:
 
 ```bash
-ss -tlnp | grep -E '4321|4322'   # chi sta ascoltando su quelle porte
+lsof -iTCP -sTCP:LISTEN -P -n | grep -E '4321|4322'   # macOS
+ss -tlnp | grep -E '4321|4322'                        # Linux
 ```
 
 ### Manutenzione
@@ -109,8 +111,12 @@ Dettagli in [`HANDOFF.md`](HANDOFF.md).
 ### Diagnostica visiva senza aprire il browser
 
 ```bash
+# il binario di Chrome sta in posti diversi: si sceglie la riga del proprio sistema
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"   # macOS
+CHROME=google-chrome                                                    # Linux
+
 # istantanea di una pagina; --virtual-time-budget aspetta il caricamento delle immagini
-google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+"$CHROME" --headless --disable-gpu --no-sandbox --hide-scrollbars \
   --virtual-time-budget=6000 --window-size=1280,2000 \
   --screenshot=/tmp/pagina.png http://localhost:4322/progetti/
 ```
