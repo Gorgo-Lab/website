@@ -1,5 +1,5 @@
 {
-  "name": "absent-ablation",
+  "name": "gorgolab-site",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -9,12 +9,27 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "ingest": "node scripts/ingest.mjs",
+    "check": "astro check",
+    "check:assets": "node scripts/check-assets.mjs",
+    "validate": "npm run check:assets && astro check && astro build && npm run check:links",
+    "placeholder": "node scripts/placeholder.mjs",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
+    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.2.8"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "lucide-static": "^1.34.0",
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.0"
   }
 }
