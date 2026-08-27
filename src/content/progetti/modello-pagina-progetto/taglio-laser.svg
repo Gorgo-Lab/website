@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200mm" height="120mm" viewBox="0 0 200 120">
+  <!-- Tracciati di taglio: rosso 0.1 mm, come vuole la maggior parte dei laser -->
+  <g fill="none" stroke="#ff0000" stroke-width="0.1">
+    <rect x="10" y="10" width="180" height="100" rx="4"/>
+    <circle cx="40" cy="60" r="12"/>
+    <circle cx="160" cy="60" r="12"/>
+  </g>
+</svg>

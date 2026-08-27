@@ -1,0 +1,5 @@
+pezzo,materiale,spessore_mm,quantita,note
+fianco,compensato pioppo,4,2,venatura verticale
+fondo,compensato pioppo,4,1,
+staffa,PETG stampato,-,4,40% riempimento
+perno,acciaio inox,6,4,M6 x 30
