@@ -1,4 +1,10 @@
 ---
+
+/**
+ * Elenco dei progetti con un dato tag. Le pagine esistono solo per i tag
+ * effettivamente usati: un tag dichiarato in site.config.ts ma mai applicato
+ * non genera una pagina vuota.
+ */
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ProjectCard from '../../../components/ProjectCard.astro';

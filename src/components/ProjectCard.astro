@@ -1,4 +1,16 @@
 ---
+
+/**
+ * Scheda di anteprima di un progetto, per le griglie.
+ *
+ * Tutta la scheda è cliccabile grazie a uno pseudo-elemento sul link del
+ * titolo, che si estende sopra l'intero riquadro. È il modo per avere l'area
+ * cliccabile grande senza annidare il contenuto dentro un <a>, che
+ * renderebbe illeggibile la struttura a chi usa uno screen reader.
+ *
+ * `index` serve solo a decidere quali copertine caricare subito: le prime tre
+ * sono nel primo schermo, le altre possono aspettare.
+ */
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { PROJECT_STATUS } from '../site.config';

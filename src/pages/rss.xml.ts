@@ -3,7 +3,12 @@ import type { APIContext } from 'astro';
 import { SITE } from '../site.config';
 import { getPosts, getProjects } from '../lib/content';
 
-/** Feed unico: articoli del blog + nuovi progetti, ordinati per data. */
+/**
+ * Feed unico per progetti e articoli, ordinati per data.
+ *
+ * Sono tenuti insieme di proposito: chi segue lo spazio vuole sapere cosa si
+ * costruisce, e separare i due flussi obbligherebbe a iscriversi due volte.
+ */
 export async function GET(context: APIContext) {
   const [posts, projects] = await Promise.all([getPosts(), getProjects()]);
 

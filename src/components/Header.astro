@@ -1,4 +1,13 @@
 ---
+
+/**
+ * Intestazione: striscia del coro, marchio, navigazione.
+ *
+ * Il menu mobile funziona senza JavaScript, con una casella di spunta nascosta
+ * e il selettore di pari livello (`#nav-toggle:checked ~ nav`). Meno codice da
+ * mantenere e nessuna dipendenza dall'idratazione: su una pagina statica un
+ * menu che richiede JS è una fragilità gratuita.
+ */
 import { SITE } from '../site.config';
 import Marquee from './Marquee.astro';
 import Icon from './Icon.astro';

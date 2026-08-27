@@ -1,0 +1,242 @@
+# Consegna del progetto
+
+Documento per chi riprende il lavoro su un'altra macchina o dopo una pausa.
+Descrive **dove siamo, cosa manca e in che ordine farlo**. Per l'architettura e
+le regole del codice vedi [`AGENTS.md`](AGENTS.md).
+
+Ultimo aggiornamento: 27 agosto 2026.
+
+---
+
+## Stato in due righe
+
+Il sito è **completo e funzionante in locale**: 20 pagine, build pulita, tutti i
+controlli verdi. **Non è ancora pubblicato**, non esiste un repository remoto e
+alcuni dati sulla pagina "Lo spazio" sono stati dedotti, non verificati.
+
+---
+
+## 1. Portare il progetto sull'altra macchina
+
+Tutto il lavoro è in git, in otto commit tematici. Non esiste ancora un remote:
+va creato (vedi punto 4) oppure, per un trasferimento immediato, si copia il
+repository.
+
+```bash
+# sulla macchina di partenza
+cd ~/Documents/tmp/gogogo
+git bundle create gorgolab.bundle --all
+
+# sulla macchina di destinazione
+git clone gorgolab.bundle gorgolab && cd gorgolab
+git remote remove origin        # il bundle non serve più
+npm install
+npm run validate                # deve passare tutto
+```
+
+Il bundle è un singolo file che contiene l'intera storia: si passa con una
+chiavetta o via rete senza bisogno di un server git.
+
+### Due cose che NON viaggiano con git
+
+- **`node_modules/`** — si ricrea con `npm install`. Serve **Node ≥ 22.12**
+  (sviluppato con la 22.23).
+- **`tmp/Gorgo Lab Design System/`** — la cartella con il design system
+  originale è esclusa dal repository di proposito: sono materiali di
+  lavorazione, non contenuti del sito. Il suo contenuto utile è già stato
+  tradotto in token in `src/styles/global.css` e le regole sono riassunte in
+  `AGENTS.md`. **Se serve ancora come riferimento va copiata a parte**;
+  altrimenti si può cancellare, come era già previsto.
+
+---
+
+## 2. Verificare che tutto funzioni
+
+```bash
+npm run dev                  # localhost:4321
+npm run dev -- --host        # raggiungibile dagli altri dispositivi in LAN
+npm run validate             # i quattro controlli della CI
+```
+
+`validate` deve chiudersi con:
+
+```
+✓ 24 file di contenuto, tutti entro i limiti.
+- 0 errors
+20 page(s) built
+✓ 20 pagine, tutti i collegamenti interni risolvono.
+```
+
+Se gli stili sembrano rotti o disallineati dopo modifiche estese al CSS, prima
+di cercare il bug nel codice prova `npm run build && npm run preview`: il server
+di sviluppo tiene in cache il CSS e ci ha già fatto perdere tempo una volta.
+
+---
+
+## 3. Dati dedotti, da confermare con i soci
+
+**Questo è il vero blocco alla pubblicazione.** Il design system è stato
+generato senza accesso a gorgolab.it e alcune informazioni sono state
+estrapolate. Sono plausibili ma **non verificate**: se il sito va online con
+orari sbagliati, qualcuno trova la porta chiusa.
+
+| Dato | Valore attuale | Dove |
+| --- | --- | --- |
+| Indirizzo | Via Sant'Andrea 6, Gorgonzola (MI) | `src/site.config.ts:16` |
+| Email | `info@gorgolab.it` | `src/site.config.ts:15` |
+| Orari | Mar e Gio 21:00–23:30, Sab 15:00–19:00 | `src/pages/spazio.astro:8-10` |
+| Regole dello spazio | quattro punti riscritti | `src/pages/spazio.astro` |
+| Attrezzature | stampa 3D, laser, elettronica, falegnameria, CNC, tessile | `src/pages/index.astro` |
+| Social | tutti vuoti | `src/site.config.ts` |
+
+Il wiki storico (`https://www.gorgolab.it`) e il regolamento ufficiale sono già
+collegati dal piè di pagina e dalla pagina "Lo spazio": lì si trovano i dati
+veri da riportare.
+
+Da confermare anche con chi cura la grafica: il wordmark GORGOLAB del banner usa
+un carattere display su misura, e **Archivo Black è solo il sostituto libero più
+vicino**. Se qualcuno ha il `.ttf`/`.otf` originale, va messo in `src/fonts/` e
+i titoli si allineano al banner.
+
+---
+
+## 4. Repository su GitHub
+
+```bash
+gh repo create gorgolab-sito --private --source=. --remote=origin --push
+# oppure --public, se il repository dev'essere aperto da subito
+```
+
+L'autenticazione (`gh auth login`) va fatta a mano: richiede il browser.
+
+Subito dopo:
+
+1. **`.github/CODEOWNERS`** — sostituire i sei `@DA-COMPILARE` con gli handle di
+   chi cura il sito. Senza, la richiesta di revisione non scatta.
+2. **Branch protection su `main`** — richiedere il passaggio dei controlli e
+   almeno una approvazione. Senza, chiunque abbia accesso in scrittura può
+   scavalcare la CI, e tutto il meccanismo di validazione diventa decorativo.
+3. Verificare che il workflow `.github/workflows/ci.yml` parta alla prima PR.
+
+**Nota sulla visibilità**: se il repository è pubblico, chiunque può aprire una
+PR — che è il modello giusto per un bene comune — ma le PR da fork non ricevono
+le variabili d'ambiente e le anteprime vanno approvate a mano la prima volta.
+
+---
+
+## 5. Deploy
+
+### Quale prodotto Cloudflare
+
+La situazione è cambiata rispetto a quando è stata presa la decisione iniziale,
+quindi serve una scelta consapevole:
+
+- **Cloudflare Pages** — non è deprecato (documentazione aggiornata ad aprile
+  2026, nessun avviso), l'interfaccia è più semplice e **le anteprime automatiche
+  su ogni pull request sono mature**. Quelle anteprime sono il pilastro del
+  flusso di lavoro: senza, si fa merge alla cieca.
+- **Cloudflare Workers** — è la direzione in cui Cloudflare sta spingendo i
+  nuovi progetti. Richiede un file `wrangler.jsonc` con
+  `{"assets": {"directory": "./dist"}}` e il deploy via `npx wrangler deploy`.
+  **Non è stato verificato** se le anteprime per pull request siano altrettanto
+  immediate: va accertato prima di sceglierlo.
+
+**Raccomandazione: partire da Pages**, perché il requisito n. 1 è l'anteprima
+per PR. La migrazione a Workers, se e quando servirà, è documentata da
+Cloudflare e riguarda solo l'infrastruttura, non il codice del sito.
+
+### Impostazioni per Cloudflare Pages
+
+Dalla dashboard: **Workers & Pages → Create → Pages → Connect to Git**.
+
+| Impostazione | Valore |
+| --- | --- |
+| Framework preset | Astro |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | *(vuoto)* |
+
+Variabili d'ambiente:
+
+| Nome | Valore | Ambiente |
+| --- | --- | --- |
+| `NODE_VERSION` | `22` | Production **e** Preview |
+| `SHOW_DRAFTS` | `true` | **solo Preview** |
+
+`SHOW_DRAFTS` è ciò che rende visibili le bozze nelle anteprime delle PR
+lasciandole invisibili sul sito pubblico. **Se lo imposti anche in Production,
+pubblichi le bozze di tutti.**
+
+### Dopo il primo deploy
+
+1. Impostare il dominio definitivo e riportarlo in **`astro.config.mjs`** (campo
+   `site`, oggi `https://gorgolab.it` con un TODO). Da quel campo dipendono
+   sitemap, URL canonici e anteprime social: se resta sbagliato, i link
+   condivisi puntano altrove.
+2. Aprire una PR di prova e verificare che Cloudflare commenti con il link
+   all'anteprima e che i quattro controlli compaiano verdi.
+3. Controllare che `/rss.xml` e `/sitemap-index.xml` rispondano.
+
+---
+
+## 6. Decisioni ancora aperte
+
+- **Il progetto modello resta visibile?** Oggi
+  `src/content/progetti/modello-pagina-progetto/` compare nell'elenco insieme ai
+  progetti veri (sono 3 in tutto). È voluto — serve che i maker lo trovino
+  navigando — ma è un progetto "meta". Per nasconderlo dal sito pubblico basta
+  aggiungere `draft: true` al suo frontmatter: resta visibile in locale e nelle
+  anteprime.
+- **Contenuti di esempio.** I due progetti e l'articolo sono inventati, con
+  autori di fantasia. Vanno sostituiti con contenuti veri prima di mostrare il
+  sito ai soci come se fosse finito.
+- **Mappa in `/contatti/`.** Prevista ma non fatta: usare OpenStreetMap e non
+  Google Maps, per evitare il banner dei cookie su un sito che oggi non ne ha
+  bisogno.
+- **Un editor web per chi non usa git.** Valutato e **scartato per ora**: la
+  motivazione sta in `README.md`. Da rivalutare sopra i ~20 contributi l'anno.
+
+---
+
+## 7. Note operative utili
+
+**Ispezionare il sito senza aprire il browser.** Chrome headless funziona bene
+per verifiche visive e misurazioni:
+
+```bash
+google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+  --virtual-time-budget=6000 --window-size=1280,2000 \
+  --screenshot=/tmp/pagina.png http://localhost:4322/progetti/
+```
+
+`--virtual-time-budget` serve ad aspettare il caricamento delle immagini: senza,
+gli screenshot escono con i riquadri vuoti e sembra un bug che non c'è.
+
+**Misurare a un viewport preciso.** `--window-size` non produce un viewport CSS
+esatto in headless (chiedendo 390 px se ne ottengono 485). Per verifiche
+attendibili su mobile conviene una paginetta con un `<iframe>` largo 390 px che
+carica il sito e misura dall'interno con `getBoundingClientRect()`: essendo
+stessa origine, il DOM è accessibile. È così che sono stati diagnosticati i due
+bug di overflow già risolti.
+
+**Gestione dei server**: `astro dev --background`, poi
+`astro dev stop|status|logs`. Il preview si ferma con `astro preview stop`.
+
+---
+
+## 8. Cosa è già stato deciso e non va rifatto
+
+Per non ripercorrere strade già valutate:
+
+- **Astro invece di Hugo** — scelto per la validazione dello schema a build time
+  e per l'ecosistema a componenti.
+- **Nessun test unitario** — su un sito statico darebbero copertura teorica e
+  zero difesa reale. I controlli veri sono i quattro della CI.
+- **Nessun framework CSS** — il design system è già un sistema di token.
+- **Nessuna animazione allo scroll** — provata e rimossa: contraddice il design
+  system e lasciava sezioni invisibili.
+- **Niente duotone sulle foto dei progetti** — in una documentazione tecnica il
+  colore è informazione.
+
+I bug già diagnosticati e le loro cause sono elencati in `AGENTS.md`, sezione
+"Trappole già incontrate": vale la pena leggerla prima di mettere mano al CSS.

@@ -1,4 +1,16 @@
 ---
+
+/**
+ * Scheletro di ogni pagina: testa del documento, intestazione, piè di pagina.
+ *
+ * Non c'è nessuno script di animazione, ed è voluto: il design system prescrive
+ * pagine ferme, e l'unico elemento in movimento del sito è la striscia del coro
+ * nell'intestazione. Una dissolvenza allo scroll era stata provata e rimossa —
+ * lasciava mezze sezioni invisibili quando l'osservatore non scattava.
+ *
+ * `bleed` toglie lo spazio superiore per le pagine che aprono con una banda
+ * colorata a tutta larghezza, che deve attaccarsi all'intestazione.
+ */
 import { SITE } from '../site.config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';

@@ -33,15 +33,31 @@ src/
 ├── content.config.ts    ← LO SCHEMA: cosa è obbligatorio nel frontmatter
 ├── site.config.ts       ← nome, contatti, tag ammessi, stati progetto
 ├── layouts/             ← struttura delle pagine
-├── components/          ← card, gallerie, allegati, blocchi per MDX
+├── components/          ← schede, galleria, allegati, blocchi per MDX, icone
 ├── pages/               ← rotte del sito
-└── styles/global.css    ← design tokens e tipografia dei contenuti
+├── plugins/             ← rehype: didascalie delle immagini, tabelle scorrevoli
+├── icons/               ← SVG Lucide usati nell'interfaccia
+└── styles/global.css    ← token del design system e tipografia dei contenuti
 scripts/
 ├── ingest.mjs           ← import di uno zip: comprime, rinomina, prepara il frontmatter
 ├── placeholder.mjs      ← copertine segnaposto geometriche, in palette
 ├── check-assets.mjs     ← guardia su peso e formato dei file
 └── check-links.mjs      ← guardia sui collegamenti interni rotti
 ```
+
+## La pagina modello
+
+`src/content/progetti/modello-pagina-progetto/` contiene **ogni formattazione
+disponibile**, già scritta e commentata: frontmatter completo, titoli, elenchi,
+tabelle, immagini con e senza didascalia, video, riquadri di richiamo,
+specifiche, codice e allegati di sei tipi.
+
+Si copia la cartella, si cancella quello che non serve, si sostituisce il resto.
+È anche consultabile renderizzata su `/progetti/modello-pagina-progetto/`.
+
+Chi aggiunge un componente o una sintassi deve aggiornare anche quel modello,
+`CONTRIBUTING.md` e la pagina `/contribuire/`: altrimenti la novità esiste ma
+nessuno saprà che c'è.
 
 ## Il patto con i maker
 
@@ -64,12 +80,11 @@ formattazione.
 
 ## Da fare prima di andare online
 
-- [ ] `src/site.config.ts` — confermare indirizzo ed email, aggiungere i social
-- [ ] `astro.config.mjs` — campo `site` con il dominio vero
-- [ ] `.github/CODEOWNERS` — sostituire `@DA-COMPILARE`
-- [ ] contenuti di esempio in `src/content/` — sostituirli con quelli veri
-- [ ] `src/pages/spazio.astro` — orari e regole da confermare sul regolamento
-- [ ] `src/pages/index.astro` — elenco attrezzature da allineare a quelle vere
+Il sito è completo e costruisce senza errori, ma **non è ancora pubblicato**:
+mancano la conferma di alcuni dati (indirizzo, orari, email, attrezzature) e la
+messa in opera del deploy.
+
+L'elenco completo dei passaggi, in ordine, sta in [`HANDOFF.md`](HANDOFF.md).
 
 ## Decisioni prese, e perché
 
@@ -99,4 +114,11 @@ Cloudflare Pages, connesso al repository:
 - Output directory: `dist`
 - Variabile d'ambiente (solo preview): `SHOW_DRAFTS=true`
 
-Vedi [`CONTRIBUTING.md`](CONTRIBUTING.md) per la guida destinata ai maker.
+Istruzioni passo per passo in [`HANDOFF.md`](HANDOFF.md).
+
+## Altri documenti
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — guida per i maker che pubblicano
+- [`HANDOFF.md`](HANDOFF.md) — cosa manca, deploy, decisioni aperte
+- [`AGENTS.md`](AGENTS.md) — presentazione tecnica per chi (o cosa) lavora sul
+  codice: stack, architettura, invarianti, trappole già incontrate

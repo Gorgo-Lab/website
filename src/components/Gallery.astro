@@ -1,4 +1,16 @@
 ---
+
+/**
+ * Galleria di immagini di un progetto, costruita dal campo `gallery` del
+ * frontmatter (quindi già validato: ogni immagine esiste davvero).
+ *
+ * Le proporzioni stanno sul riquadro e non sull'immagine: così le caselle
+ * restano tutte identiche qualunque formato abbiano le foto dentro, che
+ * vengono ritagliate al centro.
+ *
+ * Il collegamento punta al file ottimizzato: dà l'ingrandimento a schermo
+ * intero senza tirarsi dietro una libreria per le gallerie.
+ */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 

@@ -1,4 +1,15 @@
 ---
+
+/**
+ * Pagina di dettaglio di un progetto.
+ *
+ * L'indice laterale prende solo i titoli di secondo livello: con tutti i
+ * livelli diventa più lungo del testo che dovrebbe riassumere, e compare
+ * solo se ce n'è più di uno, perché un indice di una voce non serve.
+ *
+ * Galleria, allegati e licenza vanno nello slot `dopo` del layout, fuori dal
+ * contenitore tipografico: vedi la nota in ContentLayout.astro.
+ */
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';

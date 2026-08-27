@@ -1,4 +1,22 @@
 ---
+
+/**
+ * Pagina di un progetto o di un articolo.
+ *
+ * Due slot, e la distinzione è importante:
+ *  - quello predefinito finisce dentro `.prose`, ed è riservato al testo
+ *    scritto dal maker nel markdown;
+ *  - `dopo` sta fuori da `.prose`, per i blocchi strutturali che il sito
+ *    costruisce da solo (galleria, allegati, licenza).
+ *
+ * Le regole tipografiche di `.prose` — margini fra gli <li>, bordi e margini
+ * sulle <img> — sono pensate per la prosa: applicate a una galleria le
+ * riempiono di spazi vuoti e di un secondo bordo dentro al loro. Chi aggiunge
+ * un blocco strutturale lo metta in `dopo`, non nello slot predefinito.
+ *
+ * La copertina scavalca il bordo inferiore della banda con un margine
+ * negativo: è l'effetto "manifesto incollato sopra" del design system.
+ */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import BaseLayout from './BaseLayout.astro';
