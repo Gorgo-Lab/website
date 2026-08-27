@@ -11,44 +11,40 @@ Ultimo aggiornamento: 27 agosto 2026.
 ## Stato in due righe
 
 Il sito è **completo e funzionante in locale**: 20 pagine, build pulita, tutti i
-controlli verdi. **Non è ancora pubblicato**, non esiste un repository remoto e
-alcuni dati sulla pagina "Lo spazio" sono stati dedotti, non verificati.
+controlli verdi. Il codice sta su GitHub, in `Gorgo-Lab/website` (privato). Il
+sito **non è ancora pubblicato** e alcuni dati sulla pagina "Lo spazio" sono
+stati dedotti, non verificati.
 
 ---
 
-## 1. Portare il progetto sull'altra macchina
+## 1. Portare il progetto su un'altra macchina
 
-Tutto il lavoro è in git, in otto commit tematici. Non esiste ancora un remote:
-va creato (vedi punto 4) oppure, per un trasferimento immediato, si copia il
-repository.
+Il repository sta su GitHub. Serve un account con accesso a `Gorgo-Lab/website`
+— è privato — e una chiave SSH registrata; senza chiave, si clona l'URL HTTPS.
 
 ```bash
-# sulla macchina di partenza
-cd ~/Documents/tmp/gogogo
-git bundle create gorgolab.bundle --all
-
-# sulla macchina di destinazione
-git clone gorgolab.bundle gorgolab && cd gorgolab
-git remote remove origin        # il bundle non serve più
-git branch --show-current       # dev'essere "main", non "master"
+git clone git@github.com:Gorgo-Lab/website.git gorgolab && cd gorgolab
+git branch --show-current       # dev'essere "main"
+nvm use                         # legge .nvmrc e seleziona Node 22
 npm install
 npm run validate                # deve passare tutto
 ```
 
-Il bundle pesa circa 500 kB. Procedura già provata: clonando da zero,
-`validate` passa tutti e quattro i controlli.
+Provato il 27 agosto 2026 su una seconda macchina (macOS 12, Intel):
+installazione e `validate` passano tutti e quattro i controlli.
 
 Il ramo principale si chiama **`main`**: il workflow in
 `.github/workflows/ci.yml` è configurato su quel nome, e su un ramo chiamato
 diversamente i controlli non partirebbero affatto — senza dare errore.
 
-Il bundle è un singolo file che contiene l'intera storia: si passa con una
-chiavetta o via rete senza bisogno di un server git.
-
 ### Due cose che NON viaggiano con git
 
 - **`node_modules/`** — si ricrea con `npm install`. Serve **Node ≥ 22.12**
-  (sviluppato con la 22.23).
+  (sviluppato con la 22.23): `.nvmrc` la dichiara e `nvm use` la seleziona.
+  Con una versione più vecchia — anche una 22 sotto la 22.12 — `astro build`
+  si ferma subito con «Node.js vX is not supported by Astro!». Fallisce presto e
+  a voce alta, ma se il Node predefinito della macchina è un altro conviene
+  ricordarsi di `nvm use` prima di dare la colpa al progetto.
 - **`tmp/Gorgo Lab Design System/`** — la cartella con il design system
   originale è esclusa dal repository di proposito: sono materiali di
   lavorazione, non contenuti del sito. Il suo contenuto utile è già stato
@@ -110,14 +106,8 @@ i titoli si allineano al banner.
 
 ## 4. Repository su GitHub
 
-```bash
-gh repo create gorgolab-sito --private --source=. --remote=origin --push
-# oppure --public, se il repository dev'essere aperto da subito
-```
-
-L'autenticazione (`gh auth login`) va fatta a mano: richiede il browser.
-
-Subito dopo:
+Il repository esiste già: **`Gorgo-Lab/website`**, privato, ramo `main`.
+Resta da fare:
 
 1. **`.github/CODEOWNERS`** — già compilato con `@naicodev`. Vanno aggiunti gli
    handle degli altri soci che devono comparire come revisori, quando ce ne
@@ -125,6 +115,11 @@ Subito dopo:
 2. **Protezione del ramo `main`** — vedi il riquadro qui sotto: sul piano
    gratuito è disponibile solo per i repository pubblici.
 3. Verificare che il workflow `.github/workflows/ci.yml` parta alla prima PR.
+
+Comoda ma non indispensabile: `gh`, la CLI di GitHub (`brew install gh`, poi
+`gh auth login`, che richiede il browser). Serve ad aprire pull request e a
+leggere i log di una CI rossa (`gh run view --log-failed`) senza uscire dal
+terminale; l'interfaccia web fa le stesse cose.
 
 ### Privato adesso, pubblico al lancio
 

@@ -97,11 +97,13 @@ npm update                   # le aggiorna entro i limiti di versione dichiarati
 cp node_modules/lucide-static/icons/<nome>.svg src/icons/
 ```
 
-### Trasferire il progetto su un'altra macchina
+### Lavorare su un'altra macchina
 
 ```bash
-git bundle create gorgolab.bundle --all     # un solo file con tutta la storia (~500 kB)
-git clone gorgolab.bundle gorgolab          # sulla macchina di destinazione
+git clone git@github.com:Gorgo-Lab/website.git gorgolab && cd gorgolab
+nvm use                                     # legge .nvmrc e seleziona Node 22
+npm install
+npm run validate                            # deve passare tutto
 ```
 
 Ricorda che `node_modules/` e la cartella `tmp/` non viaggiano: la prima si
