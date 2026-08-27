@@ -1,0 +1,51 @@
+---
+/**
+ * Icone Lucide, inlinate a build time da src/icons/.
+ *
+ * Il design system prescrive Lucide, tratto 2px, colore ereditato da
+ * currentColor. Le emoji non si usano nell'interfaccia.
+ *
+ * Per aggiungerne una:
+ *   cp node_modules/lucide-static/icons/<nome>.svg src/icons/
+ */
+interface Props {
+  name: string;
+  size?: number;
+  /** Se l'icona porta significato, passa un'etichetta; altrimenti resta decorativa */
+  label?: string;
+  class?: string;
+}
+
+const { name, size = 20, label, class: className } = Astro.props;
+
+const files = import.meta.glob<string>('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+const raw = files[`../icons/${name}.svg`];
+
+if (!raw) {
+  const disponibili = Object.keys(files).map((k) => k.replace('../icons/', '').replace('.svg', ''));
+  throw new Error(
+    `[Icon] "${name}" non è in src/icons/.\n` +
+      `Copiala con: cp node_modules/lucide-static/icons/${name}.svg src/icons/\n` +
+      `Disponibili: ${disponibili.join(', ')}`,
+  );
+}
+
+// Sostituisco gli attributi di dimensione e innesto quelli di accessibilità.
+const svg = raw
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\swidth="24"/, ` width="${size}"`)
+  .replace(/\sheight="24"/, ` height="${size}"`)
+  .replace(
+    /<svg/,
+    `<svg${className ? ` class="${className}"` : ''} ${
+      label ? `role="img" aria-label="${label}"` : 'aria-hidden="true" focusable="false"'
+    }`,
+  )
+  .trim();
+---
+
+<Fragment set:html={svg} />
+
+<style is:global>
+  .lucide { display: inline-block; vertical-align: middle; flex: none; }
+</style>

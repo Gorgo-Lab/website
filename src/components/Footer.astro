@@ -1,0 +1,99 @@
+---
+import { SITE } from '../site.config';
+import Icon from './Icon.astro';
+
+const socials = Object.entries(SITE.social).filter(([, url]) => url);
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="wrap grid">
+    <div class="brand-col">
+      <div class="brand">
+        <img src="/brand/logo.png" alt="" width="36" height="36" />
+        <span class="shout">{SITE.name}</span>
+      </div>
+      <p>
+        Hackerspace comunale di Gorgonzola. Un bene comune aperto a chiunque,
+        italiani e stranieri, senza quota d'ingresso.
+      </p>
+      <p class="chant shout">{SITE.wordmark} {SITE.chant}</p>
+    </div>
+
+    <div>
+      <h2>Dove siamo</h2>
+      <p class="with-icon"><Icon name="map-pin" size={16} />{SITE.address}</p>
+      <p class="with-icon">
+        <Icon name="mail" size={16} /><a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      </p>
+    </div>
+
+    <div>
+      <h2>Il sito</h2>
+      <ul>
+        <li><a href="/progetti/">Progetti</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/spazio/">Lo spazio</a></li>
+        <li><a href="/contribuire/">Pubblica il tuo progetto</a></li>
+        <li><a href="/rss.xml">Feed RSS</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>Gorgo Lab</h2>
+      <ul>
+        <li><a href={SITE.wiki} rel="noopener">Wiki →</a></li>
+        <li><a href={SITE.regolamento} rel="noopener">Regolamento →</a></li>
+        {socials.map(([k, url]) => (
+          <li><a href={url} rel="me noopener">{k} →</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap legal">
+    <p>© {year} {SITE.name}</p>
+    <p>
+      Contenuti sotto la licenza indicata da ciascun autore, di norma{' '}
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" rel="license">CC BY-SA 4.0</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: var(--gl-ink); color: var(--gl-paper);
+    border-top: var(--bw-2) solid var(--gl-ink);
+    padding-block: var(--s-8) var(--s-5);
+  }
+  .grid { display: grid; gap: var(--s-7); grid-template-columns: 2fr 1fr 1fr 1fr; }
+  @media (max-width: 60rem) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 34rem) { .grid { grid-template-columns: 1fr; gap: var(--s-6); } }
+
+  .brand { display: flex; align-items: center; gap: 10px; margin-bottom: var(--s-3); }
+  .brand img { border-radius: var(--r-md); }
+  .brand .shout { font-size: var(--fz-xl); }
+  .brand-col p { color: var(--gl-line); font-size: var(--fz-sm); max-width: 34ch; }
+  .chant { color: var(--gl-orange-600); font-size: var(--fz-md); margin-top: var(--s-4); letter-spacing: var(--tr-wide); }
+
+  h2 {
+    font-size: var(--fz-xs); font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--tr-shout);
+    color: var(--gl-orange-300); margin-bottom: var(--s-3);
+  }
+  p, li { font-size: var(--fz-sm); color: var(--gl-line); }
+  .with-icon { display: flex; align-items: center; gap: var(--s-2); margin-bottom: var(--s-2); }
+  ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+
+  a { color: var(--gl-paper); text-decoration: none; }
+  a:hover { color: var(--gl-orange-400); text-decoration: underline; }
+
+  .legal {
+    margin-top: var(--s-7); padding-top: var(--s-5);
+    border-top: var(--bw-1) solid var(--gl-ink-3);
+    display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); justify-content: space-between;
+    font-family: var(--font-mono); font-size: var(--fz-xs);
+    text-transform: uppercase; letter-spacing: var(--tr-shout); color: var(--gl-mute);
+  }
+  .legal a { color: var(--gl-line); }
+</style>

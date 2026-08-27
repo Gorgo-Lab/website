@@ -1,0 +1,55 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Riquadro di richiamo. Uso in .mdx, senza import:
+ *   <Callout type="warning" title="Attenzione">Testo…</Callout>
+ */
+interface Props {
+  type?: 'info' | 'tip' | 'warning' | 'danger';
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const KIND = {
+  info: { icon: 'info', label: 'Nota' },
+  tip: { icon: 'lightbulb', label: 'Consiglio' },
+  warning: { icon: 'triangle-alert', label: 'Attenzione' },
+  danger: { icon: 'flame', label: 'Pericolo' },
+} as const;
+
+const { icon, label } = KIND[type];
+---
+
+<aside class="callout" data-type={type}>
+  <p class="head">
+    <Icon name={icon} size={18} />
+    <span>{title ?? label}</span>
+  </p>
+  <div class="body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    --tone: var(--gl-blue-600);
+    margin-block: 1.8em; padding: var(--s-4);
+    background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink);
+    border-left-width: var(--bw-4); border-left-color: var(--tone);
+    border-radius: var(--r-md);
+    box-shadow: var(--sh-card);
+    color: var(--fg-2);
+  }
+  .callout[data-type='tip'] { --tone: var(--gl-success); }
+  .callout[data-type='warning'] { --tone: var(--gl-orange-600); }
+  .callout[data-type='danger'] { --tone: var(--gl-danger); }
+
+  .head {
+    display: flex; align-items: center; gap: var(--s-2);
+    font-weight: 700; font-size: var(--fz-sm);
+    text-transform: uppercase; letter-spacing: var(--tr-shout);
+    color: var(--tone); margin-bottom: var(--s-2);
+  }
+  .body :global(> * + *) { margin-top: 0.7em; }
+</style>

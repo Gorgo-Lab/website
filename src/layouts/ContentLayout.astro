@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  summary: string;
+  cover: ImageMetadata;
+  coverAlt: string;
+  date: Date;
+  updated?: Date;
+  authors: string[];
+  tags: string[];
+  /** Segmento di URL della sezione, es. "progetti" */
+  section: string;
+  sectionLabel: string;
+}
+
+const { title, summary, cover, coverAlt, date, updated, authors, tags, section, sectionLabel } =
+  Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout title={title} description={summary} ogImage={cover.src} bleed>
+  <article>
+    <header class="head band band-blue on-blue">
+      <div class="wrap">
+        <nav aria-label="Percorso" class="crumbs">
+          <a href={`/${section}/`}>← {sectionLabel}</a>
+        </nav>
+
+        <h1 class="shout">{title}</h1>
+        <p class="summary">{summary}</p>
+
+        <div class="meta">
+          <slot name="meta" />
+          <p class="mono">
+            {authors.join(', ')} · <time datetime={date.toISOString()}>{fmt(date)}</time>
+            {updated && <> · agg. <time datetime={updated.toISOString()}>{fmt(updated)}</time></>}
+          </p>
+        </div>
+
+        <ul class="tags">
+          {tags.map((t) => <li><a class="tag" href={`/${section}/tag/${t}/`}>{t}</a></li>)}
+        </ul>
+      </div>
+    </header>
+
+    <!-- La copertina scavalca il bordo della banda: manifesto incollato sopra -->
+    <div class="wrap cover-wrap">
+      <figure class="cover">
+        <Image
+          src={cover}
+          alt={coverAlt}
+          width={1600}
+          height={900}
+          widths={[640, 1024, 1600]}
+          sizes="(max-width: 76rem) 100vw, 1150px"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    </div>
+
+    <div class="wrap layout">
+      <div class="col">
+        <div class="prose"><slot /></div>
+        {/* Fuori dalla .prose di proposito: galleria e allegati non sono testo,
+            e la tipografia del testo (margini fra <li>, bordi sulle <img>)
+            altrimenti li deforma. */}
+        <slot name="dopo" />
+      </div>
+      <aside class="side"><slot name="aside" /></aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .head { padding-block: var(--s-8) var(--s-9); border-top: 0; }
+  .crumbs { margin-bottom: var(--s-5); }
+  .crumbs a {
+    font-size: var(--fz-sm); font-weight: 700; text-decoration: none;
+    text-transform: uppercase; letter-spacing: var(--tr-shout);
+    color: var(--gl-blue-050);
+  }
+  .crumbs a:hover { color: var(--gl-white); }
+
+  h1 { font-size: var(--fz-fluid-5xl); color: var(--gl-paper); max-width: 22ch; }
+  .summary { font-size: var(--fz-md); color: var(--gl-blue-050); max-width: 52ch; margin-top: var(--s-4); }
+
+  .meta { margin-top: var(--s-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-4); }
+  .meta .mono { color: var(--gl-blue-050); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--s-2); list-style: none; padding: 0; margin-top: var(--s-5); }
+
+  .cover-wrap { margin-top: calc(var(--s-8) * -1); margin-bottom: var(--s-8); }
+  .cover {
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg); overflow: hidden; background: var(--gl-blue-100);
+  }
+  .cover :global(img) { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: var(--s-8); align-items: start; }
+  .col { min-width: 0; }
+  /* minmax(0, …) e non 1fr: un track 1fr ha larghezza minima "auto", quindi si
+     allarga fino all'elemento più largo che contiene — un blocco di codice, una
+     tabella — e si porta dietro tutta la pagina oltre il bordo dello schermo. */
+  @media (max-width: 62rem) { .layout { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); } }
+  .side { position: sticky; top: calc(64px + 34px + var(--s-5)); }
+  @media (max-width: 62rem) { .side { position: static; } }
+</style>

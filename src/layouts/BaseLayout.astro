@@ -1,0 +1,75 @@
+---
+import { SITE } from '../site.config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** URL assoluto o importato dell'immagine per le anteprime social */
+  ogImage?: string;
+  /** Toglie lo spazio superiore: per le pagine che aprono con una banda */
+  bleed?: boolean;
+}
+
+const { title, description = SITE.description, ogImage, bleed = false } = Astro.props;
+
+const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogUrl = new URL(ogImage ?? '/brand/banner.png', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0071bc" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Progetti e blog`} href="/rss.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+
+  <body>
+    <a href="#main" class="skip">Vai al contenuto</a>
+    <Header />
+    <main id="main" class:list={[{ bleed }]}>
+      <slot />
+    </main>
+    <Footer />
+
+
+    <style>
+      main { padding-block: var(--s-8) var(--s-9); }
+      main.bleed { padding-block: 0 var(--s-9); }
+
+      .skip {
+        position: absolute; left: var(--s-3); top: -5rem; z-index: 100;
+        background: var(--gl-orange-600); color: var(--fg-on-orange);
+        border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+        box-shadow: var(--sh-card);
+        padding: var(--s-3) var(--s-4); font-weight: 700; text-decoration: none;
+        transition: top var(--dur-base) var(--ease-out);
+      }
+      .skip:focus { top: var(--s-3); }
+    </style>
+  </body>
+</html>

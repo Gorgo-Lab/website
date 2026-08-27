@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { PROJECT_STATUS } from '../site.config';
+
+interface Props {
+  entry: CollectionEntry<'progetti'>;
+  index?: number;
+}
+
+const { entry, index = 0 } = Astro.props;
+const { title, summary, cover, coverAlt, status, tags, authors, date } = entry.data;
+const href = `/progetti/${entry.id}/`;
+---
+
+<article class="card">
+  <div class="media">
+    <Image
+      src={cover}
+      alt={coverAlt}
+      width={720}
+      height={480}
+      widths={[360, 540, 720, 1080]}
+      sizes="(max-width: 46rem) 92vw, (max-width: 72rem) 45vw, 22rem"
+      loading={index < 3 ? 'eager' : 'lazy'}
+    />
+    <span class="badge-status" data-status={status}>{PROJECT_STATUS[status]}</span>
+  </div>
+
+  <div class="body">
+    <h3 class="shout">
+      <!-- Il link copre tutta la scheda con ::after, ma resta un vero link -->
+      <a href={href}>{title}</a>
+    </h3>
+    <p class="summary">{summary}</p>
+
+    <footer>
+      <p class="meta">
+        {authors.join(', ')} · <time datetime={date.toISOString()}>
+          {date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' })}
+        </time>
+      </p>
+      <ul class="tags">
+        {tags.slice(0, 3).map((t) => <li class="tag">{t}</li>)}
+      </ul>
+    </footer>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex; flex-direction: column; position: relative;
+    background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+    transition: box-shadow var(--dur-fast) var(--ease-out),
+                transform var(--dur-fast) var(--ease-out);
+  }
+  /* Niente scale: la scheda si "appoggia", come un foglio premuto */
+  .card:hover, .card:focus-within {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 0 var(--gl-ink);
+  }
+
+  .media {
+    position: relative; aspect-ratio: 3 / 2; overflow: hidden;
+    border-bottom: var(--bw-2) solid var(--gl-ink);
+    border-radius: calc(var(--r-lg) - var(--bw-2)) calc(var(--r-lg) - var(--bw-2)) 0 0;
+    background: var(--gl-blue-100);
+  }
+  .media :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .badge-status { position: absolute; left: var(--s-3); top: var(--s-3); box-shadow: var(--sh-card); }
+
+  .body { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-4); flex: 1; }
+  h3 { font-size: var(--fz-lg); }
+  h3 a { color: var(--fg-1); text-decoration: none; }
+  h3 a:hover { color: var(--gl-orange-700); }
+  h3 a::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-lg); }
+
+  .summary {
+    color: var(--fg-2); font-size: var(--fz-sm);
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  footer { margin-top: auto; padding-top: var(--s-3); display: grid; gap: var(--s-3); }
+  .meta { font-family: var(--font-mono); font-size: var(--fz-xs); color: var(--fg-3); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--s-1); list-style: none; padding: 0; }
+</style>

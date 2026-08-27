@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  index?: number;
+}
+
+const { entry, index = 0 } = Astro.props;
+const { title, summary, cover, coverAlt, authors, date, tags } = entry.data;
+const href = `/blog/${entry.id}/`;
+---
+
+<article class="post">
+  <a href={href} class="thumb">
+    <Image src={cover} alt={coverAlt} width={420} height={280} widths={[210, 420, 640]} sizes="(max-width: 46rem) 100vw, 14rem" loading="lazy" />
+  </a>
+  <div>
+    <p class="meta">
+      <time datetime={date.toISOString()}>
+        {date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+      </time> · {authors.join(', ')}
+    </p>
+    <h3 class="shout"><a href={href}>{title}</a></h3>
+    <p class="summary">{summary}</p>
+    <ul class="tags">{tags.map((t) => <li class="tag">{t}</li>)}</ul>
+  </div>
+</article>
+
+<style>
+  .post {
+    display: grid; grid-template-columns: 14rem minmax(0, 1fr); gap: var(--s-5);
+    padding-block: var(--s-6); border-bottom: var(--bw-2) solid var(--gl-ink);
+  }
+  @media (max-width: 46rem) { .post { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); } }
+
+  .thumb {
+    display: block; align-self: start;
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card); overflow: hidden;
+    transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .thumb:hover { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--gl-ink); }
+  .thumb :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+
+  .meta { font-family: var(--font-mono); font-size: var(--fz-xs); color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.05em; }
+  h3 { font-size: var(--fz-xl); margin-block: var(--s-2) var(--s-2); }
+  h3 a { color: var(--fg-1); text-decoration: none; }
+  h3 a:hover { color: var(--gl-orange-700); }
+  .summary { color: var(--fg-2); font-size: var(--fz-base); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--s-1); list-style: none; padding: 0; margin-top: var(--s-3); }
+</style>

@@ -1,0 +1,90 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Video embeddato con facciata: fino al click non parte nulla verso il
+ * provider — niente iframe, niente cookie, niente megabyte di player.
+ *
+ * Uso in un file .mdx, senza import:
+ *   <Video provider="youtube" id="dQw4w9WgXcQ" title="Test del braccio" />
+ */
+interface Props {
+  provider?: 'youtube' | 'vimeo';
+  id: string;
+  title: string;
+  ratio?: string;
+}
+
+const { provider = 'youtube', id, title, ratio = '16 / 9' } = Astro.props;
+
+if (!/^[\w-]+$/.test(id)) {
+  throw new Error(`[Video] id non valido: "${id}". Serve solo l'ID del video, non l'URL completo.`);
+}
+
+const embed =
+  provider === 'youtube'
+    ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`
+    : `https://player.vimeo.com/video/${id}?autoplay=1`;
+
+const poster = provider === 'youtube' ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : undefined;
+---
+
+<figure class="video" style={`--ratio:${ratio}`}>
+  <div class="frame" data-embed={embed} data-title={title}>
+    <button type="button" class="play" aria-label={`Riproduci: ${title}`}>
+      {poster && <img src={poster} alt="" loading="lazy" width="480" height="360" />}
+      <span class="icon"><Icon name="play" size={28} /></span>
+    </button>
+  </div>
+  <figcaption>{title}</figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.video .frame').forEach((frame) => {
+    frame.querySelector('button')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = frame.dataset.embed!;
+      iframe.title = frame.dataset.title!;
+      iframe.loading = 'lazy';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      frame.replaceChildren(iframe);
+    });
+  });
+</script>
+
+<style>
+  .video { margin-block: 2rem; }
+  .frame {
+    position: relative; aspect-ratio: var(--ratio); overflow: hidden;
+    background: var(--gl-blue-100);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card);
+  }
+  .frame :global(iframe) { width: 100%; height: 100%; border: 0; }
+
+  .play { all: unset; display: block; cursor: pointer; position: absolute; inset: 0; }
+  .play img { width: 100%; height: 100%; object-fit: cover; transition: opacity var(--dur-base) var(--ease-out); }
+  .play:hover img { opacity: 0.85; }
+
+  .icon {
+    position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+    display: grid; place-items: center;
+    width: 68px; height: 68px;
+    background: var(--gl-orange-600); color: var(--fg-on-orange);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card-lg);
+    transition: background var(--dur-fast) var(--ease-out),
+                transform var(--dur-fast) var(--ease-out),
+                box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .play:hover .icon { background: var(--gl-orange-500); }
+  .play:active .icon { transform: translate(calc(-50% + 2px), calc(-50% + 2px)); box-shadow: 0 0 0 0 var(--gl-ink); }
+  .play:focus-visible { outline: var(--bw-3) solid var(--gl-orange-600); outline-offset: -6px; }
+
+  figcaption {
+    font-family: var(--font-mono); font-size: var(--fz-xs);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--fg-3); margin-top: var(--s-3);
+  }
+</style>

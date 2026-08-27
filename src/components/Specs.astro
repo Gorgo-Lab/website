@@ -1,0 +1,44 @@
+---
+/**
+ * Tabella di specifiche tecniche. Uso in .mdx, senza import:
+ *   <Specs items={[["Materiale","PLA"],["Peso","480 g"]]} />
+ */
+interface Props {
+  items: [string, string][];
+  title?: string;
+}
+
+const { items, title = 'Specifiche' } = Astro.props;
+---
+
+<div class="specs">
+  <p class="t mono">{title}</p>
+  <dl>
+    {items.map(([k, v]) => (
+      <div class="row">
+        <dt>{k}</dt>
+        <dd>{v}</dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .specs {
+    margin-block: 1.8em; overflow: hidden;
+    background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card);
+  }
+  .t {
+    font-weight: 700; text-transform: uppercase; letter-spacing: var(--tr-shout);
+    padding: var(--s-3) var(--s-4);
+    background: var(--gl-ink); color: var(--gl-paper);
+  }
+  dl { margin: 0; }
+  .row { display: grid; grid-template-columns: minmax(8rem, 13rem) minmax(0, 1fr); gap: var(--s-4); padding: var(--s-3) var(--s-4); }
+  .row + .row { border-top: var(--bw-1) solid var(--border); }
+  dt { font-family: var(--font-mono); font-size: var(--fz-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-3); align-self: center; }
+  dd { margin: 0; font-weight: 500; color: var(--fg-1); }
+  @media (max-width: 34rem) { .row { grid-template-columns: minmax(0, 1fr); gap: var(--s-1); } }
+</style>

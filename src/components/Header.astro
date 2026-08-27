@@ -1,0 +1,107 @@
+---
+import { SITE } from '../site.config';
+import Marquee from './Marquee.astro';
+import Icon from './Icon.astro';
+
+const nav = [
+  { href: '/progetti/', label: 'Progetti' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/spazio/', label: 'Lo spazio' },
+  { href: '/contatti/', label: 'Dove siamo' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="site-header">
+  <Marquee />
+
+  <div class="bar">
+    <div class="wrap row">
+      <a href="/" class="brand">
+        <img src="/brand/logo.png" alt="" width="32" height="32" />
+        <span class="shout">{SITE.name}</span>
+      </a>
+
+      <input type="checkbox" id="nav-toggle" class="visually-hidden" />
+      <label for="nav-toggle" class="burger">
+        <span class="visually-hidden">Apri il menu</span>
+        {/* Le icone stanno dentro uno <span>: Astro non applica le classi
+            scoped all'SVG inlinato da Icon, quindi il contenitore fa da presa. */}
+        <span class="i-open"><Icon name="menu" size={22} /></span>
+        <span class="i-close"><Icon name="x" size={22} /></span>
+      </label>
+
+      <nav aria-label="Principale">
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <a class="btn btn-primary cta" href="/contatti/">Vieni a vedere →</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; }
+  .bar { background: var(--bg-1); border-bottom: var(--bw-2) solid var(--gl-ink); }
+  .row { display: flex; align-items: center; gap: var(--s-5); min-height: 64px; }
+
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg-1); margin-right: auto; }
+  .brand img { border-radius: var(--r-md); border: var(--bw-1) solid var(--gl-ink); }
+  .brand .shout { font-size: var(--fz-lg); }
+  .brand:hover { color: var(--gl-orange-700); }
+
+  nav ul { display: flex; gap: var(--s-5); list-style: none; padding: 0; }
+  nav a {
+    font-weight: 600; font-size: 15px; color: var(--fg-1); text-decoration: none;
+    padding-block: var(--s-2);
+    border-bottom: var(--bw-3) solid transparent;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  nav a:hover { color: var(--gl-orange-700); }
+  nav a[aria-current='page'] { border-bottom-color: var(--gl-orange-600); }
+
+  .cta { white-space: nowrap; }
+
+  /* Menu mobile senza JS: checkbox + selettore di pari livello */
+  .burger { display: none; }
+  .i-close { display: none; }
+
+  @media (max-width: 62rem) {
+    .cta { display: none; }
+    .burger {
+      display: grid; place-items: center;
+      width: 42px; height: 42px; cursor: pointer;
+      border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+      background: var(--bg-1); color: var(--fg-1);
+    }
+    .burger:hover { background: var(--bg-2); }
+    #nav-toggle:checked ~ .burger .i-open { display: none; }
+    #nav-toggle:checked ~ .burger .i-close { display: block; }
+    #nav-toggle:focus-visible ~ .burger { outline: var(--bw-3) solid var(--gl-orange-600); outline-offset: 2px; }
+
+    nav {
+      position: absolute; inset: 100% 0 auto 0;
+      background: var(--bg-1);
+      border-bottom: var(--bw-2) solid var(--gl-ink);
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows var(--dur-base) var(--ease-out);
+    }
+    nav ul { flex-direction: column; overflow: hidden; gap: 0; padding-inline: var(--pad); }
+    nav li { border-top: var(--bw-1) solid var(--border); }
+    nav li:first-child { border-top: 0; }
+    nav a { display: block; padding-block: var(--s-4); border-bottom: 0; }
+    nav a[aria-current='page'] { color: var(--gl-orange-700); }
+    #nav-toggle:checked ~ nav { grid-template-rows: 1fr; }
+    #nav-toggle:checked ~ nav ul { padding-block: var(--s-2) var(--s-4); }
+  }
+</style>

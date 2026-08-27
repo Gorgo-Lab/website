@@ -1,0 +1,61 @@
+---
+import { SITE } from '../site.config';
+
+/**
+ * La striscia del coro: GORGOLAB ● GOGOGO ● GORGOLAB ● …
+ *
+ * È l'unico elemento in continua animazione di tutto il sito — il design
+ * system è esplicito su questo. Il nastro contiene due copie identiche e
+ * scorre del 50%, così il ciclo si chiude senza salti.
+ */
+interface Props {
+  /** Secondi per un giro completo */
+  speed?: number;
+}
+
+const { speed = 28 } = Astro.props;
+const HALF = 8;
+const cells = Array.from({ length: HALF * 2 });
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="track" style={`--dur:${speed}s`}>
+    {cells.map(() => (
+      <>
+        <span class="word">{SITE.wordmark}</span>
+        <span class="dot">●</span>
+        <span class="word">{SITE.chant}</span>
+        <span class="dot">●</span>
+      </>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    background: var(--gl-blue);
+    border-bottom: var(--bw-2) solid var(--gl-ink);
+    overflow: hidden;
+  }
+  .track {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    padding-block: 6px;
+    animation: slide var(--dur) linear infinite;
+    will-change: transform;
+  }
+  .word {
+    font-family: var(--font-display); font-weight: 400;
+    font-size: var(--fz-lg); line-height: 1;
+    color: var(--gl-orange); text-transform: uppercase;
+    letter-spacing: var(--tr-wide);
+    padding-inline: 14px;
+  }
+  .dot { color: var(--gl-paper); font-size: var(--fz-sm); padding-inline: 4px; }
+
+  @keyframes slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  /* Con movimento ridotto la striscia resta, ferma: è identità, non decoro */
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } }
+</style>

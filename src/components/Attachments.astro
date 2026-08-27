@@ -1,0 +1,93 @@
+---
+import { ATTACHMENT_EXTENSIONS, ATTACHMENT_ICONS } from '../site.config';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Cartella dell'entry, es. "braccio-robotico" */
+  dir: string;
+  collection: 'progetti' | 'blog';
+  items: { file: string; label: string; note?: string }[];
+}
+
+const { dir, collection, items } = Astro.props;
+
+/**
+ * Vite emette in output ogni file importato da src/. Il glob dev'essere
+ * statico; la risoluzione del singolo allegato avviene qui sotto.
+ */
+const assets = import.meta.glob<string>(
+  '/src/content/**/*.{pdf,zip,stl,step,stp,3mf,svg,dxf,ino,kicad_pro,sch,csv,txt,gcode}',
+  { query: '?url', import: 'default', eager: true },
+);
+
+const resolved = items.map((item) => {
+  const key = `/src/content/${collection}/${dir}/${item.file}`;
+  const url = assets[key];
+  const ext = item.file.split('.').pop()?.toLowerCase() ?? '';
+
+  // Far fallire la build è intenzionale: meglio una PR rossa che un 404 muto.
+  if (!url) {
+    throw new Error(
+      `[allegati] "${item.file}" dichiarato nel frontmatter di ${collection}/${dir} ` +
+        `ma non trovato in quella cartella.\n` +
+        `Estensioni ammesse: ${ATTACHMENT_EXTENSIONS.join(', ')}.`,
+    );
+  }
+  return { ...item, url, ext, icon: ATTACHMENT_ICONS[ext] ?? 'paperclip' };
+});
+---
+
+<section class="attachments" aria-labelledby="allegati">
+  <h2 id="allegati" class="shout">File del progetto</h2>
+  <ul>
+    {resolved.map((a) => (
+      <li>
+        <a href={a.url} download={a.file}>
+          <span class="icon"><Icon name={a.icon} size={22} /></span>
+          <span class="text">
+            <span class="label">{a.label}</span>
+            {a.note && <span class="note">{a.note}</span>}
+          </span>
+          <span class="ext mono">{a.ext}</span>
+          <span class="dl"><Icon name="download" size={18} /></span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .attachments { margin-top: var(--s-8); max-width: var(--wrap-text); }
+  h2 {
+    font-size: var(--fz-fluid-2xl); color: var(--fg-1);
+    padding-top: var(--s-5); border-top: var(--bw-4) solid var(--gl-ink);
+    margin-bottom: var(--s-4);
+  }
+  ul { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+
+  a {
+    display: flex; align-items: center; gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card);
+    text-decoration: none; color: var(--fg-1);
+    transition: background var(--dur-fast) var(--ease-out),
+                transform var(--dur-fast) var(--ease-out),
+                box-shadow var(--dur-fast) var(--ease-out);
+  }
+  a:hover { background: var(--gl-orange-100); color: var(--fg-1); }
+  a:active { transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--gl-ink); }
+
+  .icon { color: var(--gl-orange-700); display: grid; place-items: center; }
+  .text { display: grid; gap: 2px; margin-right: auto; min-width: 0; }
+  .label { font-weight: 700; }
+  .note { font-size: var(--fz-sm); color: var(--fg-3); }
+  .ext {
+    font-size: var(--fz-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--fg-3); border: var(--bw-1) solid var(--border); border-radius: var(--r-sm);
+    padding: 2px 6px; white-space: nowrap;
+  }
+  .dl { color: var(--fg-3); }
+  a:hover .dl { color: var(--gl-orange-700); }
+</style>
