@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../site.config';
+
+// TODO: orari e regole vanno confermati sul regolamento ufficiale.
+const orari = [
+  { g: 'Martedì', h: '21:00 – 23:30', note: 'Serata aperta, entra chiunque' },
+  { g: 'Giovedì', h: '21:00 – 23:30', note: 'Serata di lavoro sui progetti' },
+  { g: 'Sabato', h: '15:00 – 19:00', note: 'Workshop e progetti lunghi' },
+];
+
+const regole = [
+  {
+    title: 'Le macchine si imparano insieme',
+    text: 'Quelle pericolose si usano solo dopo la formazione, e mai da soli. Non è burocrazia: è che le dita sono due mani in tutto.',
+  },
+  {
+    title: 'Chi sporca pulisce',
+    text: "Chi rompe lo dice subito. Non è una colpa, è manutenzione: il guasto nascosto è l'unico che fa danni davvero.",
+  },
+  {
+    title: 'I consumabili si ripagano',
+    text: 'Filamento, legno, viti: quello che consumi lo reintegri. Gli utensili invece sono di tutti e restano qui.',
+  },
+  {
+    title: 'I progetti si documentano',
+    text: 'È il modo in cui restituiamo allo spazio quello che lo spazio ci ha dato. Anche due paragrafi e tre foto vanno benissimo.',
+  },
+];
+---
+
+<BaseLayout title="Lo spazio" description={`Orari, regole e attrezzature del ${SITE.name}.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Lo spazio</p>
+      <h1 class="shout">Un'officina, non un negozio</h1>
+      <p class="lead">
+        Nessuno ti vende niente e nessuno ti serve. La prima volta ti facciamo
+        fare un giro, ti spieghiamo come si sta in sicurezza, poi si lavora.
+      </p>
+    </header>
+  </div>
+
+  <section class="band band-blue on-blue">
+    <div class="wrap">
+      <h2 class="shout"><Icon name="calendar" size={28} /> Quando siamo aperti</h2>
+      <ul class="hours">
+        {orari.map((o) => (
+          <li>
+            <span class="g shout">{o.g}</span>
+            <span class="h mono">{o.h}</span>
+            <span class="note">{o.note}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="hint mono">
+        Gli orari possono cambiare: il calendario aggiornato sta sulla{' '}
+        <a href={SITE.wiki} rel="noopener">wiki</a>.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="rules">
+      <h2 class="shout">Le regole, in breve</h2>
+      <ul>
+        {regole.map((r, i) => (
+          <li>
+            <h3 class="shout">{r.title}</h3>
+            <p>{r.text}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="full mono">
+        La versione completa e vincolante è il{' '}
+        <a href={SITE.regolamento} rel="noopener">regolamento ufficiale →</a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 46ch; margin-bottom: var(--s-8); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+
+  .band h2 { display: flex; align-items: center; gap: var(--s-3); font-size: var(--fz-fluid-3xl); margin-bottom: var(--s-5); }
+
+  .hours { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+  .hours li {
+    display: grid; grid-template-columns: 9rem 10rem 1fr; gap: var(--s-4); align-items: center;
+    background: var(--gl-paper); color: var(--fg-1);
+    padding: var(--s-4);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-md);
+    box-shadow: var(--sh-card);
+  }
+  @media (max-width: 44rem) { .hours li { grid-template-columns: 1fr; gap: var(--s-1); } }
+  .g { font-size: var(--fz-lg); }
+  .h { color: var(--gl-orange-700); font-weight: 700; }
+  .note { color: var(--fg-2); font-size: var(--fz-sm); }
+  .hint { margin-top: var(--s-5); color: var(--gl-blue-050); }
+
+  .rules { padding-block: var(--s-9); }
+  .rules > h2 { font-size: var(--fz-fluid-3xl); margin-bottom: var(--s-6); }
+  .rules ul { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+  .rules li {
+    padding: var(--s-5); background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card);
+  }
+  .rules h3 { font-size: var(--fz-lg); margin-bottom: var(--s-2); }
+  .rules p { color: var(--fg-2); font-size: var(--fz-sm); }
+  .full { margin-top: var(--s-6); color: var(--fg-3); }
+</style>

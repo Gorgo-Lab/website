@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, tagCounts } from '../../lib/content';
+
+const posts = await getPosts();
+const tags = tagCounts(posts);
+---
+
+<BaseLayout title="Blog" description="Racconti, workshop, appunti e vita del Gorgo Lab.">
+  <div class="wrap narrow">
+    <header class="page-head">
+      <p class="eyebrow">Diario di bordo</p>
+      <h1 class="shout">Blog</h1>
+      <p class="lead">
+        Workshop, serate aperte, appunti tecnici e cose che abbiamo imparato
+        rompendole.
+      </p>
+    </header>
+
+    <nav class="filters" aria-label="Filtra per tag">
+      <a class="tag" data-on="true" href="/blog/">tutti <span class="count">{posts.length}</span></a>
+      {tags.map(([t, n]) => <a class="tag" href={`/blog/tag/${t}/`}>{t} <span class="count">{n}</span></a>)}
+    </nav>
+
+    {posts.length === 0 ? (
+      <p class="empty">Nessun articolo pubblicato per ora.</p>
+    ) : (
+      posts.map((entry, i) => <PostCard entry={entry} index={i} />)
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .narrow { max-width: 58rem; }
+  .page-head { max-width: 44ch; margin-bottom: var(--s-6); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+  .filters { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .empty { color: var(--fg-2); padding-block: var(--s-8); }
+</style>

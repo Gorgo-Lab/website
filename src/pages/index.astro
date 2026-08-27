@@ -1,17 +1,274 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../site.config';
+import { getProjects, getPosts } from '../lib/content';
 
+const projects = await getProjects();
+const posts = await getPosts();
+
+// In evidenza se marcati tali, altrimenti i più recenti: la home non è mai vuota.
+const featured = projects.filter((p) => p.data.featured);
+const showcase = (featured.length >= 3 ? featured : projects).slice(0, 6);
+const latestPosts = posts.slice(0, 3);
+
+const stats = [
+  { n: projects.length, label: 'progetti documentati' },
+  { n: new Set(projects.flatMap((p) => p.data.authors)).size, label: 'maker coinvolti' },
+  { n: new Set(projects.flatMap((p) => p.data.tags)).size, label: 'ambiti diversi' },
+];
+
+const attrezzature = [
+  { icon: 'printer', title: 'Stampa 3D', text: 'FDM e resina, con bobine condivise e slicer già configurati.' },
+  { icon: 'flame', title: 'Taglio laser', text: 'Legno, acrilico e cartone: dal prototipo al pezzo finito.' },
+  { icon: 'circuit-board', title: 'Banco elettronica', text: 'Saldatura, oscilloscopio, alimentatori e un cassetto di componenti.' },
+  { icon: 'hammer', title: 'Falegnameria', text: 'Utensili a mano e macchine per il legno, con chi ti insegna a usarle.' },
+  { icon: 'cog', title: 'CNC', text: 'Fresatura di precisione per alluminio, legno e circuiti stampati.' },
+  { icon: 'scissors', title: 'Tessile', text: 'Macchine da cucire e ricamatrice digitale per wearable e riparazioni.' },
+];
+
+const principi = [
+  {
+    n: '01',
+    title: 'Do-ocracy',
+    text: 'Da noi non vige la democrazia. Vuoi fare qualcosa? Fallo. Chi fa il lavoro decide su quel lavoro.',
+  },
+  {
+    n: '02',
+    title: 'Bene comune',
+    text: 'Siamo un hackerspace comunale, parte dei Beni Comuni di Gorgonzola. Gratuito e aperto a tutti i cittadini.',
+  },
+  {
+    n: '03',
+    title: 'Si impara sbagliando',
+    text: 'Qui si crea, si sbaglia, si condivide, si collabora, si ricerca, si sperimenta. Nessuno nasce capace.',
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout bleed>
+  <!-- HERO ------------------------------------------------------- -->
+  <section class="hero wrap">
+    <p class="eyebrow">{SITE.kicker}</p>
+    <h1 class="shout">
+      <span>Vuoi fare</span>
+      <span class="orange">qualcosa?</span>
+      <span>Fallo e basta.</span>
+    </h1>
+    <p class="lead">{SITE.description}</p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="/progetti/">Guarda i progetti →</a>
+      <a class="btn btn-ghost" href="/contatti/">Come arrivare</a>
+    </div>
+
+    <dl class="stats">
+      {stats.map((s) => (
+        <div>
+          <dt class="shout">{s.n}</dt>
+          <dd class="mono">{s.label}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- PRINCIPI ---------------------------------------------------- -->
+  <section class="band band-paper">
+    <div class="wrap">
+      <ul class="principi">
+        {principi.map((p, i) => (
+          <li>
+            <p class="num mono">{p.n}</p>
+            <h2 class="shout">{p.title}</h2>
+            <p class="body">{p.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROGETTI ---------------------------------------------------- -->
+  <section class="wrap block">
+    <header class="block-head">
+      <div>
+        <p class="eyebrow">Dal banco di lavoro</p>
+        <h2 class="shout">Cosa costruiamo</h2>
+      </div>
+      <a class="more" href="/progetti/">Tutti i progetti →</a>
+    </header>
+
+    {showcase.length === 0 ? (
+      <p class="empty">
+        Il primo progetto manca ancora. <a href="/contribuire/">Ecco come pubblicarlo.</a>
+      </p>
+    ) : (
+      <ul class="grid">
+        {showcase.map((entry, i) => <li><ProjectCard entry={entry} index={i} /></li>)}
+      </ul>
+    )}
+  </section>
+
+  <!-- ATTREZZATURE ------------------------------------------------ -->
+  <section class="band band-blue on-blue">
+    <div class="wrap">
+      <header class="block-head">
+        <div>
+          <p class="eyebrow on-dark">Lo spazio</p>
+          <h2 class="shout">Cosa trovi in officina</h2>
+        </div>
+        <a class="more" href="/spazio/">Orari e regole →</a>
+      </header>
+
+      <ul class="tools">
+        {attrezzature.map((t, i) => (
+          <li>
+            <span class="ico"><Icon name={t.icon} size={26} /></span>
+            <h3 class="shout">{t.title}</h3>
+            <p>{t.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- BLOG -------------------------------------------------------- -->
+  {latestPosts.length > 0 && (
+    <section class="wrap block">
+      <header class="block-head">
+        <div>
+          <p class="eyebrow">Diario di bordo</p>
+          <h2 class="shout">Ultimi articoli</h2>
+        </div>
+        <a class="more" href="/blog/">Tutto il blog →</a>
+      </header>
+
+      <ul class="posts">
+        {latestPosts.map((p, i) => (
+          <li>
+            <a href={`/blog/${p.id}/`}>
+              <time class="mono" datetime={p.data.date.toISOString()}>
+                {p.data.date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </time>
+              <h3 class="shout">{p.data.title}</h3>
+              <p>{p.data.summary}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <!-- CITAZIONE --------------------------------------------------- -->
+  <blockquote class="quote shout">
+    <span class="mark">«</span>Vuoi fare qualcosa? <b>Fallo e basta.</b><span class="mark">»</span>
+    <cite class="mono">Il principio della do-ocracy</cite>
+  </blockquote>
+
+  <!-- CONTRIBUISCI ------------------------------------------------ -->
+  <section class="wrap">
+    <div class="join">
+      <div>
+        <h2 class="shout">Hai costruito qualcosa? Raccontalo.</h2>
+        <p>
+          I progetti di questo sito li scrivono i maker, non un redattore. Tu porti
+          un file di testo e le foto: impaginazione, ottimizzazione delle immagini
+          e pagina del progetto le fa il sito.
+        </p>
+      </div>
+      <a class="btn btn-primary" href="/contribuire/">Come si pubblica →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* HERO */
+  .hero { padding-block: var(--s-9) var(--s-8); }
+  h1 { font-size: var(--fz-fluid-6xl); margin-top: var(--s-5); }
+  h1 span { display: block; }
+  h1 .orange { color: var(--gl-orange-600); }
+  .hero .lead { max-width: 46ch; margin-top: var(--s-6); font-size: var(--fz-lg); }
+
+  .cta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+
+  .stats { display: flex; flex-wrap: wrap; gap: var(--s-8); margin-top: var(--s-8); }
+  .stats dt { font-size: var(--fz-3xl); color: var(--gl-blue-600); }
+  .stats dd { margin: 0; color: var(--fg-3); text-transform: uppercase; letter-spacing: var(--tr-shout); font-size: var(--fz-xs); }
+
+  /* PRINCIPI */
+  .principi { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .principi li {
+    background: var(--gl-paper); padding: var(--s-5);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card);
+  }
+  .num { color: var(--gl-orange-800); font-weight: 700; letter-spacing: 0.1em; }
+  .principi h2 { font-size: var(--fz-xl); margin-block: var(--s-2) var(--s-2); }
+  .principi .body { color: var(--fg-2); font-size: var(--fz-sm); }
+
+  /* BLOCCHI */
+  .block { padding-block: var(--s-9); }
+  .block-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--s-4); margin-bottom: var(--s-6); }
+  .block-head h2 { font-size: var(--fz-fluid-3xl); margin-top: var(--s-2); }
+  /* su blu serve il chiaro: vedi nota in global.css */
+  .eyebrow.on-dark { color: var(--gl-blue-050); }
+  .more { font-weight: 700; white-space: nowrap; text-decoration: none; }
+  .more:hover { text-decoration: underline; }
+  .empty { color: var(--fg-2); }
+
+  .grid { list-style: none; padding: 0; display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
+
+  /* ATTREZZATURE */
+  .tools { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+  .tools li {
+    background: var(--gl-paper); color: var(--fg-1); padding: var(--s-5);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+  }
+  .ico { color: var(--gl-orange-700); display: block; margin-bottom: var(--s-3); }
+  .tools h3 { font-size: var(--fz-lg); margin-bottom: var(--s-2); }
+  .tools p { font-size: var(--fz-sm); color: var(--fg-2); }
+
+  /* BLOG */
+  .posts { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .posts a {
+    display: block; height: 100%; padding: var(--s-5);
+    background: var(--gl-paper); color: inherit; text-decoration: none;
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card);
+    transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .posts a:hover { background: var(--gl-orange-100); transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--gl-ink); }
+  .posts time { color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .posts h3 { font-size: var(--fz-lg); margin-block: var(--s-2) var(--s-2); }
+  .posts p { color: var(--fg-2); font-size: var(--fz-sm); }
+
+  /* CITAZIONE — regola spessa sopra e sotto, come una scritta in bacheca */
+  .quote {
+    margin: 0; padding: var(--s-8) var(--pad); text-align: center;
+    font-size: var(--fz-fluid-3xl); color: var(--fg-1);
+    border-block: var(--bw-4) solid var(--gl-ink);
+    /* carta piena, non paper-2: l'arancio pieno regge 3:1 solo su questo fondo */
+    background: var(--bg-1);
+  }
+  .quote b { color: var(--gl-orange-600); font-weight: inherit; }
+  .mark { color: var(--gl-orange-600); }
+  .quote cite {
+    display: block; margin-top: var(--s-4); font-style: normal;
+    font-size: var(--fz-xs); text-transform: uppercase; letter-spacing: var(--tr-shout); color: var(--fg-3);
+  }
+
+  /* CONTRIBUISCI */
+  .join {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: var(--s-6); margin-block: var(--s-9);
+    padding: var(--s-7) var(--s-6);
+    background: var(--gl-orange-600); color: var(--fg-on-orange);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+  }
+  .join h2 { font-size: var(--fz-fluid-2xl); }
+  .join p { margin-top: var(--s-3); max-width: 52ch; }
+  .join .btn { background: var(--gl-paper); }
+  .join .btn:hover { background: var(--gl-white); }
+</style>

@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { mdxComponents } from '../../components/mdx';
+import { getPosts } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+---
+
+<ContentLayout
+  title={d.title}
+  summary={d.summary}
+  cover={d.cover}
+  coverAlt={d.coverAlt}
+  date={d.date}
+  updated={d.updated}
+  authors={d.authors}
+  tags={d.tags}
+  section="blog"
+  sectionLabel="Blog"
+>
+  <Content components={mdxComponents} />
+</ContentLayout>

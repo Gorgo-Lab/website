@@ -1,0 +1,37 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getPosts, tagCounts } from '../../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return tagCounts(posts).map(([tag]) => ({
+    params: { tag },
+    props: { posts: posts.filter((p) => p.data.tags.includes(tag as never)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={`Blog · ${tag}`} description={`Articoli con tag ${tag}.`}>
+  <div class="wrap narrow">
+    <header class="page-head">
+      <p class="eyebrow"><a href="/blog/">← Tutto il blog</a></p>
+      <h1 class="shout">{tag}</h1>
+      <p class="mono">{posts.length} {posts.length === 1 ? 'articolo' : 'articoli'}</p>
+    </header>
+    {posts.map((entry, i) => <PostCard entry={entry} index={i} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .narrow { max-width: 58rem; }
+  .page-head { margin-bottom: var(--s-5); }
+  .eyebrow a { color: inherit; text-decoration: none; }
+  .eyebrow a:hover { text-decoration: underline; }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3) var(--s-2); }
+  .mono { color: var(--fg-3); }
+</style>

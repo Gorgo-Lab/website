@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { TAGS, PROJECT_STATUS } from '../site.config';
+
+const steps = [
+  {
+    n: 1,
+    title: 'Prepara la cartella',
+    text: 'Una cartella per progetto, con dentro tutto: il testo, le foto, gli allegati. Niente file sparsi.',
+  },
+  {
+    n: 2,
+    title: 'Compila il frontmatter',
+    text: 'Le poche righe in cima al file che dicono al sito titolo, descrizione, autori e tag. Il resto è markdown normale.',
+  },
+  {
+    n: 3,
+    title: 'Apri una pull request',
+    text: 'Un bot controlla che tutto sia a posto e costruisce un\'anteprima del sito con il tuo progetto dentro.',
+  },
+  {
+    n: 4,
+    title: 'Merge',
+    text: 'Quando la revisione è ok, il progetto è online. Impaginazione, immagini e anteprime le fa il sito.',
+  },
+];
+
+const frontmatter = `---
+title: Braccio robotico da scrivania
+summary: Un braccio a 4 assi stampato in 3D, comandato da un ESP32,
+  che sposta componenti SMD sul banco di saldatura.
+date: 2026-03-14
+authors:
+  - Nome Cognome
+tags:
+  - robotica
+  - stampa-3d
+status: completato
+cover: ./copertina.jpg
+coverAlt: Il braccio robotico appoggiato sul banco di lavoro
+gallery:
+  - ./montaggio-01.jpg
+  - ./montaggio-02.jpg
+galleryAlt:
+  - Le parti stampate prima del montaggio
+  - Il braccio a metà assemblaggio
+attachments:
+  - file: schema.pdf
+    label: Schema elettrico
+    note: KiCad 8, esportato in PDF
+  - file: firmware.zip
+    label: Firmware ESP32
+links:
+  - label: Repository su GitHub
+    url: https://github.com/utente/braccio
+license: CC BY-SA 4.0
+---
+
+## Da dove è partita l'idea
+
+Testo normale in markdown. Le immagini si mettono così:
+
+![Il primo prototipo, storto](./prototipo.jpg)`;
+---
+
+<BaseLayout
+  title="Pubblica il tuo progetto"
+  description="Come aggiungere il tuo progetto o un articolo al sito del Gorgo Lab."
+>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Per chi fa</p>
+      <h1 class="shout">Pubblica il tuo progetto</h1>
+      <p class="lede">
+        Vuoi metterci il tuo progetto? Fallo e basta. Tu scrivi il contenuto,
+        il sito ci mette la grafica: non serve sapere HTML, CSS o come è fatto
+        questo sito.
+      </p>
+    </header>
+
+    <a class="modello" href="/progetti/modello-pagina-progetto/">
+      <span class="eyebrow">La scorciatoia</span>
+      <span class="t">Parti dal modello →</span>
+      <span class="d">
+        Una pagina che contiene ogni formattazione disponibile, già scritta e
+        commentata. Copiala, cancella quello che non ti serve, sostituisci il resto.
+      </span>
+    </a>
+
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li>
+          <span class="n">{s.n}</span>
+          <h2 class="shout">{s.title}</h2>
+          <p>{s.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <section class="prose block">
+      <h2>La struttura della cartella</h2>
+      <p>
+        Ogni progetto vive in <code>src/content/progetti/</code>, in una cartella
+        che porta il suo nome in minuscolo-con-trattini. Quel nome diventa
+        l'indirizzo della pagina.
+      </p>
+      <pre><code>{`src/content/progetti/
+└── braccio-robotico/          ← diventa /progetti/braccio-robotico/
+    ├── index.md               ← il testo del progetto
+    ├── copertina.jpg          ← immagine di apertura e anteprima
+    ├── montaggio-01.jpg
+    ├── prototipo.jpg
+    ├── schema.pdf             ← allegato scaricabile
+    └── firmware.zip`}</code></pre>
+
+      <p>
+        Le immagini le richiami con un percorso relativo
+        (<code>./copertina.jpg</code>): il sito le ridimensiona, le converte in
+        formati moderni e genera le versioni per telefono e desktop. Carica pure
+        la foto grossa che esce dal telefono, non serve che la ritocchi.
+      </p>
+      <pre><code>{`![Descrizione per chi non vede la foto](./montaggio.jpg)
+![Descrizione per chi non vede la foto](./montaggio.jpg "Didascalia sotto la foto")`}</code></pre>
+      <p>
+        Il testo fra parentesi quadre è obbligatorio: lo legge chi usa uno
+        screen reader, quindi descrivi <em>cosa si vede</em>. Quello fra
+        virgolette è facoltativo e diventa la didascalia stampata sotto la foto,
+        quindi non ripetere la stessa frase due volte.
+      </p>
+
+      <h2>Il frontmatter, per intero</h2>
+      <p>
+        È la parte tra i due <code>---</code> in cima al file. Se sbagli o
+        dimentichi un campo, la pull request diventa rossa e ti dice quale:
+        non c'è modo di pubblicare un progetto rotto per distrazione.
+      </p>
+      <pre><code>{frontmatter}</code></pre>
+
+      <h2>Campi obbligatori e valori ammessi</h2>
+      <ul>
+        <li><code>title</code> — da 3 a 90 caratteri.</li>
+        <li><code>summary</code> — da 20 a 220 caratteri: è il testo che si legge nell'anteprima.</li>
+        <li><code>date</code> — formato <code>AAAA-MM-GG</code>.</li>
+        <li><code>authors</code> — almeno un nome.</li>
+        <li><code>cover</code> + <code>coverAlt</code> — immagine di apertura e sua descrizione testuale (serve a chi usa uno screen reader, non è opzionale).</li>
+        <li>
+          <code>tags</code> — da 1 a 6, scelti da questa lista:
+          <span class="chips">{TAGS.map((t) => <code>{t}</code>)}</span>
+          Se manca il tag che ti serve, aggiungilo a <code>src/site.config.ts</code> nella stessa PR.
+        </li>
+        <li>
+          <code>status</code> — uno tra:
+          <span class="chips">{Object.keys(PROJECT_STATUS).map((s) => <code>{s}</code>)}</span>
+        </li>
+      </ul>
+
+      <h2>Video, riquadri e specifiche</h2>
+      <p>
+        Se rinomini il file da <code>index.md</code> a <code>index.mdx</code> puoi
+        usare anche questi blocchi, senza importare nulla:
+      </p>
+      <pre><code>{`<Video provider="youtube" id="dQw4w9WgXcQ" title="Il braccio in funzione" />
+
+<Callout type="warning" title="Occhio">
+L'alimentatore va collegato **prima** di innestare i servo.
+</Callout>
+
+<Specs items={[["Materiale","PLA"],["Assi","4"],["Peso","480 g"]]} />`}</code></pre>
+      <p>
+        I video vanno sempre embeddati da YouTube o Vimeo, mai caricati come file:
+        un video nel repository lo appesantisce per sempre, anche se poi lo cancelli.
+      </p>
+
+      <h2>Un articolo invece di un progetto</h2>
+      <p>
+        Stessa procedura, ma la cartella va in <code>src/content/blog/</code> e il
+        frontmatter non ha <code>status</code>, <code>gallery</code>,
+        <code>attachments</code> né <code>links</code>.
+      </p>
+
+      <h2>Se git non è il tuo mestiere</h2>
+      <p>
+        Non serve saperlo usare. Due strade, scegli quella che ti pesa meno.
+      </p>
+
+      <h3>Dal sito di GitHub, senza installare niente</h3>
+      <p>
+        Ti basta un account GitHub gratuito e l'invito al repository. Poi, dal
+        browser: apri <code>src/content/progetti/</code>, premi
+        <strong>Add file → Upload files</strong>, trascina dentro la tua
+        cartella intera, e in fondo scegli <em>"Create a new branch for this
+        commit and start a pull request"</em>. Hai aperto una pull request senza
+        mai vedere un terminale.
+      </p>
+      <p>
+        Se ti serve un editor vero, premi il tasto <code>.</code> sul
+        repository: si apre VS Code nel browser, sempre con il trascinamento dei
+        file.
+      </p>
+
+      <h3>Mandaci uno zip</h3>
+      <p>
+        Nessun account, niente. Ci mandi la cartella zippata e la importiamo noi
+        con un comando che ricomprime le immagini, ne toglie i dati EXIF
+        (posizione GPS compresa) e prepara il file da completare. Le foto
+        caricale come stanno, grandi quanto vengono.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 46ch; margin-bottom: var(--s-8); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+
+  .steps {
+    list-style: none; padding: 0; display: grid; gap: var(--s-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    margin-bottom: var(--s-9);
+  }
+  .steps li {
+    padding: var(--s-5); background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+  }
+  .n {
+    display: grid; place-items: center; width: 32px; height: 32px;
+    background: var(--gl-orange-600); color: var(--fg-on-orange);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-sm);
+    font-family: var(--font-mono); font-weight: 700; font-size: var(--fz-sm);
+    margin-bottom: var(--s-3);
+  }
+  .steps h2 { font-size: var(--fz-lg); margin-bottom: var(--s-2); }
+  .steps p { font-size: var(--fz-sm); color: var(--fg-2); }
+
+  .modello {
+    display: grid; gap: var(--s-2); margin-bottom: var(--s-7);
+    padding: var(--s-5) var(--s-6); text-decoration: none; color: var(--fg-on-orange);
+    background: var(--gl-orange-600);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+    transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .modello:hover { color: var(--fg-on-orange); transform: translate(2px, 2px); box-shadow: 0 0 0 0 var(--gl-ink); }
+  .modello .eyebrow { color: var(--gl-ink); opacity: 0.65; }
+  .modello .t { font-family: var(--font-display); font-size: var(--fz-xl); text-transform: uppercase; letter-spacing: var(--tr-tight); }
+  .modello .d { font-size: var(--fz-sm); max-width: 60ch; }
+
+  .block { margin-bottom: var(--s-9); }
+  .chips { display: inline-flex; flex-wrap: wrap; gap: var(--s-1); margin-left: var(--s-1); }
+  .chips code { font-size: var(--fz-xs); }
+</style>

@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../site.config';
+---
+
+<BaseLayout title="Dove siamo" description={`Come raggiungere il ${SITE.name}, a Gorgonzola.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Dove siamo</p>
+      <h1 class="shout">Apri la porta ed entra</h1>
+      <p class="lead">
+        Il modo migliore per capire se questo posto fa per te è venirci una sera.
+        Non serve prenotare, non serve saper già fare qualcosa, non si paga niente.
+      </p>
+    </header>
+
+    <div class="cards">
+      <section>
+        <h2><Icon name="map-pin" size={16} /> L'indirizzo</h2>
+        <p class="big">{SITE.address}</p>
+        <p class="note">
+          Siamo un hackerspace comunale: fai parte dei Beni Comuni della città
+          anche tu, quindi sei già a casa tua.
+        </p>
+        <!-- TODO: mappa. Meglio OpenStreetMap che Google Maps: niente banner cookie. -->
+      </section>
+
+      <section>
+        <h2><Icon name="mail" size={16} /> Scrivici</h2>
+        <p class="big"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+        <p class="note">Rispondiamo quando passiamo in lab, quindi abbi pazienza.</p>
+      </section>
+
+      <section class="highlight">
+        <h2>Hai fatto qualcosa?</h2>
+        <p class="note">
+          Mettilo sul sito. Bastano un file di testo e qualche foto, al resto
+          pensa il sito da solo.
+        </p>
+        <a class="btn btn-primary" href="/contribuire/">Come si pubblica →</a>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 46ch; margin-bottom: var(--s-7); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+
+  .cards { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+  .cards section {
+    padding: var(--s-5); background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card-lg);
+    display: flex; flex-direction: column; gap: var(--s-2);
+  }
+  .cards h2 {
+    display: flex; align-items: center; gap: var(--s-2);
+    font-size: var(--fz-xs); font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--tr-shout); color: var(--fg-3);
+    margin-bottom: var(--s-1);
+  }
+  .big { font-size: var(--fz-md); font-weight: 600; }
+  .note { color: var(--fg-2); font-size: var(--fz-sm); }
+  .highlight { background: var(--gl-blue-600); color: var(--fg-on-blue); }
+  .highlight h2, .highlight .note { color: var(--gl-blue-050); }
+  .highlight .btn { margin-top: auto; align-self: start; }
+</style>

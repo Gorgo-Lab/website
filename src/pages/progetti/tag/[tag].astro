@@ -1,0 +1,40 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { getProjects, tagCounts } from '../../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return tagCounts(projects).map(([tag]) => ({
+    params: { tag },
+    props: { projects: projects.filter((p) => p.data.tags.includes(tag as never)) },
+  }));
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { projects } = Astro.props;
+---
+
+<BaseLayout title={`Progetti · ${tag}`} description={`Progetti del Gorgo Lab con tag ${tag}.`}>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow"><a href="/progetti/">← Tutti i progetti</a></p>
+      <h1 class="shout">{tag}</h1>
+      <p class="mono">{projects.length} {projects.length === 1 ? 'progetto' : 'progetti'}</p>
+    </header>
+
+    <ul class="grid">
+      {projects.map((entry, i) => <li><ProjectCard entry={entry} index={i} /></li>)}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { margin-bottom: var(--s-7); }
+  .eyebrow a { color: inherit; text-decoration: none; }
+  .eyebrow a:hover { text-decoration: underline; }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3) var(--s-2); }
+  .mono { color: var(--fg-3); }
+  .grid { list-style: none; padding: 0; display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
+</style>

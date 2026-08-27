@@ -1,0 +1,99 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import Gallery from '../../components/Gallery.astro';
+import Attachments from '../../components/Attachments.astro';
+import { mdxComponents } from '../../components/mdx';
+import { PROJECT_STATUS } from '../../site.config';
+import { getProjects } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content, headings } = await render(entry);
+
+// Solo i titoli di secondo livello: l'indice deve restare leggibile.
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<ContentLayout
+  title={d.title}
+  summary={d.summary}
+  cover={d.cover}
+  coverAlt={d.coverAlt}
+  date={d.date}
+  updated={d.updated}
+  authors={d.authors}
+  tags={d.tags}
+  section="progetti"
+  sectionLabel="Progetti"
+>
+  <span slot="meta" class="badge-status" data-status={d.status}>{PROJECT_STATUS[d.status]}</span>
+
+  <Content components={mdxComponents} />
+
+  <Fragment slot="dopo">
+    {d.gallery && d.gallery.length > 0 && (
+      <Gallery images={d.gallery} alts={d.galleryAlt} />
+    )}
+
+    {d.attachments && d.attachments.length > 0 && (
+      <Attachments dir={entry.id} collection="progetti" items={d.attachments} />
+    )}
+
+    <p class="license">
+      Contenuto pubblicato da {d.authors.join(', ')} sotto licenza <strong>{d.license}</strong>.
+    </p>
+  </Fragment>
+
+  <Fragment slot="aside">
+    {toc.length > 1 && (
+      <nav class="toc" aria-labelledby="toc-t">
+        <p id="toc-t">In questa pagina</p>
+        <ul>
+          {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ul>
+      </nav>
+    )}
+
+    {d.links && d.links.length > 0 && (
+      <nav class="links" aria-labelledby="links-t">
+        <p id="links-t">Link esterni</p>
+        <ul>
+          {d.links.map((l) => (
+            <li><a href={l.url} rel="noopener">{l.label} ↗</a></li>
+          ))}
+        </ul>
+      </nav>
+    )}
+  </Fragment>
+</ContentLayout>
+
+<style>
+  .license {
+    margin-top: var(--s-8); padding-top: var(--s-4);
+    border-top: var(--bw-2) solid var(--gl-ink);
+    font-family: var(--font-mono); font-size: var(--fz-xs);
+    text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-3);
+    max-width: var(--wrap-text);
+  }
+  .license strong { color: var(--fg-1); }
+
+  .toc, .links { font-size: var(--fz-sm); }
+  .links { margin-top: var(--s-6); }
+  .toc > p, .links > p {
+    font-family: var(--font-mono); font-size: var(--fz-xs); font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--tr-shout);
+    color: var(--fg-3); padding-bottom: var(--s-2);
+    border-bottom: var(--bw-2) solid var(--gl-ink); margin-bottom: var(--s-3);
+  }
+  .toc ul, .links ul { list-style: none; padding: 0; display: grid; gap: var(--s-2); }
+  .toc li { border-left: var(--bw-2) solid var(--border); padding-left: var(--s-3); }
+  .toc a, .links a { color: var(--fg-2); text-decoration: none; font-weight: 500; }
+  .toc a:hover, .links a:hover { color: var(--gl-orange-700); text-decoration: underline; }
+</style>
