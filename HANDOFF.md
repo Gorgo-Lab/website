@@ -119,12 +119,33 @@ L'autenticazione (`gh auth login`) va fatta a mano: richiede il browser.
 
 Subito dopo:
 
-1. **`.github/CODEOWNERS`** — sostituire i sei `@DA-COMPILARE` con gli handle di
-   chi cura il sito. Senza, la richiesta di revisione non scatta.
-2. **Branch protection su `main`** — richiedere il passaggio dei controlli e
-   almeno una approvazione. Senza, chiunque abbia accesso in scrittura può
-   scavalcare la CI, e tutto il meccanismo di validazione diventa decorativo.
+1. **`.github/CODEOWNERS`** — già compilato con `@naicodev`. Vanno aggiunti gli
+   handle degli altri soci che devono comparire come revisori, quando ce ne
+   saranno.
+2. **Protezione del ramo `main`** — vedi il riquadro qui sotto: sul piano
+   gratuito è disponibile solo per i repository pubblici.
 3. Verificare che il workflow `.github/workflows/ci.yml` parta alla prima PR.
+
+### Privato adesso, pubblico al lancio
+
+Il repository è privato, ed è la scelta giusta finché indirizzo, orari e
+attrezzature non sono confermati: non ha senso pubblicare informazioni che
+potrebbero essere sbagliate.
+
+Va però ripresa la decisione al momento del lancio, perché **su
+un'organizzazione con piano gratuito la protezione del ramo e i ruleset
+funzionano solo sui repository pubblici**: su un repository privato sono
+disattivati e richiedono GitHub Team, a pagamento.
+
+Conseguenza concreta, oggi: la CI gira su ogni pull request e mostra i controlli
+verdi o rossi, ma **nessuno impedisce di fare merge con i controlli rossi** o di
+scrivere direttamente su `main`. La validazione informa, non blocca.
+
+Rendere pubblico il repository al lancio risolve la cosa gratis, ed è coerente
+con la natura del progetto: un hackerspace comunale, contenuti già sotto
+CC BY-SA, un sito che è pubblico per definizione. Una volta pubblico, in
+Settings → Rules va attivata la protezione di `main` con "richiedi che i
+controlli passino" e "richiedi la revisione dei code owner".
 
 **Nota sulla visibilità**: se il repository è pubblico, chiunque può aprire una
 PR — che è il modello giusto per un bene comune — ma le PR da fork non ricevono

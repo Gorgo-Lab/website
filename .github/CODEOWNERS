@@ -1,11 +1,43 @@
-# Chi cura il sito rivede sempre struttura, layout e configurazione.
-# I contenuti dei progetti possono essere approvati più liberamente.
+# Chi è responsabile di quali parti del repository.
+#
+# GitHub assegna in automatico la revisione alla persona indicata quando una
+# pull request tocca uno di questi percorsi. La logica: un maker che aggiunge
+# il suo progetto tocca solo la sua cartella sotto src/content/ e non disturba
+# nessuno; chi tocca layout, configurazione o script viene invece chiamato in
+# causa, perché lì un errore rompe tutte le pagine e non una sola.
+#
+# Da solo questo file assegna soltanto il revisore. Diventa vincolante con la
+# protezione del ramo main ("Require review from Code Owners"), che su
+# un'organizzazione con piano gratuito è disponibile solo per i repository
+# pubblici: finché questo resta privato, i controlli girano e mostrano il
+# risultato, ma nessuno impedisce di fare merge ignorandoli.
+#
+# L'ultima regola che corrisponde a un file è quella che vale.
 
-/src/layouts/     @DA-COMPILARE
-/src/components/  @DA-COMPILARE
-/src/pages/       @DA-COMPILARE
-/src/styles/      @DA-COMPILARE
-/src/site.config.ts @DA-COMPILARE
-/src/content.config.ts @DA-COMPILARE
-/.github/         @DA-COMPILARE
-/scripts/         @DA-COMPILARE
+# Struttura e presentazione del sito
+/src/layouts/            @naicodev
+/src/components/         @naicodev
+/src/pages/              @naicodev
+/src/styles/             @naicodev
+/src/plugins/            @naicodev
+/src/icons/              @naicodev
+
+# Configurazione: qui si decidono i campi obbligatori, i tag ammessi e il dominio
+/src/site.config.ts      @naicodev
+/src/content.config.ts   @naicodev
+/astro.config.mjs        @naicodev
+/package.json            @naicodev
+/package-lock.json       @naicodev
+
+# Automazioni e strumenti
+/.github/                @naicodev
+/scripts/                @naicodev
+
+# Documentazione del progetto
+/README.md               @naicodev
+/CONTRIBUTING.md         @naicodev
+/AGENTS.md               @naicodev
+/HANDOFF.md              @naicodev
+
+# Nessuna regola su /src/content/: i progetti e gli articoli dei maker
+# restano approvabili senza passare per forza da chi cura il sito.
