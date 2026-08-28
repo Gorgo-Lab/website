@@ -6,7 +6,7 @@ maker aggiungono via pull request; il sito li impagina, ottimizza le immagini e
 genera anteprime, indici e feed da solo.
 
 L'identità visiva segue il design system ufficiale di Gorgo Lab: due colori
-piatti (blu `#0071BC`, arancio `#F15A24`), sfondo carta, Archivo Black per i
+piatti (blu `#0071BC`, arancio `#F15A24`), sfondo carta, Poppins per i
 titoli, bordi netti e ombre offset. Le regole vive stanno in
 [`src/styles/global.css`](src/styles/global.css).
 

@@ -146,7 +146,8 @@ Da rispettare sempre:
 - bordi netti da 2px, angoli piccoli (4px, 8px sulle schede), ombra offset dura;
 - al passaggio del mouse cambia colore o opacità, **mai `scale()`**; alla
   pressione `translate(2px, 2px)` e l'ombra collassa;
-- Archivo Black solo maiuscolo per i titoli (classe `.shout`), Space Grotesk per
+- Poppins 800 solo maiuscolo per i titoli (classe `.shout`) — è il carattere del
+  wordmark ufficiale, identificato confrontando le lettere del banner; Space Grotesk per
   il testo, JetBrains Mono per dati e metadati;
 - **niente emoji** nell'interfaccia: si usa `<Icon name="…" />`. Restano ammesse
   nel testo informale scritto dai maker;

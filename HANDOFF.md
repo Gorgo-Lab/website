@@ -97,10 +97,12 @@ Il wiki storico (`https://www.gorgolab.it`) e il regolamento ufficiale sono già
 collegati dal piè di pagina e dalla pagina "Lo spazio": lì si trovano i dati
 veri da riportare.
 
-Da confermare anche con chi cura la grafica: il wordmark GORGOLAB del banner usa
-un carattere display su misura, e **Archivo Black è solo il sostituto libero più
-vicino**. Se qualcuno ha il `.ttf`/`.otf` originale, va messo in `src/fonts/` e
-i titoli si allineano al banner.
+Il carattere del wordmark **non è più una cosa da confermare**: sovrapponendo la
+scritta del banner (`public/brand/banner.png`) alle candidate, lettera per
+lettera, il marchio è **Poppins Bold**. Il disaccordo dei pixel è del 13,7 %
+contro il 29,1 % di DM Sans e il 17,5 % di Archivo Black, che era il sostituto
+in uso fino al 28 agosto 2026. Poppins è sotto licenza SIL OFL, quindi si può
+usare liberamente, e ora è il carattere dei titoli di tutto il sito.
 
 ---
 
