@@ -4,13 +4,13 @@ Documento per chi riprende il lavoro su un'altra macchina o dopo una pausa.
 Descrive **dove siamo, cosa manca e in che ordine farlo**. Per l'architettura e
 le regole del codice vedi [`AGENTS.md`](AGENTS.md).
 
-Ultimo aggiornamento: 27 agosto 2026.
+Ultimo aggiornamento: 28 agosto 2026.
 
 ---
 
 ## Stato in due righe
 
-Il sito è **completo e funzionante in locale**: 20 pagine, build pulita, tutti i
+Il sito è **completo e funzionante in locale**: 21 pagine, build pulita, tutti i
 controlli verdi. Il codice sta su GitHub, in `Gorgo-Lab/website` (privato). Il
 sito **non è ancora pubblicato** e alcuni dati sulla pagina "Lo spazio" sono
 stati dedotti, non verificati.
@@ -65,10 +65,10 @@ npm run validate             # i quattro controlli della CI
 `validate` deve chiudersi con:
 
 ```
-✓ 24 file di contenuto, tutti entro i limiti.
+✓ 32 file di contenuto, tutti entro i limiti.
 - 0 errors
-20 page(s) built
-✓ 20 pagine, tutti i collegamenti interni risolvono.
+21 page(s) built
+✓ 21 pagine, tutti i collegamenti interni risolvono.
 ```
 
 Se gli stili sembrano rotti o disallineati dopo modifiche estese al CSS, prima
@@ -114,7 +114,13 @@ Resta da fare:
    saranno.
 2. **Protezione del ramo `main`** — vedi il riquadro qui sotto: sul piano
    gratuito è disponibile solo per i repository pubblici.
-3. Verificare che il workflow `.github/workflows/ci.yml` parta alla prima PR.
+
+La CI invece è già stata provata sul campo: la **PR #1** (`progetto-mamecab`,
+28 agosto 2026) l'ha fatta partire e il job è passato in 38 secondi su
+`ubuntu-latest` con Node 22 — quindi il contenuto regge anche dove i nomi dei
+file distinguono maiuscole e minuscole, cosa che sul Mac non si vede. La stessa
+PR ha mostrato l'altra faccia: GitHub offriva il merge automatico, senza
+revisori richiesti e senza vincoli sul semaforo.
 
 Comoda ma non indispensabile: `gh`, la CLI di GitHub (`brew install gh`, poi
 `gh auth login`, che richiede il browser). Serve ad aprire pull request e a
@@ -198,7 +204,9 @@ pubblichi le bozze di tutti.**
    sitemap, URL canonici e anteprime social: se resta sbagliato, i link
    condivisi puntano altrove.
 2. Aprire una PR di prova e verificare che Cloudflare commenti con il link
-   all'anteprima e che i quattro controlli compaiano verdi.
+   all'anteprima. Il controllo del contenuto compare invece come **un solo
+   check** — il job `build` — che al suo interno esegue i quattro passi: per
+   vedere quale è fallito bisogna aprirlo.
 3. Controllare che `/rss.xml` e `/sitemap-index.xml` rispondano.
 
 ---
@@ -207,13 +215,14 @@ pubblichi le bozze di tutti.**
 
 - **Il progetto modello resta visibile?** Oggi
   `src/content/progetti/modello-pagina-progetto/` compare nell'elenco insieme ai
-  progetti veri (sono 3 in tutto). È voluto — serve che i maker lo trovino
+  progetti veri (sono 4 in tutto). È voluto — serve che i maker lo trovino
   navigando — ma è un progetto "meta". Per nasconderlo dal sito pubblico basta
   aggiungere `draft: true` al suo frontmatter: resta visibile in locale e nelle
   anteprime.
-- **Contenuti di esempio.** I due progetti e l'articolo sono inventati, con
-  autori di fantasia. Vanno sostituiti con contenuti veri prima di mostrare il
-  sito ai soci come se fosse finito.
+- **Contenuti di esempio.** Il Mamecab è un progetto vero, entrato con la PR #1.
+  Gli altri due progetti e l'articolo sono inventati, con autori di fantasia:
+  vanno sostituiti con contenuti veri prima di mostrare il sito ai soci come se
+  fosse finito.
 - **Mappa in `/contatti/`.** Prevista ma non fatta: usare OpenStreetMap e non
   Google Maps, per evitare il banner dei cookie su un sito che oggi non ne ha
   bisogno.
