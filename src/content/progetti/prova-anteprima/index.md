@@ -1,5 +1,5 @@
 ---
-title: Lampda da banco per il saldatore
+title: Lampada da banco per il saldatore
 summary: Progetto finto, serve solo a provare che l'anteprima delle pull request funzioni. Va cancellato subito dopo.
 date: 2026-08-29
 authors:
