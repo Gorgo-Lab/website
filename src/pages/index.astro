@@ -228,7 +228,9 @@ const principi = [
   .grid { list-style: none; padding: 0; display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
 
   /* ATTREZZATURE */
-  .tools { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); }
+  /* auto-fit e non auto-fill: con tre sole schede le colonne vuote lascerebbero
+     un buco sulla banda blu invece di distribuire lo spazio. */
+  .tools { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
   .tools li {
     background: var(--gl-paper); color: var(--fg-1); padding: var(--s-5);
     border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
