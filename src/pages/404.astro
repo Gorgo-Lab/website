@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+
+/**
+ * Senza questa pagina Astro non emette `dist/404.html`, e Cloudflare Pages
+ * ripiega sull'indice: qualunque indirizzo inesistente restituisce la home con
+ * codice 200, cioè un errore travestito da pagina valida. Con il file al suo
+ * posto la risposta torna a essere un 404 vero.
+ */
+---
+
+<BaseLayout
+  title="Pagina non trovata"
+  description="L'indirizzo che hai seguito non porta a nessuna pagina di questo sito."
+>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Errore 404</p>
+      <h1 class="shout">Hai bussato alla porta sbagliata</h1>
+      <p class="lead">
+        L'indirizzo che hai seguito non porta a niente: o è scritto male, o
+        quella pagina non c'è più. Capita, i collegamenti vecchi sopravvivono
+        alle pagine.
+      </p>
+
+      <div class="cta">
+        <a class="btn btn-primary" href="/progetti/">Guarda i progetti →</a>
+        <a class="btn btn-ghost" href="/">Torna alla home</a>
+      </div>
+
+      <p class="aiuto mono">
+        Se ci sei arrivato da un collegamento nostro, scrivi a{' '}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>: lo sistemiamo.
+      </p>
+    </header>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 46ch; padding-block: var(--s-8) var(--s-9); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+  .cta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+  .aiuto {
+    margin-top: var(--s-7); padding-top: var(--s-4);
+    border-top: var(--bw-2) solid var(--gl-ink);
+    color: var(--fg-3); font-size: var(--fz-xs);
+  }
+</style>
