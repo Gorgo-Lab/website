@@ -225,9 +225,13 @@ pubblichi le bozze di tutti.**
   Gli altri due progetti e l'articolo sono inventati, con autori di fantasia:
   vanno sostituiti con contenuti veri prima di mostrare il sito ai soci come se
   fosse finito.
-- **Mappa in `/contatti/`.** Prevista ma non fatta: usare OpenStreetMap e non
-  Google Maps, per evitare il banner dei cookie su un sito che oggi non ne ha
-  bisogno.
+- **Mappa in `/contatti/`.** Provata e **scartata** il 28 agosto 2026. Era una
+  mappa statica: tasselli di OpenStreetMap cuciti a build time in un JPG con il
+  pallino della sede disegnato in tavolozza, nessuna richiesta a terzi e nessun
+  cookie. Funzionava, ma vista in pagina non aggiungeva niente all'indirizzo
+  scritto sopra e appesantiva la pagina. Se un giorno si riprende, la strada è
+  quella — non l'`<iframe>` di OpenStreetMap, che manderebbe l'IP di ogni
+  visitatore a un server esterno al caricamento.
 - **Un editor web per chi non usa git.** Valutato e **scartato per ora**: la
   motivazione sta in `README.md`. Da rivalutare sopra i ~20 contributi l'anno.
 
