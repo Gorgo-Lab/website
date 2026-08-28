@@ -59,6 +59,8 @@ links:
     url: https://github.com/esempio/modello
   - label: Il modello su Printables
     url: https://www.printables.com
+  - label: Wikipedia
+    url: https://www.wikipedia.org
 
 license: CC BY-SA 4.0
 
@@ -247,6 +249,44 @@ Per riportare le parole di qualcun altro, o per staccare un'idea dal resto.
 Quando cambi proprio argomento, tre trattini fanno una riga di stacco.
 
 ---
+
+## Collegamenti a risorse esterne
+
+Dentro il testo un collegamento si scrive con le quadre e le tonde: la voce di
+[Wikipedia](https://www.wikipedia.org) che spiega la tecnica, il datasheet del
+componente, il negozio dove hai trovato il pezzo introvabile.
+
+```markdown
+la voce di [Wikipedia](https://www.wikipedia.org) che spiega la tecnica
+```
+
+Usalo quando il collegamento serve **in quel punto del discorso**, come si cita
+una fonte leggendo.
+
+Se invece è una destinazione stabile del progetto — il repository, la pagina su
+Printables, la scheda del materiale — non metterla nel testo: dichiarala in cima
+al file, nel blocco `links`.
+
+```yaml
+links:
+  - label: Repository su GitHub
+    url: https://github.com/esempio/modello
+  - label: Wikipedia
+    url: https://www.wikipedia.org
+```
+
+Quelli finiscono nella colonna qui a fianco, sotto "Link esterni", sempre nello
+stesso posto: chi cerca la fonte del progetto sa già dove guardare, senza
+rileggersi la pagina in cerca di una parola sottolineata. Il `label` è il testo
+che si legge, non l'indirizzo: scrivi "Il modello su Printables", non
+"printables.com/model/12345".
+
+<Callout type="warning" title="I collegamenti esterni non li controlla nessuno">
+`check:links` verifica solo i collegamenti interni al sito. Quelli esterni non
+vengono contattati apposta — un sito altrui giù per manutenzione farebbe
+fallire la CI di tutti — quindi un indirizzo sbagliato lo scopre chi ci clicca.
+Provali prima di aprire la pull request.
+</Callout>
 
 ## Come sono fatti gli allegati
 
