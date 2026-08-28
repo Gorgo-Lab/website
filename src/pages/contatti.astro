@@ -68,7 +68,9 @@ import { SITE } from '../site.config';
   }
   .big { font-size: var(--fz-md); font-weight: 600; }
   .note { color: var(--fg-2); font-size: var(--fz-sm); }
-  .highlight { background: var(--gl-blue-600); color: var(--fg-on-blue); }
-  .highlight h2, .highlight .note { color: var(--gl-blue-050); }
-  .highlight .btn { margin-top: auto; align-self: start; }
+  /* `.cards section` pesa 0-1-1 e vinceva su `.highlight`: lo sfondo blu non
+     si applicava, il testo chiaro sì, e la scheda restava illeggibile. */
+  .cards section.highlight { background: var(--gl-blue-600); color: var(--fg-on-blue); }
+  .cards .highlight h2, .cards .highlight .note { color: var(--gl-blue-050); }
+  .cards .highlight .btn { margin-top: auto; align-self: start; }
 </style>
