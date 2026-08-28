@@ -105,6 +105,30 @@ La lista sta in [`src/site.config.ts`](src/site.config.ts). È chiusa apposta:
 senza vincolo nascono in fretta `stampa3d`, `stampa-3d` e `3dprint` come tag
 diversi. Se manca quello che ti serve, aggiungilo a quel file nella stessa PR.
 
+### Collegamenti esterni
+
+Due modi, che servono a due cose diverse.
+
+Dentro il testo, quando il rimando serve in quel punto del discorso:
+
+```markdown
+la voce di [Wikipedia](https://www.wikipedia.org) che spiega la tecnica
+```
+
+Nel frontmatter, quando è una destinazione stabile del progetto (il repository,
+la scheda del materiale): finiscono nella colonna di destra sotto "Link
+esterni", sempre nello stesso posto.
+
+```yaml
+links:
+  - label: Repository su GitHub      # il testo che si legge, non l'indirizzo
+    url: https://github.com/utente/braccio
+```
+
+I collegamenti esterni non li verifica nessun controllo automatico —
+`check:links` guarda solo quelli interni al sito — quindi provali prima di
+aprire la pull request.
+
 ---
 
 ## Blocchi speciali

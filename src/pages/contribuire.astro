@@ -183,6 +183,27 @@ L'alimentatore va collegato **prima** di innestare i servo.
         un video nel repository lo appesantisce per sempre, anche se poi lo cancelli.
       </p>
 
+      <h2>Collegamenti a risorse esterne</h2>
+      <p>
+        Dentro il testo, quando il rimando serve in quel punto del discorso —
+        la voce che spiega la tecnica, il datasheet, il negozio dove hai
+        trovato il pezzo:
+      </p>
+      <pre><code>{`la voce di [Wikipedia](https://www.wikipedia.org) che spiega la tecnica`}</code></pre>
+      <p>
+        Nel frontmatter, quando invece è una destinazione stabile del progetto:
+        i <code>links</code> finiscono nella colonna di destra della pagina,
+        sotto "Link esterni", sempre nello stesso posto. Il <code>label</code> è
+        il testo che si legge, non l'indirizzo.
+      </p>
+      <pre><code>{`links:
+  - label: Repository su GitHub
+    url: https://github.com/utente/braccio`}</code></pre>
+      <p>
+        I collegamenti esterni non li verifica nessun controllo automatico:
+        provali prima di aprire la pull request.
+      </p>
+
       <h2>Un articolo invece di un progetto</h2>
       <p>
         Stessa procedura, ma la cartella va in <code>src/content/blog/</code> e il
