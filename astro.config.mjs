@@ -8,9 +8,11 @@ import { rehypeFigure, rehypeTableWrap } from './src/plugins/rehype-content.mjs'
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: confermare il dominio definitivo del sito (serve a sitemap, canonical
-  // e anteprime social). Il wiki storico sta su gorgolab.it.
-  site: 'https://gorgolab.it',
+  // Dominio definitivo, deciso il 28 agosto 2026: il sito prende
+  // www.gorgolab.it e la wiki storica viene dismessa. Da qui dipendono sitemap,
+  // URL canonici e anteprime social, quindi finché il dominio non è collegato
+  // le anteprime pubblicate su *.pages.dev si dichiarano già come www.
+  site: 'https://www.gorgolab.it',
   integrations: [mdx(), sitemap()],
   image: {
     // srcset + sizes generati automaticamente per <Image /> e per le immagini markdown
