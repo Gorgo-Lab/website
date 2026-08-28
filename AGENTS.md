@@ -205,6 +205,19 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
   tenuta allineata a `ATTACHMENT_EXTENSIONS` in `site.config.ts`.
 - **Il dev server serve CSS stantio** dopo modifiche estese agli stili. Prima di
   dare la colpa al codice, verificare su `npm run build && npm run preview`.
+- **Il dev server serve contenuti stantii dopo rinomini e cancellazioni** dentro
+  `src/content/`. Un server acceso da ore continua a vedere il frontmatter
+  precedente e produce errori che puntano a file non più citati da nessun
+  sorgente — per esempio `[allegati] "x.zip" dichiarato nel frontmatter … ma non
+  trovato` su un allegato che è stato tolto. Non cercare il refuso nel
+  contenuto: confrontare prima con `npm run build`, che è la verità, poi
+  riavviare il server.
+- **Il data store della content layer sopravvive alla cancellazione di
+  `.astro/`**: sta in `node_modules/.astro/`. Dopo aver rinominato un `index.mdx`
+  in `index.md` la build fallisce con un messaggio di Rolldown che cerca ancora
+  il vecchio percorso (`failed to resolve import "astro:content-layer-deferred-module…&fileName=…index.mdx"`),
+  e né `rm -rf .astro` né `rm -rf dist` lo sbloccano. Serve
+  `rm -rf node_modules/.astro`.
 
 ---
 
