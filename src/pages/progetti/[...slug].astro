@@ -77,7 +77,11 @@ const toc = headings.filter((h) => h.depth === 2);
         <p id="links-t">Link esterni</p>
         <ul>
           {d.links.map((l) => (
-            <li><a href={l.url} rel="noopener">{l.label} ↗</a></li>
+            <li>
+              <a href={l.url} target="_blank" rel="noopener noreferrer">
+                {l.label} ↗<span class="visually-hidden"> (si apre in una nuova scheda)</span>
+              </a>
+            </li>
           ))}
         </ul>
       </nav>
