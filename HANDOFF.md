@@ -167,15 +167,22 @@ quindi serve una scelta consapevole:
   2026, nessun avviso), l'interfaccia è più semplice e **le anteprime automatiche
   su ogni pull request sono mature**. Quelle anteprime sono il pilastro del
   flusso di lavoro: senza, si fa merge alla cieca.
-- **Cloudflare Workers** — è la direzione in cui Cloudflare sta spingendo i
-  nuovi progetti. Richiede un file `wrangler.jsonc` con
-  `{"assets": {"directory": "./dist"}}` e il deploy via `npx wrangler deploy`.
-  **Non è stato verificato** se le anteprime per pull request siano altrettanto
-  immediate: va accertato prima di sceglierlo.
+- **Cloudflare Workers** — è la direzione in cui Cloudflare spinge i progetti
+  nuovi, e dal 2025 serve anche gli asset statici. Richiede un
+  `wrangler.jsonc` con `{"assets": {"directory": "./dist"}}`.
 
-**Raccomandazione: partire da Pages**, perché il requisito n. 1 è l'anteprima
-per PR. La migrazione a Workers, se e quando servirà, è documentata da
-Cloudflare e riguarda solo l'infrastruttura, non il codice del sito.
+Verificato il 29 agosto 2026 sulla documentazione ufficiale: **Pages non è
+deprecato**, le anteprime per branch esistono anche su Workers (vanno però
+abilitate le build dei rami non di produzione, e i controlli sui rami sono meno
+configurabili), e soprattutto **Workers serve solo domini la cui zona DNS è su
+Cloudflare, mentre Pages accetta un dominio esterno via CNAME**.
+
+**Raccomandazione confermata: Pages.** Due ragioni concrete: le anteprime per
+PR sono automatiche, e il dominio si collega senza spostare la zona DNS di
+gorgolab.it su Cloudflare — cosa che, finché la wiki è viva su quel dominio,
+significa non toccare quello che già funziona. Il vantaggio di Workers è unire
+frontend e backend: qui il backend non c'è. La migrazione, se un giorno
+servirà, è documentata e riguarda l'infrastruttura, non il codice del sito.
 
 ### Impostazioni per Cloudflare Pages
 
