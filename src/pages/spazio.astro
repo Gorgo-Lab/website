@@ -3,6 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../site.config';
 
+/**
+ * Unica fonte degli orari: la wiki che li teneva aggiornati viene dismessa.
+ * Se cambiano, si cambiano qui e si fa una pull request.
+ */
 const orari = [
   { g: 'Lunedì', h: '20:30 – 23:30', note: 'Si lavora su progetti specifici' },
   { g: 'Mercoledì', h: '20:30 – 23:30', note: 'Open day: si entra e basta, e i maker mostrano a che punto sono' },
@@ -57,10 +61,6 @@ const regole = [
         Al mercoledì si entra senza formalità. Per frequentare le altre serate e
         usare le macchine ci si associa: c'è una quota annuale e si firma il
         registro all'ingresso.
-      </p>
-      <p class="hint mono">
-        Gli orari possono cambiare: il calendario aggiornato sta sulla{' '}
-        <a href={SITE.wiki} rel="noopener">wiki</a>.
       </p>
     </div>
   </section>
