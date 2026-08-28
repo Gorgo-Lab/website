@@ -198,6 +198,15 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
   `.prose li + li` erano generiche e deformavano galleria e poster dei video con
   margini e bordi doppi. Ora `.prose :is(p, figure) > img` colpisce solo le
   immagini del testo.
+- **Specificità: una regola più corta che perde.** In `contatti.astro`
+  `.cards section` (0-1-1) batteva `.highlight` (0-1-0): lo sfondo blu della
+  scheda non si applicava mai, mentre il colore chiaro del testo passava — a
+  parità di peso vince la regola scritta dopo — e la scheda restava con testo
+  quasi bianco su carta, contrasto 1,03:1. Nel CSS di pagina, quando si vuole
+  variare una scheda dentro un contenitore, la variante va scritta con lo stesso
+  contenitore davanti (`.cards section.highlight`). Vale la pena misurare il
+  contrasto calcolato invece di fidarsi dell'occhio: qui il testo era invisibile
+  e nessuno se n'era accorto.
 - **Classi scoped che non arrivano sugli SVG.** Astro non applica il proprio
   attributo di scope all'HTML inlinato con `set:html`: per stilare un'icona
   serve un contenitore `<span>` attorno a `<Icon />`.
