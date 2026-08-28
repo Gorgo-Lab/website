@@ -1,6 +1,6 @@
 # Sito del Gorgo Lab
 
-Sito statico dell'hackerspace comunale di Gorgonzola, costruito con
+Sito statico del makerspace comunale di Gorgonzola, costruito con
 [Astro](https://astro.build). I progetti e gli articoli sono file markdown che i
 maker aggiungono via pull request; il sito li impagina, ottimizza le immagini e
 genera anteprime, indici e feed da solo.

@@ -8,12 +8,12 @@ export const SITE = {
   /** Tutto maiuscolo attaccato: si usa solo nei manifesti e nel banner */
   wordmark: 'GORGOLAB',
   chant: 'GOGOGO',
-  kicker: 'Hackerspace comunale · Gorgonzola',
+  kicker: 'Makerspace di Gorgonzola',
   tagline: 'Vuoi fare qualcosa? Fallo e basta.',
   description:
     'Un luogo fisico per programmazione, elettronica, tecnologia, artigianato, scienza, robotica, arte e fai-da-te. Aperto a chiunque.',
-  email: 'info@gorgolab.it',
-  address: "Via Sant'Andrea 6, Gorgonzola (MI)",
+  email: 'info@martelab.it',
+  address: "Ca' Busca, via Montenero, Gorgonzola (MI)",
   wiki: 'https://www.gorgolab.it',
   regolamento: 'https://www.gorgolab.it/doku.php?id=regolamento',
   social: {
