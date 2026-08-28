@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+
+/**
+ * Vetrina dei sette principi fondamentali, girati verso chi il makerspace non
+ * l'ha ancora visto.
+ *
+ * I documenti di governance regolano gli attriti fra maker che i progetti li
+ * hanno già avviati: chi decide, chi può bloccare, di chi è il merito. Chi
+ * legge questa pagina è un passo prima, e quelle domande non se l'è ancora
+ * poste: raccontargliele gli mostrerebbe dei muri dove non ce ne sono.
+ *
+ * Perciò ogni scheda dice cosa il lab TOGLIE DI MEZZO a chi arriva, non cosa
+ * si deve agli altri. Stesso principio, destinatario diverso. Il testo per chi
+ * è già dentro resta nel repository governance, linkato in fondo.
+ *
+ * Volutamente NON è una copia di quei documenti: due testi identici in due
+ * posti si disallineano al primo aggiornamento, e quello sbagliato sarebbe
+ * questo.
+ *
+ * Le schede sono otto e i principi sette: la 01 non viene dalla governance,
+ * risponde alla domanda che si fa chi non è ancora maker — "l'idea ce l'ho, il
+ * come no" — e serve anche a chiudere la griglia su due righe piene.
+ */
+const valori = [
+  {
+    n: '01',
+    title: 'Si impara facendo',
+    text: 'Hai un\'idea e non sai da dove si comincia: un oggetto di legno che ti sei immaginato, una riparazione che sembra impossibile, un meccanismo elettronico che in giro non si trova. Si parte lo stesso — la tecnica la impari sulla cosa che ti interessa, non su un esercizio.',
+  },
+  {
+    n: '02',
+    title: 'Non devi chiedere il permesso',
+    text: 'Non c\'è una commissione che approva le idee e non esiste una lista d\'attesa. Se vuoi costruire qualcosa, si comincia: chi porta avanti il lavoro decide su quel lavoro, anche quando è arrivato ieri.',
+  },
+  {
+    n: '03',
+    title: 'Sbagliare è messo in conto',
+    text: 'Nessuno qui è nato capace e la prima volta va storta a tutti. Si prova, si rompe, si ricomincia: è il modo in cui si impara un mestiere, non un incidente da nascondere.',
+  },
+  {
+    n: '04',
+    title: 'Chiedere è normale',
+    text: 'Non ci sono domande stupide: ci sono persone che quella cosa l\'hanno già sbagliata prima di te e te la mostrano volentieri. Se preferisci provare da solo, nessuno ti sta addosso.',
+  },
+  {
+    n: '05',
+    title: 'Non serve avere le idee chiare',
+    text: 'Puoi arrivare con mezza idea, un disegno storto e nessun piano. Si parte da un pezzo piccolo e si vede cosa succede: una cosa imperfetta che esiste insegna più di un progetto perfetto rimasto sulla carta.',
+  },
+  {
+    n: '06',
+    title: 'Quello che fai resta tuo',
+    text: 'Nessuno ti prende in mano il progetto e nessuno decide al posto tuo quando è finito. Se vuoi compagnia la trovi, se vuoi lavorare per conto tuo va bene uguale.',
+  },
+  {
+    n: '07',
+    title: 'Sei libero di sperimentare',
+    text: 'Puoi prendere strade che a qualcun altro sembrano sbagliate: i consigli arrivano, e li prendi o li lasci. Nessuno può importi come si fa la tua cosa.',
+  },
+  {
+    n: '08',
+    title: 'Il lab è un\'officina, non un padrone',
+    text: 'Gorgo Lab mette lo spazio, le macchine e le persone. Quello che ne esce è tuo: il lab non si prende né il merito né i diritti di quello che costruisci qui.',
+  },
+];
+---
+
+<BaseLayout
+  title="Valori"
+  description={`Cosa puoi aspettarti dal ${SITE.name} la prima volta che entri: sette cose su cui contare.`}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Come si sta qui</p>
+      <h1 class="shout">Fra te e la tua idea non c'è niente</h1>
+      <p class="lead">
+        Un makerspace è un'officina condivisa: macchine, spazio e persone a
+        disposizione di chiunque abbia qualcosa da costruire. Qui le persone
+        creano, imparano dai propri errori, condividono, collaborano, ricercano,
+        sperimentano e sviluppano competenze nuove. Non serve saper già fare, non
+        serve un'idea chiara, non serve il permesso di nessuno: queste otto cose
+        sono quello su cui puoi contare dalla prima sera.
+      </p>
+    </header>
+
+    <ol class="valori">
+      {valori.map((v) => (
+        <li>
+          <p class="num mono">{v.n}</p>
+          <h2 class="shout">{v.title}</h2>
+          <p class="body">{v.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <p class="fonte mono">
+      Questa è la versione per chi arriva. Come funzionano le decisioni quando i
+      progetti si incrociano, e il metodo di lavoro che ci siamo dati, stanno nei{' '}
+      <a href={SITE.governance} target="_blank" rel="noopener noreferrer">
+        documenti di governance ↗<span class="visually-hidden"> (si apre in una nuova scheda)</span>
+      </a>. Sono sotto licenza CC BY-SA: se ti servono per il tuo spazio, prendili.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 52ch; margin-bottom: var(--s-8); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+
+  .valori {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; gap: var(--s-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+  .valori li {
+    padding: var(--s-5); background: var(--gl-paper);
+    border: var(--bw-2) solid var(--gl-ink); border-radius: var(--r-lg);
+    box-shadow: var(--sh-card);
+    display: flex; flex-direction: column; gap: var(--s-2);
+  }
+  .num { color: var(--gl-orange-700); font-size: var(--fz-xs); letter-spacing: var(--tr-shout); }
+  .valori h2 { font-size: var(--fz-lg); }
+  .body { color: var(--fg-2); font-size: var(--fz-sm); }
+
+  .fonte {
+    margin-top: var(--s-7); padding-top: var(--s-4);
+    border-top: var(--bw-2) solid var(--gl-ink);
+    color: var(--fg-3); font-size: var(--fz-xs);
+    max-width: var(--wrap-text);
+  }
+</style>

@@ -8,8 +8,9 @@
  * abbandonato, e all'inizio nessuno avrà marcato niente come in evidenza.
  *
  * Attrezzature e principi sono scritti qui e non nei contenuti: cambiano una
- * volta l'anno e non meritano una collezione. Le attrezzature elencate sono
- * ancora da confermare con i soci.
+ * volta l'anno e non meritano una collezione. I tre principi in home sono
+ * l'estratto della pagina /valori/, che a sua volta riassume i documenti di
+ * governance: la fonte è quella, non questo file.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -85,6 +86,13 @@ const principi = [
   <!-- PRINCIPI ---------------------------------------------------- -->
   <section class="band band-paper">
     <div class="wrap">
+      <header class="block-head">
+        <div>
+          <p class="eyebrow">Come si sta qui</p>
+          <h2 class="shout">Tre cose su cui non si transige</h2>
+        </div>
+        <a class="more" href="/valori/">Tutti i valori →</a>
+      </header>
       <ul class="principi">
         {principi.map((p, i) => (
           <li>
