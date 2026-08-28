@@ -143,7 +143,7 @@ verdi o rossi, ma **nessuno impedisce di fare merge con i controlli rossi** o di
 scrivere direttamente su `main`. La validazione informa, non blocca.
 
 Rendere pubblico il repository al lancio risolve la cosa gratis, ed è coerente
-con la natura del progetto: un hackerspace comunale, contenuti già sotto
+con la natura del progetto: un makerspace comunale, contenuti già sotto
 CC BY-SA, un sito che è pubblico per definizione. Una volta pubblico, in
 Settings → Rules va attivata la protezione di `main` con "richiedi che i
 controlli passino" e "richiedi la revisione dei code owner".

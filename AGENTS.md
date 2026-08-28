@@ -1,6 +1,6 @@
 # Gorgo Lab — sito
 
-Sito pubblico del **Gorgo Lab**, hackerspace comunale di Gorgonzola (MI). I
+Sito pubblico del **Gorgo Lab**, makerspace comunale di Gorgonzola (MI). I
 progetti e gli articoli li scrivono i soci e i maker via pull request; il sito
 li impagina, ottimizza le immagini e genera anteprime, indici e feed da solo.
 
