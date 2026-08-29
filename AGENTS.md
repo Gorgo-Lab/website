@@ -231,6 +231,30 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
 
 ---
 
+## Abitudini di lavoro con git
+
+Due lezioni pagate sul campo il 29 agosto 2026, mentre si collaudava il flusso
+delle anteprime.
+
+- **Spingere `main` prima di aprire un ramo.** Un ramo nato da un `main` locale
+  in anticipo di otto commit se li porta dentro tutti: la pull request non
+  contiene più una cosa sola, e allo schiacciamento quegli otto messaggi
+  diventano uno solo, col titolo del ramo. Il contenuto si salva, il *perché*
+  no — e in questo repository i messaggi di commit sono documentazione.
+- **Il bottone del merge si sceglie, non si subisce.** Ramo con un commit e un
+  messaggio già scritto bene: *Rebase and merge*, che lo riporta intatto e
+  tiene `main` lineare. Ramo di un maker con dieci commit di aggiustamento:
+  *Squash and merge*, riscrivendo il messaggio a mano, perché quello proposto è
+  il titolo della PR. Il commit di merge serve solo quando si vuole conservare
+  la forma del ramo, che qui non succede quasi mai.
+
+Per il lavoro proprio, finché il sito non è pubblico, il merge in locale è
+legittimo: l'anteprima del ramo esiste comunque e i controlli girano anche sul
+push a `main`. Per il lavoro degli altri no — la revisione prima del merge è
+tutto il senso del patto con i maker.
+
+---
+
 ## Comandi
 
 ```bash

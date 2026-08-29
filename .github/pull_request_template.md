@@ -15,5 +15,12 @@
 
 ## Anteprima
 
-<!-- Cloudflare Pages commenta qui sotto con il link al sito costruito
-     da questa PR. Controllalo prima di chiedere la revisione. -->
+Il sito costruito da questo ramo si vede qui, prima del merge:
+
+<!-- Sostituisci NOME-DEL-RAMO. L'indirizzo segue il ramo, quindi resta valido
+     anche dopo altri commit: ricarica e vedi l'ultima versione. Lo stesso link
+     sta nel check "Cloudflare Pages" qui sotto, sotto "Details". -->
+
+https://NOME-DEL-RAMO.gorgolab-website.pages.dev/
+
+Controllalo prima di chiedere la revisione.
