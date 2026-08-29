@@ -175,9 +175,11 @@ Un maker apre una PR con la sua cartella. La CI verifica **prima del merge**:
    inesistenti e allegati dichiarati ma assenti fanno **fallire la build**;
 4. `check:links` — nessun collegamento interno punta a una pagina che non esiste.
 
-Cloudflare Pages pubblica un'anteprima della PR, così il progetto si vede
-renderizzato prima di accettarlo. Nelle preview le bozze (`draft: true`) sono
-visibili; sul sito pubblico no.
+Cloudflare Pages costruisce un'anteprima a ogni push, così il progetto si vede
+renderizzato prima di accettarlo. L'indirizzo si ricava dal nome del ramo —
+`https://<ramo>.gorgolab-website.pages.dev/` — e lo stesso link sta nel check
+"Cloudflare Pages" sulla pull request. Nelle anteprime le bozze (`draft: true`)
+sono visibili; sul sito pubblico no.
 
 Il risultato: si accetta un contributo guardando la sostanza, non la
 formattazione.
