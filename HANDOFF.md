@@ -10,10 +10,14 @@ Ultimo aggiornamento: 28 agosto 2026.
 
 ## Stato in due righe
 
-Il sito è **completo e funzionante in locale**: 21 pagine, build pulita, tutti i
-controlli verdi. Il codice sta su GitHub, in `Gorgo-Lab/website` (privato). Il
-sito **non è ancora pubblicato** e alcuni dati sulla pagina "Lo spazio" sono
-stati dedotti, non verificati.
+Il sito è **online su Cloudflare Pages**, all'indirizzo provvisorio
+`gorgolab-website.pages.dev`: 22 pagine, build pulita, tutti i controlli verdi.
+Il codice sta su GitHub, in `Gorgo-Lab/website` (privato).
+
+**Manca il dominio**: `www.gorgolab.it` serve ancora la wiki, e il passaggio va
+fatto quando si è pronti a spegnerla. I dati della pagina "Lo spazio" sono stati
+confermati dai soci il 28 agosto 2026; restano da decidere la cifra della quota
+e dove va a vivere il regolamento.
 
 ---
 
@@ -206,17 +210,41 @@ Variabili d'ambiente:
 lasciandole invisibili sul sito pubblico. **Se lo imposti anche in Production,
 pubblichi le bozze di tutti.**
 
-### Dopo il primo deploy
+### Cosa è già stato fatto e verificato
 
-1. Impostare il dominio definitivo e riportarlo in **`astro.config.mjs`** (campo
-   `site`, oggi `https://gorgolab.it` con un TODO). Da quel campo dipendono
-   sitemap, URL canonici e anteprime social: se resta sbagliato, i link
-   condivisi puntano altrove.
-2. Aprire una PR di prova e verificare che Cloudflare commenti con il link
-   all'anteprima. Il controllo del contenuto compare invece come **un solo
-   check** — il job `build` — che al suo interno esegue i quattro passi: per
-   vedere quale è fallito bisogna aprirlo.
-3. Controllare che `/rss.xml` e `/sitemap-index.xml` rispondano.
+Il progetto Pages è collegato al repository e la produzione si ricostruisce a
+ogni push su `main`. Provato il 29 agosto 2026, tutto sul campo:
+
+- **le anteprime nascono dal push di un ramo**, senza bisogno della pull
+  request, e vivono a un indirizzo prevedibile: `<ramo>.<progetto>.pages.dev`.
+  L'indirizzo segue il ramo, quindi un secondo commit aggiorna la stessa pagina
+  (~40 secondi);
+- **`SHOW_DRAFTS=true` sul solo ambiente Preview funziona**: un progetto
+  `draft: true` si vede nell'anteprima e non in produzione. Verificato con un
+  progetto finto, poi rimosso;
+- **i quattro controlli girano sulla pull request**, non sul push del ramo: il
+  workflow scatta su `pull_request` e su `push: [main]`. Fermarsi al ramo
+  significa avere l'anteprima senza validazione;
+- **Cloudflare non lascia un commento** sulla PR: attacca un *check* il cui
+  "Details" porta all'anteprima, più uno stato di deployment. Il commento
+  automatico non è garantito e dipende dai permessi dell'app GitHub — l'indirizzo
+  prevedibile del ramo è più affidabile;
+- `/rss.xml` e `/sitemap-index.xml` rispondono, e gli URL canonici dichiarano
+  già `https://www.gorgolab.it`.
+
+### Cosa resta
+
+1. **Collegare il dominio.** Su Pages si aggiunge `www.gorgolab.it` come dominio
+   personalizzato e si crea un CNAME nel DNS dov'è adesso: la zona non va
+   spostata su Cloudflare. Va fatto insieme allo spegnimento della wiki, che oggi
+   occupa quell'indirizzo. Aggiungere anche il dominio nudo e reindirizzarlo.
+2. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede, anche se il
+   repository è privato. Se dà fastidio si mette davanti Cloudflare Access, che
+   ha un piano gratuito, al prezzo di dover fare login per guardarle.
+3. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
+   che stanno dentro il repository. Perché il patto con i maker funzioni come
+   descritto in `README.md`, chi pubblica deve avere accesso in scrittura e
+   spingere un ramo, non un fork.
 
 ---
 
