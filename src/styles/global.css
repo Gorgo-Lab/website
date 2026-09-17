@@ -9,8 +9,6 @@
      · press = traslazione di 2px, l'ombra "collassa".
    ========================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
 :root {
   /* ---------- Marca ---------- */
   --gl-blue: #0071bc;
@@ -72,9 +70,11 @@
   --border-strong: var(--gl-ink);
 
   /* ---------- Tipografia ---------- */
-  --font-display: 'Poppins', Impact, Haettenschweiler, system-ui, sans-serif;
-  --font-sans: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, Menlo, monospace;
+  /* Le variabili --font-poppins & co. le genera Astro (vedi `fonts` in
+     astro.config.mjs) e contengono già un fallback con metriche corrette. */
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 
   --fz-xs: 12px;
   --fz-sm: 14px;

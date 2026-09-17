@@ -19,11 +19,14 @@ commit. Non c'è internazionalizzazione ed è una scelta, non una mancanza.
 | Immagini | `astro:assets` (Sharp) | ridimensiona, converte in WebP e genera le varianti responsive |
 | Stile | CSS puro con custom properties | niente framework: il design system è già un sistema di token |
 | Icone | **Lucide**, inlinate a build time | nessun CDN, nessun JS a runtime |
+| Caratteri | API `fonts` di Astro, file dai pacchetti `@fontsource` | serviti dal sito: nessuna richiesta a Google, fallback con metriche corrette |
 | Tipi | TypeScript strict + `astro check` | |
 | Hosting previsto | **Cloudflare Pages** | anteprima automatica su ogni pull request |
 
 Dipendenze runtime: `astro`, `@astrojs/mdx`, `@astrojs/rss`, `@astrojs/sitemap`.
-In sviluppo: `@astrojs/check`, `typescript`, `yaml`, `lucide-static`.
+In sviluppo: `@astrojs/check`, `typescript`, `yaml`, `lucide-static`,
+`@fontsource/poppins`, `@fontsource-variable/space-grotesk`,
+`@fontsource-variable/jetbrains-mono`.
 Nessuna libreria UI, nessun framework CSS, nessuna dipendenza JavaScript sul
 client tranne due frammenti minuscoli (menu mobile, facciata dei video).
 
@@ -132,7 +135,9 @@ che conosce `entry.id`. Per questo galleria e allegati si dichiarano nel
 frontmatter invece di essere componenti.
 
 I video si incorporano con una facciata: fino al click non parte nulla verso il
-provider, quindi niente cookie e niente player da megabyte.
+provider, quindi niente cookie e niente player da megabyte. Anche l'anteprima di
+YouTube la scarica Astro a build time (`image.domains` in `astro.config.mjs`):
+un ID inesistente fa fallire la build.
 
 ---
 

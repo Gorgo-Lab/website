@@ -1,9 +1,16 @@
 ---
+import { getImage } from 'astro:assets';
 import Icon from './Icon.astro';
 
 /**
  * Video embeddato con facciata: fino al click non parte nulla verso il
  * provider — niente iframe, niente cookie, niente megabyte di player.
+ *
+ * Vale anche per l'anteprima: la scarica Astro a build time e la serve dal
+ * sito come WebP. Presa direttamente da i.ytimg.com, ogni visita avrebbe
+ * contattato Google prima di qualsiasi click. Un effetto collaterale utile:
+ * un ID YouTube inesistente fa fallire la build («Failed to load remote image
+ * https://i.ytimg.com/vi/<id>/…») invece di pubblicare un riquadro vuoto.
  *
  * Uso in un file .mdx, senza import:
  *   <Video provider="youtube" id="dQw4w9WgXcQ" title="Test del braccio" />
@@ -26,7 +33,10 @@ const embed =
     ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`
     : `https://player.vimeo.com/video/${id}?autoplay=1`;
 
-const poster = provider === 'youtube' ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : undefined;
+const poster =
+  provider === 'youtube'
+    ? (await getImage({ src: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, width: 480, height: 360, format: 'webp' })).src
+    : undefined;
 ---
 
 <figure class="video" style={`--ratio:${ratio}`}>
