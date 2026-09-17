@@ -26,7 +26,10 @@ const featured = projects.filter((p) => p.data.featured);
 const showcase = (featured.length >= 3 ? featured : projects).slice(0, 6);
 const latestPosts = posts.slice(0, 3);
 
-const stats = [
+// I numeri si mostrano solo quando dicono qualcosa: «1 progetto, 1 maker»
+// racconta un posto vuoto meglio di quanto farebbe il silenzio.
+const STATS_MIN_PROJECTS = 5;
+const stats = projects.length < STATS_MIN_PROJECTS ? [] : [
   { n: projects.length, label: 'progetti documentati' },
   { n: new Set(projects.flatMap((p) => p.data.authors)).size, label: 'maker coinvolti' },
   { n: new Set(projects.flatMap((p) => p.data.tags)).size, label: 'ambiti diversi' },
@@ -73,14 +76,16 @@ const principi = [
       <a class="btn btn-ghost" href="/contatti/">Come arrivare</a>
     </div>
 
-    <dl class="stats">
-      {stats.map((s) => (
-        <div>
-          <dt class="shout">{s.n}</dt>
-          <dd class="mono">{s.label}</dd>
-        </div>
-      ))}
-    </dl>
+    {stats.length > 0 && (
+      <dl class="stats">
+        {stats.map((s) => (
+          <div>
+            <dt class="shout">{s.n}</dt>
+            <dd class="mono">{s.label}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
   </section>
 
   <!-- PRINCIPI ---------------------------------------------------- -->
@@ -94,7 +99,7 @@ const principi = [
         <a class="more" href="/valori/">Tutti i valori →</a>
       </header>
       <ul class="principi">
-        {principi.map((p, i) => (
+        {principi.map((p) => (
           <li>
             <p class="num mono">{p.n}</p>
             <h2 class="shout">{p.title}</h2>
@@ -138,7 +143,7 @@ const principi = [
       </header>
 
       <ul class="tools">
-        {attrezzature.map((t, i) => (
+        {attrezzature.map((t) => (
           <li>
             <span class="ico"><Icon name={t.icon} size={26} /></span>
             <h3 class="shout">{t.title}</h3>
@@ -161,7 +166,7 @@ const principi = [
       </header>
 
       <ul class="posts">
-        {latestPosts.map((p, i) => (
+        {latestPosts.map((p) => (
           <li>
             <a href={`/blog/${p.id}/`}>
               <time class="mono" datetime={p.data.date.toISOString()}>

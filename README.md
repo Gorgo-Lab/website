@@ -157,7 +157,9 @@ tabelle, immagini con e senza didascalia, video, riquadri di richiamo,
 specifiche, codice e allegati di sei tipi.
 
 Si copia la cartella, si cancella quello che non serve, si sostituisce il resto.
-È anche consultabile renderizzata su `/progetti/modello-pagina-progetto/`.
+È una bozza (`draft: true`): la si vede renderizzata su
+`/progetti/modello-pagina-progetto/` in locale e nelle anteprime, non sul sito
+pubblico. Chi la copia deve togliere quella riga.
 
 Chi aggiunge un componente o una sintassi deve aggiornare anche quel modello,
 `CONTRIBUTING.md` e la pagina `/contribuire/`: altrimenti la novità esiste ma

@@ -5,8 +5,10 @@ Vuoi metterci il tuo progetto? Fallo e basta.
 > **La scorciatoia:** copia la cartella
 > [`src/content/progetti/modello-pagina-progetto/`](src/content/progetti/modello-pagina-progetto/),
 > rinominala col nome del tuo progetto e sostituisci il contenuto. Quel modello
-> contiene ogni formattazione disponibile, già scritta e commentata, e lo vedi
-> renderizzato su **`/progetti/modello-pagina-progetto/`**.
+> contiene ogni formattazione disponibile, già scritta e commentata. È una
+> bozza: lo vedi renderizzato su **`/progetti/modello-pagina-progetto/`** in
+> locale (`npm run dev`) e nelle anteprime delle PR, non sul sito pubblico.
+> Quando lo copi, **cancella la riga `draft: true`** in cima al frontmatter.
 
 Tu scrivi il contenuto, il sito ci mette la grafica. Non serve sapere HTML o CSS,
 e non serve chiedere il permesso a nessuno.

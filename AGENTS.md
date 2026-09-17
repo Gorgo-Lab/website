@@ -182,7 +182,9 @@ colore è informazione (il PLA che ingiallisce, il legno bruciato sui bordi).
 - Il progetto modello `src/content/progetti/modello-pagina-progetto/` è la
   vetrina di ogni formattazione: aggiungendo un componente o una sintassi va
   aggiunto anche lì, altrimenti nessuno saprà che esiste. Vanno aggiornati
-  insieme anche `CONTRIBUTING.md` e la pagina `/contribuire/`.
+  insieme anche `CONTRIBUTING.md` e la pagina `/contribuire/`. Il modello è
+  `draft: true`: esiste in locale e nelle anteprime, non in produzione, quindi
+  dal sito si linka il suo sorgente su GitHub e mai la sua pagina.
 
 ---
 
@@ -222,6 +224,10 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
   trovato` su un allegato che è stato tolto. Non cercare il refuso nel
   contenuto: confrontare prima con `npm run build`, che è la verità, poi
   riavviare il server.
+- **«The collection "blog" does not exist or is empty»** ripetuto nel log di
+  build non è un errore: il blog oggi non ha articoli. La cartella resta nel
+  repository grazie a `src/content/blog/.gitkeep`; sparisce da sola al primo
+  articolo.
 - **Il data store della content layer sopravvive alla cancellazione di
   `.astro/`**: sta in `node_modules/.astro/`. Dopo aver rinominato un `index.mdx`
   in `index.md` la build fallisce con un messaggio di Rolldown che cerca ancora

@@ -8,11 +8,16 @@
  * formato del frontmatter vanno aggiornati tutti e due, più il progetto
  * modello in src/content/progetti/modello-pagina-progetto/.
  *
+ * Il modello è in bozza, quindi sul sito pubblico la sua pagina non esiste: il
+ * collegamento porta al sorgente su GitHub, che è anche ciò che il maker copia.
+ *
  * L'elenco dei tag e degli stati è generato da site.config.ts, quindi quella
  * parte resta allineata da sola.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { TAGS, PROJECT_STATUS } from '../site.config';
+import { SITE, TAGS, PROJECT_STATUS } from '../site.config';
+
+const MODELLO = `${SITE.repository}/tree/main/src/content/progetti/modello-pagina-progetto`;
 
 const steps = [
   {
@@ -90,17 +95,18 @@ Testo normale in markdown. Le immagini si mettono così:
       </p>
     </header>
 
-    <a class="modello" href="/progetti/modello-pagina-progetto/">
+    <a class="modello" href={MODELLO}>
       <span class="eyebrow">La scorciatoia</span>
-      <span class="t">Parti dal modello →</span>
+      <span class="t">Parti dal modello ↗</span>
       <span class="d">
-        Una pagina che contiene ogni formattazione disponibile, già scritta e
-        commentata. Copiala, cancella quello che non ti serve, sostituisci il resto.
+        Una cartella che contiene ogni formattazione disponibile, già scritta e
+        commentata. Copiala, togli la riga <code>draft: true</code>, cancella
+        quello che non ti serve e sostituisci il resto.
       </span>
     </a>
 
     <ol class="steps">
-      {steps.map((s, i) => (
+      {steps.map((s) => (
         <li>
           <span class="n">{s.n}</span>
           <h2 class="shout">{s.title}</h2>

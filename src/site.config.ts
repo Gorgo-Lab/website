@@ -16,6 +16,8 @@ export const SITE = {
   address: "Ca' Busca, via Montenero, Gorgonzola (MI)",
   /** I documenti che descrivono valori e funzionamento del lab */
   governance: 'https://github.com/Gorgo-Lab/governance',
+  /** Il repository del sito: è dove i maker aprono le pull request */
+  repository: 'https://github.com/Gorgo-Lab/website',
   social: {
     instagram: '',
     github: '',
