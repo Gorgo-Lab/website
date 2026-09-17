@@ -190,6 +190,10 @@ colore è informazione (il PLA che ingiallisce, il legno bruciato sui bordi).
   insieme anche `CONTRIBUTING.md` e la pagina `/contribuire/`. Il modello è
   `draft: true`: esiste in locale e nelle anteprime, non in produzione, quindi
   dal sito si linka il suo sorgente su GitHub e mai la sua pagina.
+- **Nessuna risorsa di terzi senza un click.** Caratteri, immagini e script
+  vengono dal sito. La CSP in `public/_headers` lo fa rispettare e la pagina
+  `/privacy/` lo promette: chi aggiunge un servizio esterno aggiorna tutti e
+  due nella stessa pull request.
 
 ---
 
@@ -301,7 +305,7 @@ src/
 ├── site.config.ts       ← nome, contatti, tag ammessi, stati progetto
 ├── layouts/             ← BaseLayout (scheletro), ContentLayout (progetti e articoli)
 ├── components/          ← schede, galleria, allegati, blocchi per MDX, Icon
-├── pages/               ← rotte del sito
+├── pages/               ← rotte del sito (privacy.astro va riletta se cambia chi contattiamo)
 ├── plugins/             ← rehype: didascalie delle immagini, tabelle scorrevoli
 ├── icons/               ← SVG Lucide usati, copiati da lucide-static
 └── styles/global.css    ← token del design system e tipografia dei contenuti

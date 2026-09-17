@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../site.config';
+
+/**
+ * Informativa sul trattamento dei dati.
+ *
+ * Descrive quello che il sito fa davvero, quindi va riletta ogni volta che
+ * cambia qualcosa che tocca terzi: un nuovo provider di video, un contatore di
+ * visite, un carattere caricato da fuori, un modulo. Oggi il sito non usa
+ * cookie, non ha statistiche e fino a un click non contatta nessuno oltre a
+ * Cloudflare, che lo ospita: se una modifica rende falsa una di queste frasi,
+ * la pagina va aggiornata nella stessa pull request.
+ */
+const aggiornamento = new Date('2026-09-17');
+---
+
+<BaseLayout
+  title="Privacy"
+  description={`Quali dati tratta il sito del ${SITE.name}, perché, e come chiederne conto.`}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="shout">Cosa sappiamo di te: quasi niente</h1>
+      <p class="lead">
+        Questo sito non usa cookie, non conta le visite e non ti segue da una
+        pagina all'altra. Qui sotto c'è quel poco che succede comunque, detto
+        per esteso.
+      </p>
+    </header>
+
+    <div class="prose">
+      <h2>Chi è responsabile</h2>
+      <p>
+        Il titolare del trattamento è il {SITE.name}, {SITE.address}. Per
+        qualunque domanda su questa pagina o sui tuoi dati scrivi a{' '}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      </p>
+
+      <h2>Quando visiti il sito</h2>
+      <p>
+        Il sito è fatto di pagine statiche ospitate da <strong>Cloudflare</strong>{' '}
+        (Cloudflare Pages). Come qualunque server, per consegnarti una pagina
+        Cloudflare riceve l'indirizzo IP del tuo dispositivo e i dati tecnici
+        della richiesta: quale pagina, quale browser, a che ora. Li usa per far
+        funzionare il servizio e proteggerlo dagli abusi; noi non li
+        raccogliamo e non li consultiamo.
+      </p>
+      <p>
+        La base giuridica è il legittimo interesse a tenere online il sito in
+        modo sicuro (art. 6.1.f del GDPR). Cloudflare è un'azienda statunitense
+        che aderisce all'EU-U.S. Data Privacy Framework, il meccanismo che
+        consente il trasferimento dei dati negli Stati Uniti.
+      </p>
+      <p>
+        Tutto il resto — caratteri, immagini, script, anteprime dei video — è
+        servito dal sito stesso. Non ci sono cookie, statistiche di visita,
+        pixel pubblicitari o pulsanti social che contattano altri server.
+      </p>
+
+      <h2>Quando fai partire un video</h2>
+      <p>
+        Alcune pagine mostrano video di YouTube o Vimeo. Finché non premi il
+        pulsante di riproduzione vedi solo un'immagine ospitata qui, e nessuna
+        richiesta parte verso quei servizi. Quando lo premi il video viene
+        caricato dal provider, che da quel momento riceve il tuo indirizzo IP e
+        può usare i propri cookie secondo la sua informativa. Per YouTube usiamo
+        il dominio <code>youtube-nocookie.com</code>, che limita il
+        tracciamento.
+      </p>
+
+      <h2>Quando ci scrivi</h2>
+      <p>
+        Se mandi una email a {SITE.email} usiamo il tuo indirizzo e quello che ci
+        scrivi solo per risponderti. Non finisce in liste, newsletter o mani
+        altrui.
+      </p>
+
+      <h2>Quando pubblichi un progetto</h2>
+      <p>
+        I progetti e gli articoli li scrivono i maker tramite il repository
+        pubblico del sito su GitHub. Chi pubblica sceglie il nome con cui
+        firmarsi, che compare sulla pagina. Il nome e l'account GitHub restano
+        anche nella storia delle modifiche del repository, che è pubblica e per
+        sua natura difficile da riscrivere: se vuoi usare uno pseudonimo,
+        sceglilo prima di aprire la pull request.
+      </p>
+
+      <h2>Collegamenti esterni</h2>
+      <p>
+        Le pagine contengono collegamenti ad altri siti, come GitHub o le
+        cartelle di documentazione dei progetti. Seguendoli esci da questo sito
+        e si applica l'informativa di chi li gestisce.
+      </p>
+
+      <h2>I tuoi diritti</h2>
+      <p>
+        Puoi chiederci di accedere ai dati che ti riguardano, di correggerli, di
+        cancellarli, di limitarne l'uso o di opporti al trattamento (articoli
+        15–22 del GDPR), scrivendo a{' '}
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Se pensi che i tuoi
+        dati siano trattati in modo scorretto puoi rivolgerti al{' '}
+        <a href="https://www.garanteprivacy.it" rel="noopener">Garante per la protezione dei dati personali</a>.
+      </p>
+
+      <p class="aggiornato mono">
+        Ultimo aggiornamento:{' '}
+        <time datetime={aggiornamento.toISOString().slice(0, 10)}>
+          {aggiornamento.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </time>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { max-width: 46ch; margin-bottom: var(--s-8); }
+  h1 { font-size: var(--fz-fluid-4xl); margin-block: var(--s-3); }
+  .aggiornato { margin-top: var(--s-7); color: var(--fg-3); font-size: var(--fz-xs); }
+</style>
