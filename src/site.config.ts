@@ -14,8 +14,6 @@ export const SITE = {
     'Un luogo fisico per programmazione, elettronica, tecnologia, artigianato, scienza, robotica, arte e fai-da-te. Aperto a chiunque.',
   email: 'info@martelab.it',
   address: "Ca' Busca, via Montenero, Gorgonzola (MI)",
-  wiki: 'https://www.gorgolab.it',
-  regolamento: 'https://www.gorgolab.it/doku.php?id=regolamento',
   /** I documenti che descrivono valori e funzionamento del lab */
   governance: 'https://github.com/Gorgo-Lab/governance',
   social: {
@@ -26,7 +24,7 @@ export const SITE = {
 } as const;
 
 /**
- * Vocabolario chiuso dei tag, allineato agli ambiti del regolamento:
+ * Vocabolario chiuso dei tag, allineato agli ambiti del lab:
  * programmazione, elettronica, tecnologia, artigianato, scienza,
  * robotica, arte e fai-da-te.
  *
