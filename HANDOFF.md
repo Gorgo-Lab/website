@@ -4,20 +4,25 @@ Documento per chi riprende il lavoro su un'altra macchina o dopo una pausa.
 Descrive **dove siamo, cosa manca e in che ordine farlo**. Per l'architettura e
 le regole del codice vedi [`AGENTS.md`](AGENTS.md).
 
-Ultimo aggiornamento: 28 agosto 2026.
+Ultimo aggiornamento: 17 settembre 2026.
 
 ---
 
 ## Stato in due righe
 
 Il sito è **online su Cloudflare Pages**, all'indirizzo provvisorio
-`gorgolab-website.pages.dev`: 22 pagine, build pulita, tutti i controlli verdi.
-Il codice sta su GitHub, in `Gorgo-Lab/website` (privato).
+`gorgolab-website.pages.dev`: build pulita, tutti i controlli verdi. Il codice
+sta su GitHub, in `Gorgo-Lab/website` (privato).
 
-**Manca il dominio**: `www.gorgolab.it` serve ancora la wiki, e il passaggio va
-fatto quando si è pronti a spegnerla. I dati della pagina "Lo spazio" sono stati
-confermati dai soci il 28 agosto 2026; restano da decidere la cifra della quota
-e dove va a vivere il regolamento.
+Il 17 settembre 2026 il sito è stato preparato alla pubblicazione: tolti i
+contenuti inventati (restano il Mamecab e il modello, in bozza), caratteri
+serviti dal sito invece che da Google, pagina `/privacy/`, intestazioni HTTP in
+`public/_headers`, nessun riferimento a wiki e regolamento.
+
+**Manca il lancio**: repository pubblico e protezione di `main`, poi il dominio
+(sezione 5). La wiki su `www.gorgolab.it` viene eliminata a mano, senza
+redirect: i collegamenti che puntano lì moriranno, ed è accettato. Il
+regolamento verrà riscritto come pagina del sito.
 
 ---
 
@@ -69,11 +74,14 @@ npm run validate             # i quattro controlli della CI
 `validate` deve chiudersi con:
 
 ```
-✓ 32 file di contenuto, tutti entro i limiti.
+✓ 20 file di contenuto, tutti entro i limiti.
 - 0 errors
-21 page(s) built
-✓ 21 pagine, tutti i collegamenti interni risolvono.
+13 page(s) built
+✓ 12 pagine, tutti i collegamenti interni risolvono.
 ```
+
+I numeri crescono con i contenuti; conta che non ci siano errori. Con
+`SHOW_DRAFTS=true` le pagine sono di più, perché compare il modello.
 
 Se gli stili sembrano rotti o disallineati dopo modifiche estese al CSS, prima
 di cercare il bug nel codice prova `npm run build && npm run preview`: il server
@@ -81,25 +89,21 @@ di sviluppo tiene in cache il CSS e ci ha già fatto perdere tempo una volta.
 
 ---
 
-## 3. Dati dedotti, da confermare con i soci
+## 3. Dati e testi
 
-**Questo è il vero blocco alla pubblicazione.** Il design system è stato
-generato senza accesso a gorgolab.it e alcune informazioni sono state
-estrapolate. Sono plausibili ma **non verificate**: se il sito va online con
-orari sbagliati, qualcuno trova la porta chiusa.
+Indirizzo, email, orari e attrezzature sono stati **confermati dai soci il 28
+agosto 2026**. L'email è `info@martelab.it` di proposito: una casella
+`@gorgolab.it` non esiste ancora. Quando esisterà si cambia in
+`src/site.config.ts`, e da lì si aggiornano footer, contatti, 404 e privacy.
 
-| Dato | Valore attuale | Dove |
-| --- | --- | --- |
-| Indirizzo | Via Sant'Andrea 6, Gorgonzola (MI) | `src/site.config.ts:16` |
-| Email | `info@gorgolab.it` | `src/site.config.ts:15` |
-| Orari | Mar e Gio 21:00–23:30, Sab 15:00–19:00 | `src/pages/spazio.astro:8-10` |
-| Regole dello spazio | quattro punti riscritti | `src/pages/spazio.astro` |
-| Attrezzature | stampa 3D, laser, elettronica, falegnameria, CNC, tessile | `src/pages/index.astro` |
-| Social | tutti vuoti | `src/site.config.ts` |
+Restano da scrivere:
 
-Il wiki storico (`https://www.gorgolab.it`) e il regolamento ufficiale sono già
-collegati dal piè di pagina e dalla pagina "Lo spazio": lì si trovano i dati
-veri da riportare.
+| Cosa | Dove andrà |
+| --- | --- |
+| Il regolamento | una pagina del sito, non un collegamento esterno |
+| La cifra e le modalità della quota | `src/pages/spazio.astro` |
+| Chi è il titolare del trattamento, in senso legale | `src/pages/privacy.astro` — oggi dice «il Gorgo Lab» |
+| I social | `src/site.config.ts`, oggi vuoti e quindi nascosti |
 
 Il carattere del wordmark **non è più una cosa da confermare**: sovrapponendo la
 scritta del banner (`public/brand/banner.png`) alle candidate, lettera per
@@ -135,9 +139,10 @@ terminale; l'interfaccia web fa le stesse cose.
 
 ### Privato adesso, pubblico al lancio
 
-Il repository è privato, ed è la scelta giusta finché indirizzo, orari e
-attrezzature non sono confermati: non ha senso pubblicare informazioni che
-potrebbero essere sbagliate.
+Il repository è privato. Finché dati e contenuti non erano confermati era la
+scelta giusta; ora non c'è più una ragione per tenerlo così, e la pagina
+`/contribuire/` (il modello si apre su GitHub) e `/privacy/` (parla di
+repository pubblico) danno già per scontato che sia pubblico.
 
 Va però ripresa la decisione al momento del lancio, perché **su
 un'organizzazione con piano gratuito la protezione del ramo e i ruleset
@@ -234,14 +239,27 @@ ogni push su `main`. Provato il 29 agosto 2026, tutto sul campo:
 
 ### Cosa resta
 
-1. **Collegare il dominio.** Su Pages si aggiunge `www.gorgolab.it` come dominio
-   personalizzato e si crea un CNAME nel DNS dov'è adesso: la zona non va
-   spostata su Cloudflare. Va fatto insieme allo spegnimento della wiki, che oggi
-   occupa quell'indirizzo. Aggiungere anche il dominio nudo e reindirizzarlo.
-2. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede, anche se il
+1. **Verificare `public/_headers` sull'anteprima di un ramo**, prima del
+   lancio: `curl -I https://<ramo>.gorgolab-website.pages.dev/` deve mostrare
+   `Content-Security-Policy` e `X-Robots-Tag: noindex`, e la console del browser
+   non deve riportare risorse bloccate (provare anche il click su un video del
+   modello). Le intestazioni non valgono né in `dev` né in `preview`.
+2. **Tenere spento Cloudflare Web Analytics** nel progetto Pages: inietterebbe
+   uno script di terzi, la CSP lo bloccherebbe e la pagina `/privacy/`, che dice
+   che il sito non conta le visite, diventerebbe falsa.
+3. **Collegare il dominio.** Su Pages si aggiunge `www.gorgolab.it` come dominio
+   personalizzato e si crea un CNAME nel DNS dov'è adesso (OVH): la zona non va
+   spostata su Cloudflare. Va fatto insieme all'eliminazione della wiki, che oggi
+   occupa quell'indirizzo.
+4. **Il dominio nudo `gorgolab.it`.** OVH non ammette un CNAME sul dominio nudo,
+   che oggi punta all'hosting OVH della wiki. Se quell'hosting si spegne,
+   `gorgolab.it` smette di rispondere: serve un redirect verso `www` fatto da
+   OVH (redirect visibile, o `.htaccess` sull'hosting se resta attivo), oppure
+   lo spostamento della zona DNS su Cloudflare.
+5. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede, anche se il
    repository è privato. Se dà fastidio si mette davanti Cloudflare Access, che
    ha un piano gratuito, al prezzo di dover fare login per guardarle.
-3. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
+6. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
    che stanno dentro il repository. Perché il patto con i maker funzioni come
    descritto in `README.md`, chi pubblica deve avere accesso in scrittura e
    spingere un ramo, non un fork.
@@ -250,16 +268,9 @@ ogni push su `main`. Provato il 29 agosto 2026, tutto sul campo:
 
 ## 6. Decisioni ancora aperte
 
-- **Il progetto modello resta visibile?** Oggi
-  `src/content/progetti/modello-pagina-progetto/` compare nell'elenco insieme ai
-  progetti veri (sono 4 in tutto). È voluto — serve che i maker lo trovino
-  navigando — ma è un progetto "meta". Per nasconderlo dal sito pubblico basta
-  aggiungere `draft: true` al suo frontmatter: resta visibile in locale e nelle
-  anteprime.
-- **Contenuti di esempio.** Il Mamecab è un progetto vero, entrato con la PR #1.
-  Gli altri due progetti e l'articolo sono inventati, con autori di fantasia:
-  vanno sostituiti con contenuti veri prima di mostrare il sito ai soci come se
-  fosse finito.
+- **Statistiche in home.** Si mostrano solo da 5 progetti in su
+  (`STATS_MIN_PROJECTS` in `src/pages/index.astro`): con un progetto e un maker
+  raccontavano un posto vuoto. La soglia è arbitraria, si può cambiare.
 - **Mappa in `/contatti/`.** Provata e **scartata** il 28 agosto 2026. Era una
   mappa statica: tasselli di OpenStreetMap cuciti a build time in un JPG con il
   pallino della sede disegnato in tavolozza, nessuna richiesta a terzi e nessun
@@ -314,6 +325,15 @@ Per non ripercorrere strade già valutate:
   system e lasciava sezioni invisibili.
 - **Niente duotone sulle foto dei progetti** — in una documentazione tecnica il
   colore è informazione.
+- **Il modello è una bozza** (17 settembre 2026) — non compare tra i progetti
+  veri; `/contribuire/` porta al suo sorgente su GitHub. Il rischio è che un
+  maker copi anche `draft: true`: il commento in cima al frontmatter lo avverte,
+  e l'anteprima non lo rivelerebbe perché lì le bozze si vedono.
+- **Via i contenuti inventati** (17 settembre 2026) — braccio robotico, lampada
+  e l'articolo sulla saldatura. Meglio un sito con un progetto vero che con tre
+  finti.
+- **Wiki eliminata senza redirect** (17 settembre 2026) — nessun contenuto da
+  salvare; il dump esiste fuori dal repository.
 
 I bug già diagnosticati e le loro cause sono elencati in `AGENTS.md`, sezione
 "Trappole già incontrate": vale la pena leggerla prima di mettere mano al CSS.
