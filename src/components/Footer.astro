@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
       </div>
       <p>
         Makerspace di Gorgonzola. Un bene comune aperto a chiunque,
-        italiani e stranieri, senza quota d'ingresso.
+        italiani e stranieri.
       </p>
       <p class="chant shout">{SITE.wordmark} {SITE.chant}</p>
     </div>
@@ -51,8 +51,7 @@ const year = new Date().getFullYear();
     <div>
       <h2>Gorgo Lab</h2>
       <ul>
-        <li><a href={SITE.wiki} rel="noopener">Wiki →</a></li>
-        <li><a href={SITE.regolamento} rel="noopener">Regolamento →</a></li>
+        <li><a href={SITE.governance} rel="noopener">Governance →</a></li>
         {socials.map(([k, url]) => (
           <li><a href={url} rel="me noopener">{k} →</a></li>
         ))}

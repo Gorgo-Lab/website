@@ -4,7 +4,7 @@ import Icon from '../components/Icon.astro';
 import { SITE } from '../site.config';
 
 /**
- * Unica fonte degli orari: la wiki che li teneva aggiornati viene dismessa.
+ * Unica fonte degli orari: la wiki che li teneva aggiornati è stata dismessa.
  * Se cambiano, si cambiano qui e si fa una pull request.
  */
 const orari = [
@@ -69,17 +69,13 @@ const regole = [
     <section class="rules">
       <h2 class="shout">Le regole, in breve</h2>
       <ul>
-        {regole.map((r, i) => (
+        {regole.map((r) => (
           <li>
             <h3 class="shout">{r.title}</h3>
             <p>{r.text}</p>
           </li>
         ))}
       </ul>
-      <p class="full mono">
-        La versione completa e vincolante è il{' '}
-        <a href={SITE.regolamento} rel="noopener">regolamento ufficiale →</a>
-      </p>
     </section>
   </div>
 </BaseLayout>
@@ -114,5 +110,4 @@ const regole = [
   }
   .rules h3 { font-size: var(--fz-lg); margin-bottom: var(--s-2); }
   .rules p { color: var(--fg-2); font-size: var(--fz-sm); }
-  .full { margin-top: var(--s-6); color: var(--fg-3); }
 </style>
