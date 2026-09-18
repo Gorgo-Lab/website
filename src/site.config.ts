@@ -13,6 +13,18 @@ export const SITE = {
   tagline: 'Ti servono gli attrezzi? Qui ci sono.',
   description:
     'Un luogo fisico per programmazione, elettronica, tecnologia, artigianato, scienza, robotica, arte e fai-da-te. Aperto a chiunque.',
+  /**
+   * Il soggetto giuridico dietro al lab. Serve alla pagina /privacy/, dove il
+   * titolare del trattamento dev'essere identificabile: "il Gorgo Lab" è il
+   * nome dello spazio, non di qualcuno a cui si possa scrivere una diffida.
+   * Spiega anche perché la casella è @martelab.it e non @gorgolab.it.
+   */
+  entity: {
+    name: 'Associazione Marte Lab',
+    taxId: '91590380159',
+    /** Sede legale: non coincide con il lab, che sta a Ca' Busca */
+    address: 'via Volta 15A, Gorgonzola (MI)',
+  },
   email: 'info@martelab.it',
   address: "Ca' Busca, via Montenero, Gorgonzola (MI)",
   /** I documenti che descrivono valori e funzionamento del lab */

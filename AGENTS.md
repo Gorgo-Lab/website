@@ -338,9 +338,17 @@ scripts/
 
 ## Stato e cose aperte
 
-Il sito è completo e costruisce senza errori, ma **non è ancora pubblicato**.
-Prima di andare online vanno confermati alcuni dati che sono stati dedotti e non
-verificati (indirizzo, orari, email, attrezzature), e va completato il deploy.
+Il sito è completo, costruisce senza errori ed è online su Cloudflare Pages
+all'indirizzo provvisorio `gorgolab-website.pages.dev`. **Manca il lancio**: il
+dominio definitivo e, prima ancora, il repository pubblico con la protezione di
+`main` — che sul piano gratuito esiste solo sui repository pubblici.
+
+Indirizzo, orari, email e attrezzature **sono stati confermati dai soci il 28
+agosto 2026**: non sono più dati dedotti. Il lab è gestito dall'Associazione
+Marte Lab (codice fiscale 91590380159), che è il titolare del trattamento in
+`/privacy/` e l'intestataria della casella `info@martelab.it` — per questo la
+casella non è `@gorgolab.it`. Restano aperti la cifra della quota, il
+regolamento e i social.
 
 **Tutti i dettagli, con i passaggi in ordine, stanno in [`HANDOFF.md`](HANDOFF.md).**
 
