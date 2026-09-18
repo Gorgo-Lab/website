@@ -4,7 +4,7 @@ Documento per chi riprende il lavoro su un'altra macchina o dopo una pausa.
 Descrive **dove siamo, cosa manca e in che ordine farlo**. Per l'architettura e
 le regole del codice vedi [`AGENTS.md`](AGENTS.md).
 
-Ultimo aggiornamento: 17 settembre 2026.
+Ultimo aggiornamento: 18 settembre 2026.
 
 ---
 
@@ -12,24 +12,29 @@ Ultimo aggiornamento: 17 settembre 2026.
 
 Il sito è **online su Cloudflare Pages**, all'indirizzo provvisorio
 `gorgolab-website.pages.dev`: build pulita, tutti i controlli verdi. Il codice
-sta su GitHub, in `Gorgo-Lab/website` (privato).
+sta su GitHub, in `Gorgo-Lab/website`, **pubblico dal 18 settembre 2026**.
 
 Il 17 settembre 2026 il sito è stato preparato alla pubblicazione: tolti i
 contenuti inventati (restano il Mamecab e il modello, in bozza), caratteri
 serviti dal sito invece che da Google, pagina `/privacy/`, intestazioni HTTP in
 `public/_headers`, nessun riferimento a wiki e regolamento.
 
-**Manca il lancio**: repository pubblico e protezione di `main`, poi il dominio
-(sezione 5). La wiki su `www.gorgolab.it` viene eliminata a mano, senza
-redirect: i collegamenti che puntano lì moriranno, ed è accettato. Il
-regolamento verrà riscritto come pagina del sito.
+Il 18 settembre 2026 sono stati fatti gli ultimi due passi che dipendevano da
+GitHub: il repository è diventato pubblico e `main` è protetto da un ruleset.
+Nella stessa giornata: titolare del trattamento in `/privacy/`, file di licenza
+con la riserva sul marchio, primo articolo del blog, revisione dei testi.
+
+**Manca solo il dominio** (sezione 5). La wiki su `www.gorgolab.it` viene
+eliminata a mano, senza redirect: i collegamenti che puntano lì moriranno, ed è
+accettato. Il regolamento verrà riscritto come pagina del sito.
 
 ---
 
 ## 1. Portare il progetto su un'altra macchina
 
-Il repository sta su GitHub. Serve un account con accesso a `Gorgo-Lab/website`
-— è privato — e una chiave SSH registrata; senza chiave, si clona l'URL HTTPS.
+Il repository sta su GitHub ed è pubblico: per clonarlo non serve nulla. Per
+**spingere** invece serve l'accesso in scrittura e una chiave SSH registrata;
+senza chiave si clona l'URL HTTPS e si autentica al primo push.
 
 ```bash
 git clone git@github.com:Gorgo-Lab/website.git gorgolab && cd gorgolab
@@ -116,14 +121,12 @@ usare liberamente, e ora è il carattere dei titoli di tutto il sito.
 
 ## 4. Repository su GitHub
 
-Il repository esiste già: **`Gorgo-Lab/website`**, privato, ramo `main`.
+Il repository è **`Gorgo-Lab/website`**, pubblico, ramo `main` protetto.
 Resta da fare:
 
 1. **`.github/CODEOWNERS`** — già compilato con `@naicodev`. Vanno aggiunti gli
    handle degli altri soci che devono comparire come revisori, quando ce ne
    saranno.
-2. **Protezione del ramo `main`** — vedi il riquadro qui sotto: sul piano
-   gratuito è disponibile solo per i repository pubblici.
 
 La CI invece è già stata provata sul campo: la **PR #1** (`progetto-mamecab`,
 28 agosto 2026) l'ha fatta partire e il job è passato in 38 secondi su
@@ -137,31 +140,37 @@ Comoda ma non indispensabile: `gh`, la CLI di GitHub (`brew install gh`, poi
 leggere i log di una CI rossa (`gh run view --log-failed`) senza uscire dal
 terminale; l'interfaccia web fa le stesse cose.
 
-### Privato adesso, pubblico al lancio
+### Perché è pubblico, e cosa protegge `main`
 
-Il repository è privato. Finché dati e contenuti non erano confermati era la
-scelta giusta; ora non c'è più una ragione per tenerlo così, e la pagina
-`/contribuire/` (il modello si apre su GitHub) e `/privacy/` (parla di
-repository pubblico) danno già per scontato che sia pubblico.
+Il repository è pubblico dal 18 settembre 2026. La ragione non è solo di
+principio — makerspace comunale, contenuti già sotto CC BY-SA, un sito pubblico
+per definizione — ma molto pratica: **su un'organizzazione con piano gratuito i
+ruleset non vengono applicati sui repository privati**, dove richiedono GitHub
+Team, a pagamento. Finché il repository è stato privato, la CI girava su ogni
+pull request e mostrava il semaforo, ma nessuno impediva di fare merge col
+semaforo rosso o di scrivere dritto su `main`: la validazione informava senza
+bloccare. Da pubblico la stessa protezione è gratis.
 
-Va però ripresa la decisione al momento del lancio, perché **su
-un'organizzazione con piano gratuito la protezione del ramo e i ruleset
-funzionano solo sui repository pubblici**: su un repository privato sono
-disattivati e richiedono GitHub Team, a pagamento.
+Il ruleset su `main` (Settings → Rules → Rulesets) ha come bersaglio il ramo
+predefinito e richiede: una pull request prima del merge, la revisione dei code
+owner, i controlli verdi con il ramo aggiornato, e blocca i force push. La
+**bypass list è vuota di proposito**: metterci "Repository admin" avrebbe reso
+il ruleset decorativo, visto che l'amministratore è chi scrive di più.
 
-Conseguenza concreta, oggi: la CI gira su ogni pull request e mostra i controlli
-verdi o rossi, ma **nessuno impedisce di fare merge con i controlli rossi** o di
-scrivere direttamente su `main`. La validazione informa, non blocca.
+Due conseguenze pratiche, valide anche per chi cura il sito:
 
-Rendere pubblico il repository al lancio risolve la cosa gratis, ed è coerente
-con la natura del progetto: un makerspace comunale, contenuti già sotto
-CC BY-SA, un sito che è pubblico per definizione. Una volta pubblico, in
-Settings → Rules va attivata la protezione di `main` con "richiedi che i
-controlli passino" e "richiedi la revisione dei code owner".
+- **non si committa più su `main`**, mai, nemmeno per una virgola nella
+  documentazione: si apre un ramo e una PR. Se il ruleset non richiede
+  approvazioni (0 required approvals) la PR la si può comunque chiudere da soli,
+  ma solo a controlli verdi;
+- **l'`enforcement status` dev'essere `Active`**. Un ruleset creato e lasciato
+  `Disabled` esiste, si legge, e non fa niente: è la prima cosa da guardare se
+  un giorno il merge passa quando non dovrebbe.
 
-**Nota sulla visibilità**: se il repository è pubblico, chiunque può aprire una
-PR — che è il modello giusto per un bene comune — ma le PR da fork non ricevono
-le variabili d'ambiente e le anteprime vanno approvate a mano la prima volta.
+**Nota sui fork**: chiunque può aprire una PR — che è il modello giusto per un
+bene comune — ma le PR da fork non ricevono le variabili d'ambiente e le
+anteprime vanno approvate a mano la prima volta. Aprire la PR non significa
+poter pubblicare: il merge resta a chi ha accesso in scrittura.
 
 ---
 
@@ -256,9 +265,11 @@ ogni push su `main`. Provato il 29 agosto 2026, tutto sul campo:
    `gorgolab.it` smette di rispondere: serve un redirect verso `www` fatto da
    OVH (redirect visibile, o `.htaccess` sull'hosting se resta attivo), oppure
    lo spostamento della zona DNS su Cloudflare.
-5. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede, anche se il
-   repository è privato. Se dà fastidio si mette davanti Cloudflare Access, che
-   ha un piano gratuito, al prezzo di dover fare login per guardarle.
+5. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede. Ora che anche
+   il repository è pubblico la cosa è meno sorprendente, ma resta vera per le
+   bozze, che nelle anteprime sono visibili (`SHOW_DRAFTS=true`) e in produzione
+   no. Se dà fastidio si mette davanti Cloudflare Access, che ha un piano
+   gratuito, al prezzo di dover fare login per guardarle.
 6. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
    che stanno dentro il repository. Perché il patto con i maker funzioni come
    descritto in `README.md`, chi pubblica deve avere accesso in scrittura e

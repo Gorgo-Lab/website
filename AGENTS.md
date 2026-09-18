@@ -281,10 +281,14 @@ delle anteprime.
   il titolo della PR. Il commit di merge serve solo quando si vuole conservare
   la forma del ramo, che qui non succede quasi mai.
 
-Per il lavoro proprio, finché il sito non è pubblico, il merge in locale è
-legittimo: l'anteprima del ramo esiste comunque e i controlli girano anche sul
-push a `main`. Per il lavoro degli altri no — la revisione prima del merge è
-tutto il senso del patto con i maker.
+**Dal 18 settembre 2026 il merge in locale non è più possibile, per nessuno.**
+Il repository è pubblico e un ruleset protegge `main`: ogni modifica passa da un
+ramo e da una pull request con i controlli verdi, anche una virgola nella
+documentazione, anche fatta da chi cura il sito. Non è un intralcio da aggirare:
+è la stessa regola che vale per i maker, ed è tutto il senso del patto. Prima, a
+repository privato, il ruleset non sarebbe stato applicato e il merge in locale
+era legittimo: se in giro resta una procedura che lo dava per scontato, è
+vecchia.
 
 ---
 
@@ -339,9 +343,9 @@ scripts/
 ## Stato e cose aperte
 
 Il sito è completo, costruisce senza errori ed è online su Cloudflare Pages
-all'indirizzo provvisorio `gorgolab-website.pages.dev`. **Manca il lancio**: il
-dominio definitivo e, prima ancora, il repository pubblico con la protezione di
-`main` — che sul piano gratuito esiste solo sui repository pubblici.
+all'indirizzo provvisorio `gorgolab-website.pages.dev`. Il repository è pubblico
+e `main` è protetto da un ruleset dal 18 settembre 2026. **Manca solo il dominio
+definitivo**, `www.gorgolab.it`.
 
 Indirizzo, orari, email e attrezzature **sono stati confermati dai soci il 28
 agosto 2026**: non sono più dati dedotti. Il lab è gestito dall'Associazione
