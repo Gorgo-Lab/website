@@ -224,8 +224,16 @@ Cloudflare Pages, connesso al repository:
 
 Istruzioni passo per passo in [`HANDOFF.md`](HANDOFF.md).
 
+## Licenza
+
+Tre cose diverse con tre regole diverse: il **codice** è MIT, i **contenuti**
+sono CC BY-SA 4.0 salvo diversa indicazione del singolo progetto, il **nome e
+il logo** non sono coperti da nessuna delle due. Il dettaglio, e il perché,
+stanno in [`LICENSES.md`](LICENSES.md).
+
 ## Altri documenti
 
+- [`LICENSES.md`](LICENSES.md) — codice, contenuti e marchio: cosa si può riusare
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — guida per i maker che pubblicano
 - [`HANDOFF.md`](HANDOFF.md) — cosa manca, deploy, decisioni aperte
 - [`AGENTS.md`](AGENTS.md) — presentazione tecnica per chi (o cosa) lavora sul

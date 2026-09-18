@@ -33,9 +33,10 @@ const aggiornamento = new Date('2026-09-17');
     <div class="prose">
       <h2>Chi è responsabile</h2>
       <p>
-        Il titolare del trattamento è il {SITE.name}, {SITE.address}. Per
-        qualunque domanda su questa pagina o sui tuoi dati scrivi a{' '}
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+        Il {SITE.name} è gestito dall'<strong>{SITE.entity.name}</strong>
+        (codice fiscale {SITE.entity.taxId}), con sede in {SITE.entity.address},
+        che è il titolare del trattamento. Per qualunque domanda su questa pagina o sui tuoi dati
+        scrivi a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
       </p>
 
       <h2>Quando visiti il sito</h2>
