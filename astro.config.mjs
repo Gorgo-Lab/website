@@ -20,10 +20,26 @@ export default defineConfig({
   // I file vengono dai pacchetti @fontsource installati, non da una CDN: la
   // build non dipende dalla rete e le versioni stanno nel package-lock.
   // Solo il sottoinsieme latino, che copre l'italiano.
+  //
+  // `display: 'optional'` su tutte e tre: è quello che toglie il sobbalzo al
+  // caricamento. Con il valore predefinito (`swap`) il browser disegna la
+  // pagina col carattere di ripiego e poi la ridisegna con quello vero: le
+  // metriche di ripiego sono calibrate (`size-adjust` & co., li genera Astro)
+  // ma la larghezza dei glifi resta diversa, e titoli e occhielli si spostano
+  // di qualche pixel — non sempre, solo quando la cache è fredda, che è il
+  // motivo per cui il difetto sembrava intermittente.
+  // Con `optional` il browser dà al carattere ~100ms: se arriva lo usa, se non
+  // arriva tiene il ripiego per TUTTA la vita di quella pagina e non scambia
+  // mai. Lo spostamento non può proprio avvenire.
+  // Il prezzo: alla primissima visita con rete lenta qualcuno vede il sito in
+  // Arial. È mitigato dal precaricamento di tutti e tre in BaseLayout (69 kB
+  // in croce, serviti dal sito) e dalla cache immutabile: dalla seconda pagina
+  // in poi i caratteri sono già lì.
   fonts: [
     {
       provider: fontProviders.local(),
       name: 'Poppins',
+      display: 'optional',
       cssVariable: '--font-poppins',
       fallbacks: ['sans-serif'],
       options: {
@@ -36,6 +52,7 @@ export default defineConfig({
     {
       provider: fontProviders.local(),
       name: 'Space Grotesk',
+      display: 'optional',
       cssVariable: '--font-space-grotesk',
       fallbacks: ['sans-serif'],
       options: {
@@ -47,6 +64,7 @@ export default defineConfig({
     {
       provider: fontProviders.local(),
       name: 'JetBrains Mono',
+      display: 'optional',
       cssVariable: '--font-jetbrains-mono',
       fallbacks: ['monospace'],
       options: {

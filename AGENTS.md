@@ -226,6 +226,22 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
 - **Allegati trasformati in data URI.** Vite inlina gli asset piccoli; le
   estensioni degli allegati sono escluse in `astro.config.mjs` e la lista va
   tenuta allineata a `ATTACHMENT_EXTENSIONS` in `site.config.ts`.
+- **La pagina si assesta dopo il primo disegno.** Titoli e occhielli disegnati
+  e poi spostati di qualche pixel un attimo dopo. Due cause distinte, e la
+  prima fa perdere tempo sulla seconda:
+  1. in `npm run dev` gli stili li inietta Vite con JavaScript dopo il primo
+     disegno, quindi là il riassestamento c'è sempre ed è un artefatto del
+     server di sviluppo. Si misura solo su `npm run preview`;
+  2. in produzione era lo scambio dei caratteri. Le metriche di ripiego le
+     genera già Astro (`size-adjust`, `ascent-override`), ma pareggiano
+     l'altezza, non la larghezza dei glifi: con `font-display: swap` il
+     secondo disegno sposta comunque le cose. Si vedeva a intermittenza
+     perché con la cache calda il carattere è già pronto al primo disegno.
+     Risolto con `display: 'optional'` su tutte e tre le famiglie, che dopo
+     la finestra iniziale non scambia più nulla. Da lì dipende anche il
+     precaricamento di tutti e tre in `BaseLayout`: con `optional`, un
+     carattere non precaricato non fa in tempo e non si vedrebbe mai.
+
 - **Il dev server serve CSS stantio** dopo modifiche estese agli stili. Prima di
   dare la colpa al codice, verificare su `npm run build && npm run preview`.
 - **Il dev server serve contenuti stantii dopo rinomini e cancellazioni** dentro
