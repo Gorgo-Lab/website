@@ -35,6 +35,75 @@ const stats = projects.length < STATS_MIN_PROJECTS ? [] : [
   { n: new Set(projects.flatMap((p) => p.data.tags)).size, label: 'ambiti diversi' },
 ];
 
+/**
+ * Lo slogan dell'hero: una domanda e la sua risposta, estratte insieme.
+ *
+ * Ogni voce è [attacco, evidenza, coda, risposta]. L'evidenza è l'unica cosa
+ * in arancio del titolo, e prende il sintagma intero — "gli attrezzi", non
+ * "attrezzi"; "a saldare", non "saldare" — perché un articolo o una
+ * preposizione lasciati fuori spezzano la cosa a metà e l'occhio inciampa.
+ * La coda è quasi sempre "?" ma resta scrivibile: serve a chi ha l'evidenza in
+ * mezzo alla frase e non in fondo. La risposta cambia con la domanda: tenerla
+ * fissa costringeva a piegare le domande a una chiusura sola, e alcune
+ * suonavano finte.
+ *
+ * Si dice "ti servono", non "ti mancano": in italiano "mi manchi" è affettivo,
+ * e "ti manca l'officina?" si legge come se l'officina l'avessi persa.
+ *
+ * Ogni domanda nomina una cosa che il lab dà davvero — gli attrezzi, lo
+ * spazio, chi insegna, il permesso di sbagliare. Non se ne aggiungono di
+ * ironiche ("ti serve tempo?", "ti serve voglia?"): quelle il lab non le
+ * risolve, e una promessa falsa nell'hero si paga alla prima visita.
+ *
+ * Restano corte, e il limite lo fa rispettare la build: vedi i controlli
+ * subito sotto l'elenco.
+ *
+ * Quale si vede la sceglie il visitatore senza saperlo: uno script in linea ne
+ * estrae una a caso a ogni caricamento (vedi in fondo all'hero). Senza
+ * JavaScript, e per gli screen reader che leggono l'HTML servito, resta la
+ * prima — che è anche `SITE.tagline`, cioè il <title> della home.
+ *
+ * L'ordine quindi conta solo per la prima. Aggiungerne è gratis: più sono,
+ * meno capita di rivedere la stessa due volte di fila.
+ */
+const slogan = [
+  ['Ti servono ', 'gli attrezzi', '?', 'Qui ci sono.'],
+  ['Ti serve ', 'lo spazio', '?', 'Eccolo.'],
+  ['Non sai ', 'da dove partire', '?', 'Si parte qui.'],
+  ['Vuoi imparare ', 'a saldare', '?', 'Ti insegniamo.'],
+  ['Hai ', "un'idea", ' ferma?', 'Qui riparte.'],
+  ['Vuoi provare ', 'la stampa 3D', '?', 'Si prova qui.'],
+  ['Hai paura ', 'di sbagliare', '?', 'Sbagliamo tutti.'],
+  ['Mai usato ', 'un saldatore', '?', 'Vieni da noi.'],
+  ['Cerchi ', 'un hobby', '?', 'Qui lo trovi.'],
+  ['Ti senti ', 'imbranato', '?', 'Qui non lo sei.'],
+  ['Non sai cos\'è ', 'un PCB', '?', 'Scoprilo.'],
+  ['Non sai cos\'è ', 'Arduino', '?', 'Scoprilo.']
+];
+
+/**
+ * Il limite non è un consiglio: se una frase sfora, la build si ferma. È lo
+ * stesso patto del resto del sito — meglio rossa in CI che storta in pagina.
+ *
+ * I due numeri non sono uguali, e non per caso:
+ * - la domanda è un tetto di LARGHEZZA. A corpo grande, oltre i 26 caratteri
+ *   va a capo sul telefono e diventa tre righe invece di due;
+ * - la risposta è un tetto di RITMO. Deve arrivare secca e restare nettamente
+ *   più corta della domanda: "Qui si sbaglia tutti." (21) stava dentro
+ *   qualsiasi schermo, ma lunga quanto la domanda si mangiava la battuta.
+ */
+const MAX_DOMANDA = 26;
+const MAX_RISPOSTA = 18;
+for (const [attacco, evidenza, coda, risposta] of slogan) {
+  const domanda = attacco + evidenza + coda;
+  if (domanda.length > MAX_DOMANDA) {
+    throw new Error(`[slogan] la domanda «${domanda}» è di ${domanda.length} caratteri, il massimo è ${MAX_DOMANDA}`);
+  }
+  if (risposta.length > MAX_RISPOSTA) {
+    throw new Error(`[slogan] la risposta «${risposta}» è di ${risposta.length} caratteri, il massimo è ${MAX_RISPOSTA}`);
+  }
+}
+
 const attrezzature = [
   { icon: 'printer', title: 'Stampa 3D', text: 'Stampanti a filamento, con bobine condivise e slicer già configurati.' },
   { icon: 'circuit-board', title: 'Banco elettronica', text: 'Stazione saldante, alimentatori e un cassetto di componenti.' },
@@ -65,10 +134,25 @@ const principi = [
   <section class="hero wrap">
     <p class="eyebrow">{SITE.kicker}</p>
     <h1 class="shout">
-      <span>Vuoi fare</span>
-      <span class="orange">qualcosa?</span>
-      <span>Fallo e basta.</span>
+      {/* Su una riga sola: fra due tag in linea un a capo nel sorgente diventa
+          uno spazio a video, e finirebbe davanti all'evidenza e alla coda. */}
+      <span><span id="slogan-attacco">{slogan[0][0]}</span><span class="evidenza" id="slogan-evidenza">{slogan[0][1]}</span><span id="slogan-coda">{slogan[0][2]}</span></span>
+      <span id="slogan-risposta">{slogan[0][3]}</span>
     </h1>
+    {/*
+      Lo script sta qui, subito sotto il titolo, e NON è un modulo: così è
+      sincrono e la sostituzione avviene prima che il browser disegni: il
+      visitatore non vede la frase cambiare sotto gli occhi. `define:vars` lo
+      rende in linea e ci porta dentro l'elenco, che resta scritto una volta
+      sola qui sopra, già chiuso da Astro in una funzione sua: niente variabili
+      globali. La CSP ammette gli script in linea (`public/_headers`).
+    */}
+    <script is:inline define:vars={{ slogan }}>
+      const scelta = slogan[Math.floor(Math.random() * slogan.length)];
+      ['attacco', 'evidenza', 'coda', 'risposta'].forEach(function (pezzo, i) {
+        document.getElementById('slogan-' + pezzo).textContent = scelta[i];
+      });
+    </script>
     <p class="lead">{SITE.description}</p>
 
     <div class="cta">
@@ -94,7 +178,7 @@ const principi = [
       <header class="block-head">
         <div>
           <p class="eyebrow">Come si sta qui</p>
-          <h2 class="shout">Tre cose su cui non si transige</h2>
+          <h2 class="shout">Tre cose in cui crediamo</h2>
         </div>
         <a class="more" href="/valori/">Tutti i valori →</a>
       </header>
@@ -206,9 +290,18 @@ const principi = [
 <style>
   /* HERO */
   .hero { padding-block: var(--s-9) var(--s-8); }
-  h1 { font-size: var(--fz-fluid-6xl); margin-top: var(--s-5); }
-  h1 span { display: block; }
-  h1 .orange { color: var(--gl-orange-600); }
+  /* `.shout` sta a 0.95 di interlinea, che sotto l'1 fa uscire gli accenti
+     delle maiuscole (Ù di PIÙ, È di C'È) sopra l'altezza delle lettere: finivano
+     addosso alla riga precedente, e si vedeva o no a seconda di cosa capitava
+     sopra. 1.05 è il minimo che li fa stare, e su due righe non si nota. */
+  h1 { font-size: var(--fz-fluid-6xl); margin-top: var(--s-5); line-height: 1.05; }
+  /* Figli DIRETTI: sono le due righe del titolo. Gli span dentro la domanda
+     restano in linea senza doverlo ridichiarare. */
+  h1 > span { display: block; }
+  /* L'unico arancio del titolo è la cosa che ti serve: è lì che deve andare
+     l'occhio, non sulla risposta. */
+  h1 .evidenza { color: var(--gl-orange-600); }
+
   .hero .lead { max-width: 46ch; margin-top: var(--s-6); font-size: var(--fz-lg); }
 
   .cta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
