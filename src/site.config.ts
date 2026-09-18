@@ -9,7 +9,8 @@ export const SITE = {
   wordmark: 'GORGOLAB',
   chant: 'GOGOGO',
   kicker: 'Makerspace di Gorgonzola',
-  tagline: 'Vuoi fare qualcosa? Fallo e basta.',
+  /** Prima variante dello slogan della home: le altre stanno in index.astro */
+  tagline: 'Ti servono gli attrezzi? Qui ci sono.',
   description:
     'Un luogo fisico per programmazione, elettronica, tecnologia, artigianato, scienza, robotica, arte e fai-da-te. Aperto a chiunque.',
   email: 'info@martelab.it',

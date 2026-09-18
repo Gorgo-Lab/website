@@ -28,7 +28,9 @@ In sviluppo: `@astrojs/check`, `typescript`, `yaml`, `lucide-static`,
 `@fontsource/poppins`, `@fontsource-variable/space-grotesk`,
 `@fontsource-variable/jetbrains-mono`.
 Nessuna libreria UI, nessun framework CSS, nessuna dipendenza JavaScript sul
-client tranne due frammenti minuscoli (menu mobile, facciata dei video).
+client tranne due frammenti minuscoli in linea: la facciata dei video e la
+riga dell'hero che pesca una frase a caso. Il menu mobile è un checkbox e
+di JavaScript non ne ha.
 
 ---
 
