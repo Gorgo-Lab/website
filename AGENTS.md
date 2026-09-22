@@ -241,6 +241,14 @@ Bug già diagnosticati e risolti: se ricompaiono, la causa è probabilmente ques
      la finestra iniziale non scambia più nulla. Da lì dipende anche il
      precaricamento di tutti e tre in `BaseLayout`: con `optional`, un
      carattere non precaricato non fa in tempo e non si vedrebbe mai.
+  3. il precaricamento va fatto **per peso**, non per famiglia. Il marquee
+     chiedeva Poppins 400, che non esiste fra i file serviti: il browser
+     ripiegava in silenzio sul 700, che non era precaricato. Risultato:
+     marquee in Arial alla prima visita e in Poppins dalla seconda, con la
+     testata che cambiava larghezza fra una pagina e l'altra. Aggiungendo
+     un `font-weight` nuovo a un elemento `.shout` o `--font-display`,
+     controllare che quel peso sia fra le varianti di `astro.config.mjs` e
+     fra i `preload` di `BaseLayout`.
 
 - **Il dev server serve CSS stantio** dopo modifiche estese agli stili. Prima di
   dare la colpa al codice, verificare su `npm run build && npm run preview`.

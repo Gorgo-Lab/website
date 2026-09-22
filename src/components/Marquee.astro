@@ -43,8 +43,13 @@ const cells = Array.from({ length: HALF * 2 });
     animation: slide var(--dur) linear infinite;
     will-change: transform;
   }
+  /* 700, cioè Poppins Bold: è il peso del wordmark nel banner ufficiale. Qui
+     c'era scritto 400, rimasto da quando il carattere era Archivo Black, che ha
+     un peso solo. Poppins 400 non è fra i file serviti, quindi il browser
+     ripiegava in silenzio sul 700: stesso aspetto, ma un file che nessuno
+     sapeva di usare e che per questo non veniva precaricato. */
   .word {
-    font-family: var(--font-display); font-weight: 400;
+    font-family: var(--font-display); font-weight: 700;
     font-size: var(--fz-lg); line-height: 1;
     color: var(--gl-orange); text-transform: uppercase;
     letter-spacing: var(--tr-wide);

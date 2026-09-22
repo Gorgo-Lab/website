@@ -61,10 +61,13 @@ const ogUrl = new URL(ogImage ?? '/brand/banner.png', Astro.site).href;
       Precaricati tutti e tre. Con `display: 'optional'` (astro.config.mjs) il
       browser ha ~100ms per averli, poi rinuncia fino al caricamento dopo: un
       carattere non precaricato quella finestra non la prende quasi mai, e si
-      vedrebbe sempre il ripiego. Poppins 700 resta fuori: lo usano solo pochi
-      titoli minori, e vale la pena tenerlo fuori dalla partenza.
+      vedrebbe sempre il ripiego. Di Poppins servono tutti e due i pesi: l'800
+      per i titoli, il 700 per il marquee in cima a ogni pagina. Lasciare fuori
+      il 700 faceva vedere il marquee in Arial alla prima visita e in Poppins
+      dalla seconda, con la testata che cambiava larghezza fra una pagina e
+      l'altra.
     -->
-    <Font cssVariable="--font-poppins" preload={[{ weight: 800 }]} />
+    <Font cssVariable="--font-poppins" preload={[{ weight: 800 }, { weight: 700 }]} />
     <Font cssVariable="--font-space-grotesk" preload />
     <Font cssVariable="--font-jetbrains-mono" preload />
   </head>
