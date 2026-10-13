@@ -1,0 +1,190 @@
+---
+title: ANGELO, amplifica emozioni
+summary: Un piccolo amplificatore da cuffia equalizzato sulla voce umana, nato per un suocero di 105 anni in una RSA e oggi un progetto hardware aperto che chiunque può montare e regalare.
+date: 2026-10-13
+authors:
+  - Gorgo Lab
+  - Luciano Fumagalli
+tags:
+  - elettronica
+  - stampa-3d
+  - fai-da-te
+status: in-corso
+draft: true
+cover: ./copertina.jpg
+coverAlt: Composizione geometrica arancione e blu, segnaposto della copertina
+links:
+  - label: Il sito ufficiale del progetto
+    url: https://angelo-amplifica-emozioni.jimdosite.com/progetto/
+  - label: I file aggiornati da scaricare
+    url: https://angelo-amplifica-emozioni.jimdosite.com/download/
+  - label: Schema e circuito stampato su OSHWLab
+    url: https://oshwlab.com/luciopcb1960/project_gnmihamd
+  - label: La certificazione Open Source Hardware (OSHWA IT000017)
+    url: https://certification.oshwa.org/it000017.html
+---
+
+Durante la pandemia Angelo, il suocero di Luciano Fumagalli, aveva 105 anni e
+viveva in una RSA. Con le visite a due metri di distanza e le mascherine,
+parlargli era diventato quasi impossibile. Luciano, una vita da tecnico
+elettronico, ha fatto quello che sapeva fare: ha costruito un amplificatore
+da tenere in mano, con un microfono e un paio di cuffie, tarato apposta sulla
+voce umana. Il primo prototipo è del 2020; oggi ANGELO è un progetto aperto,
+con i file liberi e una rete di punti che lo montano e lo regalano.
+
+## ANGELO e il Gorgo Lab
+
+Luciano è stato uno dei primi maker della zona che abbiamo incontrato, quando
+il Gorgo Lab ancora non c'era, e ha fatto con noi le battaglie che sono
+servite per aprirlo. Nel suo progetto abbiamo visto subito un grande
+potenziale, e ci siamo messi a disposizione: abbiamo assemblato alcune delle
+prime versioni e abbiamo applicato un modello virtuoso, con un gruppo di ragazzi
+che imparavano a montarlo per poi regalarlo. Quei dispositivi sono andati a
+due RSA del territorio.
+
+È la parte di questa storia a cui teniamo di più. È la prova che una comunità
+può organizzarsi in autonomia attorno a un bisogno vero, e che a guadagnarci sono tutti. I ragazzi hanno
+imparato ad assemblare un circuito sapendo che non sarebbe rimasto a loro,
+ma a una persona che lo aspettava; gli anziani hanno
+ricevuto un aiuto concreto costruito per loro da ragazzi che potevano essere loro
+nipoti. È un modello che vorremmo migliorare, far crescere, ripetere e veder copiare
+altrove.
+
+Negli anni dal lab sono passate molte persone, soprattutto anziane, che con
+ANGELO hanno ritrovato pezzi di vita quotidiana: chi riesce di nuovo a
+seguire la televisione, chi è tornato al cinema, chi non perde più una
+battuta al tavolo del burraco.
+
+Il progetto ormai cammina con le sue gambe e ha un sito suo. Questa pagina
+racconta cos'è e come si monta; **i file aggiornati stanno sempre sul sito
+ufficiale**, linkato in fondo, e non li copiamo qui apposta: una copia
+invecchia, l'originale no.
+
+<Callout type="warning" title="Non è un apparecchio acustico">
+Lo diciamo con le parole del progetto: «ANGELO è un progetto hardware Open
+Source a scopo sperimentale, didattico e di inclusione sociale. NON è un
+dispositivo medico, non è un apparecchio acustico e non è destinato alla
+diagnosi, alla prevenzione o alla cura di patologie uditive. Per qualsiasi
+necessità legata alla salute uditiva, si raccomanda di consultare
+esclusivamente medici specialisti e professionisti sanitari.»
+</Callout>
+
+## L'idea
+
+ANGELO non cerca la precisione clinica: cerca di riportare dentro una
+conversazione chi ne resta fuori. Serve a chiacchierare in famiglia, ad
+ascoltare musica, a seguire quello che si dice attorno a un tavolo in una
+RSA o in un centro di aggregazione. Per questo è tarato sulla voce e non su
+tutto lo spettro, ed è analogico: il suono arriva in cuffia senza alcun
+ritardo, e una voce che arriva in ritardo rispetto alle labbra stanca subito.
+
+Luciano ha scelto di non brevettarlo. Schema, circuito stampato, distinta
+dei componenti e contenitore sono rilasciati in CC BY-SA 4.0, e il progetto
+ha la certificazione Open Source Hardware di OSHWA. L'idea è che un FabLab,
+una scuola o un'associazione possano produrlo da soli, con componenti
+comuni, ripararlo e adattarlo, anche nei paesi dove la tecnologia costa
+troppo. Chi lo monta lo regala: ANGELO non è un prodotto commerciale.
+
+## Com'è fatto
+
+ANGELO esiste in due versioni, una con componenti a montaggio superficiale
+(SMD) e una con componenti tradizionali, che spieghiamo più sotto. **La
+versione ufficiale di riferimento è quella SMD**, ed è quella che
+descriviamo qui.
+
+Il circuito è tutto analogico, niente microcontrollore e niente software. Lo
+schema sta in una pagina e si legge in quattro blocchi.
+
+- **Il microfono.** Una capsula interna, con una presa jack da 3,5 mm per
+  collegarne una esterna (da avvicinare a chi parla, per esempio sul tavolo).
+- **Il preamplificatore equalizzato**, la parte che dà il carattere ad
+  ANGELO. Un operazionale TL072 alza il segnale del microfono, ma non in modo
+  uniforme: taglia i bassi, dove stanno rimbombi e rumore di fondo, e dà più
+  guadagno alla banda dove sta l'intelligibilità del parlato, grosso modo fra
+  1 e 3 kHz. TODO: questi numeri sono una nostra lettura dello schema, da far
+  confermare a Luciano.
+- **Il volume**, un potenziometro con l'interruttore di accensione incorporato:
+  una sola manopola per accendere e regolare.
+- **Il finale per le cuffie**, un LM386 con guadagno 20, seguito da un filtro
+  che taglia sopra i 15 kHz. Esce su un secondo jack da 3,5 mm, per cuffie
+  normali.
+
+L'alimentazione è una batteria ricaricabile al litio da 9 V, di quelle con la
+stessa forma a mattoncino delle 9 V tradizionali ma con una presa USB-C per
+ricaricarle: niente circuito di ricarica sulla scheda, e niente pile da
+buttare. Il secondo operazionale del TL072, con due transistor, divide la
+tensione della batteria a metà e crea una massa "virtuale" al centro, così
+il preamplificatore lavora con un'alimentazione duale senza bisogno di due
+batterie. Un LED dice se è acceso.
+
+<Specs items={[
+  ["Circuito", "analogico: TL072 (preamplificatore e massa virtuale), LM386 (finale)"],
+  ["Ingressi", "microfono interno, jack 3,5 mm per microfono esterno"],
+  ["Uscita", "jack 3,5 mm per cuffie"],
+  ["Comandi", "una manopola: accensione e volume"],
+  ["Alimentazione", "batteria al litio ricaricabile da 9 V, formato a mattoncino, ricarica USB-C"],
+  ["Contenitore", "stampato in 3D, chiuso a incastro senza viti"],
+  ["Costo dei componenti", "TODO: da far confermare, le fonti oscillano fra 10 e 35 euro"],
+  ["Licenza", "CC BY-SA 4.0, certificato OSHWA IT000017"],
+]} />
+
+## Come si monta
+
+Delle due versioni, qui «base» e «avanzata» non dicono quanto è difficile
+saldare, ma quanto bisogna saperne di elettronica.
+
+**La versione base, con i componenti SMD**, è quella «ordina e ricevi». I
+componenti a montaggio superficiale sono minuscoli e a mano sarebbero i più
+difficili da saldare, ma non li salda nessuno: si mandano i file a un
+servizio di produzione di circuiti stampati come JLCPCB, si paga e arriva a
+casa la scheda già montata: nella distinta ogni componente ha già il codice
+del fornitore. Resta poco da fare: collegare i pezzi esterni, come capsula del
+microfono, batteria e manopola del volume, e chiudere tutto nel contenitore,
+che si monta a incastro senza viti, colla o attrezzi. È la strada per chi
+vuole un ANGELO da regalare senza sapere cos'è un condensatore.
+
+**La versione avanzata, con i componenti tradizionali** a foro passante,
+quelli con i piedini lunghi. Saldarli è più facile, ma si parte dalla scheda
+nuda e da una busta di componenti: bisogna riconoscerli, leggere i valori,
+sapere da che parte vanno montati e capire cosa non va se al primo colpo non
+suona. È pensata per scuole e istituti tecnici, ma soprattutto per
+makerspace, FabLab e appassionati di elettronica.
+
+In tutti e due i casi si parte dal **sito ufficiale**, dove ci sono schema,
+file Gerber del circuito stampato, distinta dei componenti, file di
+posizionamento per il montaggio automatico, STL del contenitore e manuale.
+TODO: verificare sul sito quali file valgono per quale versione.
+
+Una volta montato, la prova è sempre la stessa: volume al minimo, cuffie
+lontane dalle orecchie, accensione, LED acceso, poi si alza piano mentre
+qualcuno parla.
+
+I punti in cui si sbaglia:
+
+- **Nella versione avanzata, i condensatori elettrolitici e il LED hanno un
+  verso.** Sulla scheda è segnato; montati al contrario il circuito non
+  funziona e l'elettrolitico può gonfiarsi.
+- **Anche la capsula del microfono ha una polarità**: il polo collegato al
+  contenitore metallico va a massa.
+- **Il fischio è normale, se le cuffie stanno vicino al microfono.** È
+  l'effetto Larsen: il microfono riprende le cuffie, che lo rimandano al
+  microfono. Si sente soprattutto collaudandolo sul banco, molto meno quando
+  le cuffie sono in testa.
+
+<Callout type="warning" title="Volume al minimo, sempre">
+Un amplificatore da cuffia può arrivare a volumi che fanno male, e chi usa
+ANGELO spesso non si accorge di quanto è forte. Si accende con la manopola
+al minimo e la regolazione si fa con la persona che lo indossa, alzando
+piano finché sente bene, non di più.
+</Callout>
+
+## Dove sta andando
+
+ANGELO è arrivato alla terza versione della scheda e nel frattempo è
+cresciuto attorno a una rete di **ANGELO Point**: laboratori e associazioni
+che montano i kit, li regalano e insegnano a farli. Fra i prossimi passi
+annunciati ci sono la ricarica con un pannellino solare, pensata per le zone
+dove la corrente non è scontata, e il collegamento a cuffie Bluetooth.
+
+Per montarne uno, per i file dell'ultima versione o per contattare Luciano,
+il punto di partenza è il sito ufficiale.
