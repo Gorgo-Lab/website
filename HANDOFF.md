@@ -4,15 +4,15 @@ Documento per chi riprende il lavoro su un'altra macchina o dopo una pausa.
 Descrive **dove siamo, cosa manca e in che ordine farlo**. Per l'architettura e
 le regole del codice vedi [`AGENTS.md`](AGENTS.md).
 
-Ultimo aggiornamento: 18 settembre 2026.
+Ultimo aggiornamento: 13 ottobre 2026.
 
 ---
 
 ## Stato in due righe
 
-Il sito è **online su Cloudflare Pages**, all'indirizzo provvisorio
-`gorgolab-website.pages.dev`: build pulita, tutti i controlli verdi. Il codice
-sta su GitHub, in `Gorgo-Lab/website`, **pubblico dal 18 settembre 2026**.
+Il sito è **online su `www.gorgolab.it`** dal 22 settembre 2026, servito da
+Cloudflare Pages; `gorgolab.it` senza `www` rimanda lì. Il codice sta su GitHub,
+in `Gorgo-Lab/website`, **pubblico dal 18 settembre 2026**.
 
 Il 17 settembre 2026 il sito è stato preparato alla pubblicazione: tolti i
 contenuti inventati (restano il Mamecab e il modello, in bozza), caratteri
@@ -24,9 +24,13 @@ GitHub: il repository è diventato pubblico e `main` è protetto da un ruleset.
 Nella stessa giornata: titolare del trattamento in `/privacy/`, file di licenza
 con la riserva sul marchio, primo articolo del blog, revisione dei testi.
 
-**Manca solo il dominio** (sezione 5). La wiki su `www.gorgolab.it` viene
-eliminata a mano, senza redirect: i collegamenti che puntano lì moriranno, ed è
-accettato. Il regolamento verrà riscritto come pagina del sito.
+Il 22 settembre 2026 il dominio: `www.gorgolab.it` collegato a Pages, la zona
+DNS spostata da OVH a Cloudflare, il dominio nudo rediretto su `www`, i crawler
+di intelligenza artificiale bloccati sulla rete. Come è fatto e perché sta in
+"Dominio e DNS", sezione 5. La vecchia wiki non è più raggiungibile.
+
+**Non manca niente di tecnico.** Restano da scrivere la cifra della quota e il
+regolamento, e da compilare i social (sezione 3).
 
 ---
 
@@ -198,7 +202,9 @@ Cloudflare, mentre Pages accetta un dominio esterno via CNAME**.
 **Raccomandazione confermata: Pages.** Due ragioni concrete: le anteprime per
 PR sono automatiche, e il dominio si collega senza spostare la zona DNS di
 gorgolab.it su Cloudflare — cosa che, finché la wiki è viva su quel dominio,
-significa non toccare quello che già funziona. Il vantaggio di Workers è unire
+significa non toccare quello che già funziona. (Alla fine la zona è stata
+spostata comunque, il 22 settembre 2026, ma per il dominio nudo e non per Pages:
+vedi "Dominio e DNS".) Il vantaggio di Workers è unire
 frontend e backend: qui il backend non c'è. La migrazione, se un giorno
 servirà, è documentata e riguarda l'infrastruttura, non il codice del sito.
 
@@ -244,36 +250,51 @@ ogni push su `main`. Provato il 29 agosto 2026, tutto sul campo:
   automatico non è garantito e dipende dai permessi dell'app GitHub — l'indirizzo
   prevedibile del ramo è più affidabile;
 - `/rss.xml` e `/sitemap-index.xml` rispondono, e gli URL canonici dichiarano
-  già `https://www.gorgolab.it`.
+  già `https://www.gorgolab.it`;
+- **le intestazioni di `public/_headers` arrivano** sia su `pages.dev` sia su
+  `www.gorgolab.it` (verificato il 18 e il 22 settembre 2026), e il
+  `X-Robots-Tag: noindex` sta **solo** su `pages.dev`: il doppione resta fuori
+  dai motori di ricerca, il dominio vero no. È la prima cosa da ricontrollare
+  se un giorno si tocca `_headers`, perché un `noindex` finito sul dominio vero
+  toglie il sito da Google senza che nessuno se ne accorga.
 
-### Cosa resta
+### Da tenere presente
 
-1. **Verificare `public/_headers` sull'anteprima di un ramo**, prima del
-   lancio: `curl -I https://<ramo>.gorgolab-website.pages.dev/` deve mostrare
-   `Content-Security-Policy` e `X-Robots-Tag: noindex`, e la console del browser
-   non deve riportare risorse bloccate (provare anche il click su un video del
-   modello). Le intestazioni non valgono né in `dev` né in `preview`.
-2. **Tenere spento Cloudflare Web Analytics** nel progetto Pages: inietterebbe
-   uno script di terzi, la CSP lo bloccherebbe e la pagina `/privacy/`, che dice
-   che il sito non conta le visite, diventerebbe falsa.
-3. **Collegare il dominio.** Su Pages si aggiunge `www.gorgolab.it` come dominio
-   personalizzato e si crea un CNAME nel DNS dov'è adesso (OVH): la zona non va
-   spostata su Cloudflare. Va fatto insieme all'eliminazione della wiki, che oggi
-   occupa quell'indirizzo.
-4. **Il dominio nudo `gorgolab.it`.** OVH non ammette un CNAME sul dominio nudo,
-   che oggi punta all'hosting OVH della wiki. Se quell'hosting si spegne,
-   `gorgolab.it` smette di rispondere: serve un redirect verso `www` fatto da
-   OVH (redirect visibile, o `.htaccess` sull'hosting se resta attivo), oppure
-   lo spostamento della zona DNS su Cloudflare.
-5. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede. Ora che anche
+1. **Tenere spento Cloudflare Web Analytics**, e con lui Bot Fight Mode e le
+   JavaScript Detections: iniettano script nelle pagine, e la pagina
+   `/privacy/` dice che il sito non conta le visite e non carica script di
+   terzi.
+2. **Le anteprime sono pubbliche**: chiunque abbia l'URL le vede. Ora che anche
    il repository è pubblico la cosa è meno sorprendente, ma resta vera per le
    bozze, che nelle anteprime sono visibili (`SHOW_DRAFTS=true`) e in produzione
    no. Se dà fastidio si mette davanti Cloudflare Access, che ha un piano
    gratuito, al prezzo di dover fare login per guardarle.
-6. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
+3. **Le PR da fork non ricevono l'anteprima**: Cloudflare costruisce solo i rami
    che stanno dentro il repository. Perché il patto con i maker funzioni come
    descritto in `README.md`, chi pubblica deve avere accesso in scrittura e
    spingere un ramo, non un fork.
+
+### Dominio e DNS
+
+Dal 22 settembre 2026 i tre servizi stanno in due posti:
+
+- **registrar: OVH.** Il rinnovo annuale di `gorgolab.it` si paga lì. Resta
+  OVH per forza: il registrar di Cloudflare non gestisce i `.it`;
+- **zona DNS e sito: Cloudflare.** `www` è un CNAME verso Pages; il dominio
+  nudo `gorgolab.it` rimanda a `www` con una Redirect Rule della zona.
+
+Due scelte, con il loro perché:
+
+- **la zona è su Cloudflare per servire il dominio nudo in HTTPS.** OVH non
+  ammette un CNAME sul dominio nudo, e la sua redirezione non gestisce HTTPS:
+  `https://gorgolab.it` avrebbe dato un errore di certificato. L'alternativa
+  era tenere in vita un hosting solo per fare da redirect;
+- **sul dominio non c'è posta.** Nessuna casella, nessun MX, e SPF e DMARC
+  dichiarano che nessuno può spedire a nome di `@gorgolab.it`. Il giorno in cui
+  servirà una casella si cambiano quei record.
+
+I crawler di intelligenza artificiale sono bloccati sulla rete di Cloudflare; i
+motori di ricerca no.
 
 ---
 
@@ -344,7 +365,11 @@ Per non ripercorrere strade già valutate:
   e l'articolo sulla saldatura. Meglio un sito con un progetto vero che con tre
   finti.
 - **Wiki eliminata senza redirect** (17 settembre 2026) — nessun contenuto da
-  salvare; il dump esiste fuori dal repository.
+  salvare; il dump esiste fuori dal repository. I vecchi indirizzi della wiki
+  finiscono sulla pagina 404 del sito.
+- **Zona DNS su Cloudflare, registrar su OVH** (22 settembre 2026) — per
+  servire il dominio nudo in HTTPS senza tenere in vita un hosting. La
+  redirezione di OVH è stata scartata perché non gestisce HTTPS.
 
 I bug già diagnosticati e le loro cause sono elencati in `AGENTS.md`, sezione
 "Trappole già incontrate": vale la pena leggerla prima di mettere mano al CSS.

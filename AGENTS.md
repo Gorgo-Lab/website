@@ -21,7 +21,7 @@ commit. Non c'è internazionalizzazione ed è una scelta, non una mancanza.
 | Icone | **Lucide**, inlinate a build time | nessun CDN, nessun JS a runtime |
 | Caratteri | API `fonts` di Astro, file dai pacchetti `@fontsource` | serviti dal sito: nessuna richiesta a Google, fallback con metriche corrette |
 | Tipi | TypeScript strict + `astro check` | |
-| Hosting previsto | **Cloudflare Pages** | anteprima automatica su ogni pull request |
+| Hosting | **Cloudflare Pages**, su `www.gorgolab.it` | anteprima automatica su ogni pull request |
 
 Dipendenze runtime: `astro`, `@astrojs/mdx`, `@astrojs/rss`, `@astrojs/sitemap`.
 In sviluppo: `@astrojs/check`, `typescript`, `yaml`, `lucide-static`,
@@ -195,7 +195,9 @@ colore è informazione (il PLA che ingiallisce, il legno bruciato sui bordi).
 - **Nessuna risorsa di terzi senza un click.** Caratteri, immagini e script
   vengono dal sito. La CSP in `public/_headers` lo fa rispettare e la pagina
   `/privacy/` lo promette: chi aggiunge un servizio esterno aggiorna tutti e
-  due nella stessa pull request.
+  due nella stessa pull request. Vale anche per le funzioni di Cloudflare che
+  iniettano script nelle pagine (Web Analytics, Bot Fight Mode, JavaScript
+  Detections): restano spente.
 
 ---
 
@@ -350,10 +352,10 @@ scripts/
 
 ## Stato e cose aperte
 
-Il sito è completo, costruisce senza errori ed è online su Cloudflare Pages
-all'indirizzo provvisorio `gorgolab-website.pages.dev`. Il repository è pubblico
-e `main` è protetto da un ruleset dal 18 settembre 2026. **Manca solo il dominio
-definitivo**, `www.gorgolab.it`.
+Il sito è **online su `www.gorgolab.it` dal 22 settembre 2026**, servito da
+Cloudflare Pages; `gorgolab.it` rimanda lì. La zona DNS sta su Cloudflare, il
+dominio resta registrato presso OVH. Il repository è pubblico e `main` è
+protetto da un ruleset dal 18 settembre 2026.
 
 Indirizzo, orari, email e attrezzature **sono stati confermati dai soci il 28
 agosto 2026**: non sono più dati dedotti. Il lab è gestito dall'Associazione
