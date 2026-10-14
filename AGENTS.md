@@ -120,6 +120,15 @@ Le bozze (`draft: true`) sono invisibili in produzione ma visibili in sviluppo e
 nelle anteprime delle PR, dove la CI passa `SHOW_DRAFTS=true`: così si
 revisionano prima di pubblicarle.
 
+**L'anteprima non dice se la pagina sarà pubblica.** Proprio perché lì le
+bozze si vedono, una pagina con `draft: true` sembra pronta, passa la
+revisione, viene unita a `main` e in produzione non compare. È successo con
+ANGELO il 14 ottobre 2026, e c'è voluta una seconda PR solo per togliere la
+riga. Una PR che chiude la scrittura di una pagina serve a pubblicarla:
+prima di aprirla `draft` va tolto o messo a `false`. In bozza su `main` ci
+resta solo ciò che si è deciso esplicitamente di tenere nascosto, come il
+progetto modello.
+
 ---
 
 ## Componenti disponibili nei file .mdx
